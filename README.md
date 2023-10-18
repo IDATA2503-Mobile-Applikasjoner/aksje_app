@@ -21,11 +21,79 @@ Welcome to StockApp, a Flutter project developed by students at NTNU for the cou
 7. **User Authentication:** As a user, I want to register, log in, and secure my account so that my portfolio and transaction history remain private.
 
 8. **Personal Stock Lists:** As a user, I want to add and remove stocks to different personal lists.
+   
 9. **Alerts and Notifications:** (Future feature)
 
 ## Specifications
 
-**[To be filled in the future]**
+NB: First iteration. This section needs updates in due time...
+
+### General:
+
+- **Platform:** Mobile (iOS & Android)
+- **Language:** English (with potential for localization in future updates)
+- **Theme:** Light & Dark mode support
+
+### Features:
+
+1. **Stock Listings:**
+   - Real-time data from Oslo Børs
+   - Display stock name, current price, and daily change percentage
+   - Scrollable list with pull-to-refresh functionality
+
+2. **Stock Details:**
+   - Historical performance charts (Daily, Weekly, Monthly, Yearly)
+   - Company-related news feeds
+   - Buy/Sell options within details page
+   - Overview of company information (CEO, founded year, sector, etc.)
+
+3. **User Portfolio:**
+   - Display user's total portfolio value
+   - List of owned stocks with current value and quantity
+   - Total profit/loss calculation
+
+4. **Search & Filters:**
+   - Search bar to quickly find stocks
+   - Filtering options based on sectors, price range, etc.
+
+5. **Notifications:**
+   - Real-time alerts for stock price thresholds set by users
+   - News alerts for owned stocks
+
+6. **User Authentication:**
+   - Secure login and registration process (using OAuth or similar technologies)
+   - Password encryption
+   - Multi-factor authentication option
+
+7. **Data & API Integration:**
+   - Integration with Oslo Børs API for real-time stock data
+   - Secure handling and storage of user data in compliance with GDPR
+
+### Performance & Scalability:
+
+- **Caching:** Implement caching mechanisms to reduce redundant API calls and enhance app performance.
+- **Database:** Utilize efficient database systems (e.g., Firebase, SQL databases) for storing user data, transaction history, and other app-related data.
+- **Scalability:** Design the backend infrastructure to handle a growing number of users and increased data traffic.
+
+### Security:
+
+- **Data Encryption:** Ensure that sensitive user data, including passwords and financial transactions, are encrypted.
+- **Regular Audits:** Conduct security audits and vulnerability assessments to ensure the app's safety.
+- **Third-party Integrations:** Ensure any third-party libraries or APIs used are up-to-date and secure.
+
+### Accessibility:
+
+- Ensure the app is usable for people with disabilities:
+  - Screen reader compatibility
+  - Font size adjustment
+  - High contrast themes
+
+### Other Considerations:
+
+- **Updates:** Regular app updates for feature enhancements, security patches, and performance improvements.
+- **User Feedback:** Incorporate mechanisms for users to provide feedback, report bugs, or request features directly within the app.
+- **Tutorials:** Provide onboarding tutorials or tooltips for new users to understand the app's functionality.
+
 
 ## Folder Structure
 
