@@ -26,7 +26,7 @@ Welcome to StockApp, a Flutter project developed by students at NTNU for the cou
 
 ## Specifications
 
-NB: First iteration. This section needs updates in due time...
+NB: First iteration. This section needs updates in due time..
 
 ### General:
 
