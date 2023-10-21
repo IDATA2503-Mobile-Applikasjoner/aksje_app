@@ -1,7 +1,6 @@
-import 'package:aksje_app/widgets/stock_chart.dart';
+import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:aksje_app/widgets/navbar.dart';
 
 class Inventory extends StatefulWidget {
   const Inventory({super.key});
@@ -54,7 +53,7 @@ class _InventoryState extends State<Inventory> {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
+      // Removed the bottom navigation bar from here
     );
   }
 }

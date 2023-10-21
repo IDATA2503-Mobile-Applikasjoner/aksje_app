@@ -13,8 +13,7 @@ class StockChart extends StatefulWidget {
 class _StockChartState extends State<StockChart> {
   @override
   Widget build(BuildContext context) {
-    final bool isPositiveGrowth =
-        widget.data.last.y > widget.data.first.y; // Check if growth is positive
+    final bool isPositiveGrowth = widget.data.last.y > widget.data.first.y; // Check if growth is positive
 
     final LinearGradient gradient = LinearGradient(
       colors: isPositiveGrowth
@@ -37,25 +36,25 @@ class _StockChartState extends State<StockChart> {
               );
             },
           ),
-          titlesData: FlTitlesData(show: true),
+          titlesData: const FlTitlesData(show: true),
           borderData: FlBorderData(
             show: true,
             border: Border.all(color: Colors.grey[300]!, width: 1),
           ),
-          minX: widget.data.first.x, // assuming data is sorted
+          minX: widget.data.first.x, 
           maxX: widget.data.last.x,
-          minY: widget.data.first.y, // this can be dynamic based on the min/max value in your data
-          maxY: widget.data.last.y, // this too
+          minY: widget.data.first.y, 
+          maxY: widget.data.last.y, 
           lineBarsData: [
             LineChartBarData(
               spots: widget.data,
               isCurved: true,
-              gradient: gradient, // updated to use gradient
+              gradient: gradient, 
               barWidth: 4,
               isStrokeCapRound: true,
               belowBarData: BarAreaData(
                 show: true,
-                gradient: gradient, // updated to use gradient
+                gradient: gradient, 
               ),
               dotData: FlDotData(
                 show: true,
