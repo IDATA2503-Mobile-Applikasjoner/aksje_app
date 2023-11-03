@@ -2,6 +2,7 @@ import 'package:aksje_app/models/StockList.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:aksje_app/widgets/pages/add_list.dart';
 
 class MyListsPage extends StatefulWidget {
   const MyListsPage({Key? key}) : super(key: key);
@@ -54,6 +55,15 @@ class _MyListsPageState extends State<MyListsPage> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddListPage()),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
