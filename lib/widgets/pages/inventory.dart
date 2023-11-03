@@ -17,7 +17,7 @@ class _InventoryState extends State<Inventory> {
   void navPersonPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => (const SignUp())),
+      MaterialPageRoute(builder: (context) => (SignUp())),
     );
   }
 
