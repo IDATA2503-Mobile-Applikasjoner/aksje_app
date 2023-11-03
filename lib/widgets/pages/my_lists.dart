@@ -1,39 +1,59 @@
+import 'package:aksje_app/models/StockList.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyListsPage extends StatefulWidget {
-  const MyListsPage({super.key});
+  const MyListsPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _MyListsPageState();
-  }
+  _MyListsPageState createState() => _MyListsPageState();
 }
 
 class _MyListsPageState extends State<MyListsPage> {
+  List<StockList> lists = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDataFromServer();
+  }
+
+  void _fetchDataFromServer() async {
+    try {
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list");
+      var response = await http.get(baseURL);
+
+      if (response.statusCode == 200) {
+        List responseData = jsonDecode(response.body);
+        setState(() {
+          lists = responseData.map((data) => StockList.fromJson(data)).toList();
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Lists'),
       ),
-      body: ListView(
-        children: <Widget>[
-          ListTile(
+      body: ListView.builder(
+        itemCount: lists.length,
+        itemBuilder: (context, index) {
+          return ListTile(
             leading: const Icon(Icons.list),
-            title: const Text('List 1'),
+            title: Text(lists[index].name), // Assuming StockList has a 'name' property
             onTap: () {
               // Handle list tap
             },
-          ),
-          ListTile(
-            leading: const Icon(Icons.list),
-            title: const Text('List 2'),
-            onTap: () {
-              // Handle list tap
-            },
-          ),
-          // Add more list tiles as needed
-        ],
+          );
+        },
       ),
     );
   }
