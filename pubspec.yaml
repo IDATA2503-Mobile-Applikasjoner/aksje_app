@@ -38,6 +38,9 @@ dependencies:
   fl_chart: ^0.64.0
   dio: ^5.3.3
   http: ^1.1.0
+  provider: ^6.0.5
+  shared_preferences: ^2.2.2
+  flutter_secure_storage: ^9.0.0
 
 dev_dependencies:
   flutter_test:

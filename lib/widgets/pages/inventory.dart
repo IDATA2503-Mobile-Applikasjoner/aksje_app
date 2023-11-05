@@ -1,7 +1,7 @@
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:aksje_app/widgets/pages/sign-up.dart';
+import 'package:aksje_app/widgets/pages/log-in.dart';
 
 class Inventory extends StatefulWidget {
   const Inventory({super.key});
@@ -14,10 +14,10 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
 
-  void navPersonPage() {
+  void navLoginPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => (SignUp())),
+      MaterialPageRoute(builder: (context) => (const LoginPage())),
     );
   }
 
@@ -37,7 +37,7 @@ class _InventoryState extends State<Inventory> {
               children: [
                 const Text('Your development today'),
                 OutlinedButton(
-                  onPressed: navPersonPage,
+                  onPressed: navLoginPage,
                   child: Icon(Icons.person, color: Colors.black),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.transparent),
