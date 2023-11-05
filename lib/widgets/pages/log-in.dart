@@ -1,3 +1,4 @@
+import 'package:aksje_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/pages/sign-up.dart';
 import 'package:http/http.dart' as http;
@@ -42,13 +43,31 @@ void login(String email, String password) async {
   setState(() {
     isLoggedIn = true;
   });
+}
 
-      if (isLoggedIn) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Inventory()), // Navigate to the Inventory widget
-      );
+void getLoginUser() async {
+  String? token = await getToken();
+  if (token != null) {
+    var url = Uri.parse('http://10.0.2.2:8080/api/user/sessionuser');
+    var response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token', // Include the token in the header
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      var user = User.fromJson(jsonResponse); // Assuming User class with fromJson method
+
+      print('User: ${user.toJson()}'); // Assuming toJson method is defined in User class
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
     }
+  } else {
+    print('Token not found');
+  }
 }
 
 // Storing the token securely
@@ -77,11 +96,11 @@ void removeToken() async {
 
   @override
   Widget build(BuildContext context) {
-    if(isLoggedIn) {
-      return const Scaffold(
-        body: Text("Test"),
-      );
-    }
+ //   if(isLoggedIn) {
+ //     return const Scaffold(
+//        body: Text("Test"),
+//      );
+///    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login Page'),
@@ -119,6 +138,12 @@ void removeToken() async {
             ElevatedButton(
               onPressed: () {
                 navSignUpPage();
+              },
+              child: const Text('Create account'),
+            ),
+                        ElevatedButton(
+              onPressed: () {
+                getLoginUser();
               },
               child: const Text('Create account'),
             ),
