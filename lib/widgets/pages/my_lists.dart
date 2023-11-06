@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/widgets/pages/add_list.dart';
+import 'package:aksje_app/models/user.dart';
+import 'package:aksje_app/models/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyListsPage extends StatefulWidget {
   const MyListsPage({Key? key}) : super(key: key);
@@ -17,12 +20,21 @@ class _MyListsPageState extends State<MyListsPage> {
   @override
   void initState() {
     super.initState();
-    _fetchDataFromServer();
+  }
+
+    @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fetchDataFromServer(); // Move the function call here
   }
 
   void _fetchDataFromServer() async {
     try {
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list");
+
+      UserProvider userProvider = Provider.of<UserProvider>(context);
+      var uid = userProvider.user!.uid;
+      print(uid);
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/listsbyuid/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -40,6 +52,8 @@ class _MyListsPageState extends State<MyListsPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context); // Move the call here
+    User? user = userProvider.user;
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Lists'),

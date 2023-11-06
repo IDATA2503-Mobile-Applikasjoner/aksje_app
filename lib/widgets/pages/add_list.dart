@@ -18,7 +18,7 @@ class _AddListPage extends State<AddListPage> {
     var body = jsonEncode({
       "name": name,
       "user": {
-        "uid": 5
+        "uid": 1
       }
     });
     try {

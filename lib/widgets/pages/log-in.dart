@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:aksje_app/widgets/pages/inventory.dart';
+import 'package:provider/provider.dart';
+import 'package:aksje_app/models/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -60,6 +62,8 @@ void getLoginUser() async {
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       var user = User.fromJson(jsonResponse); // Assuming User class with fromJson method
+
+      Provider.of<UserProvider>(context, listen: false).setUser(user);
 
       print('User: ${user.toJson()}'); // Assuming toJson method is defined in User class
     } else {

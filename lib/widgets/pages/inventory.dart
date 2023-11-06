@@ -2,6 +2,8 @@ import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/pages/log-in.dart';
+import 'package:aksje_app/models/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class Inventory extends StatefulWidget {
   const Inventory({super.key});
@@ -44,6 +46,15 @@ class _InventoryState extends State<Inventory> {
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                     side: MaterialStateProperty.all(BorderSide.none),
                   ),
+                ),
+                Consumer<UserProvider>(
+                  builder: (context, userProvider, _) {
+                    if (userProvider.user != null) {
+                      return Text(userProvider.user!.email);
+                    } else {
+                      return const SizedBox.shrink(); // Hide the email if the user is null
+                    }
+                  },
                 ),
               ],
             ),
