@@ -21,13 +21,13 @@ class StockItem extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                Text('${stock.price.toStringAsFixed(2)} NOK'),
+                Text('${stock.currentPrice.toStringAsFixed(2)} NOK'),
                 const Spacer(),
                 Row(
                   children: [
                     const Icon(Icons.trending_up),  // You can replace this with an appropriate icon or widget
                     const SizedBox(width: 8),
-                    Text('${stock.percentageChange}%'),
+                    Text('${stock.percentChangeIntraday}%'),
                   ],
                 ),
               ],

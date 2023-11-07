@@ -17,8 +17,6 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
   final List<Stock> stocks = [
-    Stock(id: '1', symbol: '7', name: 'Subsea 7', price: 204.85, percentageChange: 7.34),
-    Stock(id: '2', symbol: 'F', name: 'Frontline PLC', price: 175.35, percentageChange: 5.97),
     // Add more stocks with unique ids as needed
   ];
 
@@ -86,8 +84,8 @@ class _InventoryState extends State<Inventory> {
                   return ListTile(
                     leading: CircleAvatar(child: Text(stock.symbol)),
                     title: Text(stock.name),
-                    subtitle: Text('${stock.price} NOK'),
-                    trailing: Text('+${stock.percentageChange.toStringAsFixed(2)}%'),
+                    subtitle: Text('${stock.currentPrice} NOK'),
+                    trailing: Text('+${stock.percentChangeIntraday.toStringAsFixed(2)}%'),
                     onTap: () => _goToStockDetailPage(stock),
                   );
                 },

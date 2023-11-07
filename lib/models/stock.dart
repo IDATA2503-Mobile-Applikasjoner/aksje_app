@@ -1,15 +1,28 @@
 class Stock {
-  final String symbol;
-  final String id;
-  final String name;
-  final double price;
-  final double percentageChange;
+  int id;
+  String symbol;
+  String name;
+  double currentPrice;
+  double openingPrice;
+  double percentChangeIntraday;
 
   Stock({
-    required this.symbol,
     required this.id,
+    required this.symbol,
     required this.name,
-    required this.price,
-    required this.percentageChange,
+    required this.currentPrice,
+    required this.openingPrice,
+    required this.percentChangeIntraday,
   });
+
+  factory Stock.fromJson(Map<String, dynamic> json) {
+    return Stock(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      currentPrice: json['currentPrice'] as double,
+      openingPrice: json['openingPrice'] as double,
+      percentChangeIntraday: json['percentChangeIntraday'] as double,
+      symbol: json['symbol'] as String
+    );
+  }
 }

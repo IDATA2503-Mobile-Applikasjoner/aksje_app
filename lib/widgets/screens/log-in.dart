@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/models/user_provider.dart';
-import 'package:aksje_app/widgets/button_components/login_button.dart';
+import 'package:aksje_app/widgets/components/login_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

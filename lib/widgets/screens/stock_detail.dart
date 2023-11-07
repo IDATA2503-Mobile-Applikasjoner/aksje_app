@@ -34,7 +34,7 @@ class StockDetailPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                '${stock.price.toString()} NOK (${stock.percentageChange.toString()}%)',
+                '${stock.currentPrice.toString()} NOK (${stock.percentChangeIntraday.toString()}%)',
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
