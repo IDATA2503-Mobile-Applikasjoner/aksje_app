@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:aksje_app/widgets/pages/inventory.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/models/user_provider.dart';
+import 'package:aksje_app/widgets/button_components/login_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,9 +22,15 @@ class LoginPage extends StatefulWidget {
     final TextEditingController passwordController = TextEditingController();
     final storage = new FlutterSecureStorage();
     bool isLoggedIn = false;
+    bool isLoading = false;
 
 
 void login(String email, String password) async {
+
+    setState(() {
+    isLoading = true;
+  });
+
   var url = Uri.parse('http://10.0.2.2:8080/api/user/authenticate');
   var response = await http.post(
     url,
@@ -44,6 +51,8 @@ void login(String email, String password) async {
   // Set the user as logged in
   setState(() {
     isLoggedIn = true;
+    getLoginUser();
+    isLoading = false;
   });
 }
 
@@ -130,24 +139,10 @@ void removeToken() async {
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                String email = emailController.text;
-                String password = passwordController.text;
-                print('Login button pressed');
-                login(email,password);
-              },
-              child: const Text('Login'),
-            ),
+            buildLoginButton(isLoading, emailController, passwordController, login),
             ElevatedButton(
               onPressed: () {
                 navSignUpPage();
-              },
-              child: const Text('Create account'),
-            ),
-                        ElevatedButton(
-              onPressed: () {
-                getLoginUser();
               },
               child: const Text('Create account'),
             ),

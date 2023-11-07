@@ -5,6 +5,7 @@ import 'package:aksje_app/widgets/ui_components/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/models/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:aksje_app/models/user.dart';
 
 void main() {
   runApp(

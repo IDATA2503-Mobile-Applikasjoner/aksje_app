@@ -25,7 +25,7 @@ class _MyListsPageState extends State<MyListsPage> {
     @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _fetchDataFromServer(); // Move the function call here
+    _fetchDataFromServer();
   }
 
   void _fetchDataFromServer() async {
@@ -52,7 +52,7 @@ class _MyListsPageState extends State<MyListsPage> {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context); // Move the call here
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     User? user = userProvider.user;
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +63,7 @@ class _MyListsPageState extends State<MyListsPage> {
         itemBuilder: (context, index) {
           return ListTile(
             leading: const Icon(Icons.list),
-            title: Text(lists[index].name), // Assuming StockList has a 'name' property
+            title: Text(lists[index].name),
             onTap: () {
               // Handle list tap
             },

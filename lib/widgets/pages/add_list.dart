@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:aksje_app/models/user_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:aksje_app/models/user.dart';
 
 class AddListPage extends  StatefulWidget {
   const AddListPage({Key? key}) : super(key: key);
@@ -14,11 +17,14 @@ class _AddListPage extends State<AddListPage> {
   final TextEditingController nameController = TextEditingController();
 
   Future<void> createList(BuildContext context, String name) async {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    var uid = userProvider.user!.uid;
+    print(uid);
     var baseURL = Uri.parse('http://10.0.2.2:8080/api/list');
     var body = jsonEncode({
       "name": name,
       "user": {
-        "uid": 1
+        "uid": uid
       }
     });
     try {
@@ -36,8 +42,8 @@ class _AddListPage extends State<AddListPage> {
         print('Error message: $errorMessage');
         ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(errorMessage)),
-      );
-    }
+        );
+      }
     }
     catch(e) {
       print(e);
