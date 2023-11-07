@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/models/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:aksje_app/models/user.dart';
 
 class AddListPage extends  StatefulWidget {
   const AddListPage({Key? key}) : super(key: key);

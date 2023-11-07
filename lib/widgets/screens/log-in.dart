@@ -1,10 +1,9 @@
 import 'package:aksje_app/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:aksje_app/widgets/pages/sign-up.dart';
+import 'package:aksje_app/widgets/screens/sign-up.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:aksje_app/widgets/pages/inventory.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/models/user_provider.dart';
 import 'package:aksje_app/widgets/button_components/login_button.dart';
@@ -20,7 +19,7 @@ class LoginPage extends StatefulWidget {
 
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    final storage = new FlutterSecureStorage();
+    final storage = const FlutterSecureStorage();
     bool isLoggedIn = false;
     bool isLoading = false;
 

@@ -1,22 +1,23 @@
-import 'package:aksje_app/widgets/pages/inventory.dart';
-import 'package:aksje_app/widgets/pages/my_lists.dart';
-import 'package:aksje_app/widgets/pages/search.dart';
+import 'package:aksje_app/widgets/screens/inventory.dart';
+import 'package:aksje_app/widgets/screens/my_lists.dart';
+import 'package:aksje_app/widgets/screens/search.dart';
 import 'package:aksje_app/widgets/ui_components/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/models/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:aksje_app/models/user.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => UserProvider(), 
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }

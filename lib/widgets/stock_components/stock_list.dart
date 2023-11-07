@@ -19,7 +19,7 @@ class StockList extends StatelessWidget {
       itemBuilder: (ctx, index) => Dismissible(
         key: ValueKey(stocks[index].id),
         background: Container(
-          color: Theme.of(context).errorColor.withOpacity(0.75),
+          color: Theme.of(context).colorScheme.error.withOpacity(0.75),
           margin: const EdgeInsets.symmetric(horizontal: 16),
         ),
         onDismissed: (direction) {

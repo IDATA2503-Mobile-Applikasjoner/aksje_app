@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Widget buildLoginButton(
   bool isLoading, TextEditingController emailController, TextEditingController passwordController, Function login) {
   if (isLoading) {
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(),
     );
   } else {
@@ -14,7 +14,7 @@ Widget buildLoginButton(
         print('Login button pressed');
 
         // Add a 1-second delay here to simulate loading
-        Future.delayed(Duration(seconds: 3), () {
+        Future.delayed(const Duration(seconds: 3), () {
           login(email, password);
         });
       },

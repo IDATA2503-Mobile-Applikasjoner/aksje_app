@@ -1,29 +1,44 @@
-import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:aksje_app/models/stock.dart';
 import 'package:flutter/material.dart';
-import 'package:aksje_app/widgets/pages/log-in.dart';
-import 'package:aksje_app/models/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:aksje_app/models/user_provider.dart';
+import 'package:aksje_app/widgets/screens/log-in.dart';
+import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
+import 'package:aksje_app/widgets/screens/stock_detail.dart';
+
+// Stock model class
 
 class Inventory extends StatefulWidget {
-  const Inventory({super.key});
+  const Inventory({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _InventoryState();
-  }
+  State<Inventory> createState() => _InventoryState();
 }
 
 class _InventoryState extends State<Inventory> {
+  final List<Stock> stocks = [
+    Stock(id: '1', symbol: '7', name: 'Subsea 7', price: 204.85, percentageChange: 7.34),
+    Stock(id: '2', symbol: 'F', name: 'Frontline PLC', price: 175.35, percentageChange: 5.97),
+    // Add more stocks with unique ids as needed
+  ];
 
   void navLoginPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => (const LoginPage())),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
-    @override
+  void _goToStockDetailPage(Stock stock) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StockDetailPage(stock: stock),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -40,12 +55,12 @@ class _InventoryState extends State<Inventory> {
                 const Text('Your development today'),
                 OutlinedButton(
                   onPressed: navLoginPage,
-                  child: Icon(Icons.person, color: Colors.black),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.transparent),
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                     side: MaterialStateProperty.all(BorderSide.none),
                   ),
+                  child: const Icon(Icons.person, color: Colors.black),
                 ),
                 Consumer<UserProvider>(
                   builder: (context, userProvider, _) {
@@ -59,35 +74,28 @@ class _InventoryState extends State<Inventory> {
               ],
             ),
             const SizedBox(height: 20.0),
-            // Some placeholder for the graph
-            const StockChart(data: [
-              FlSpot(0, 1),
-              FlSpot(1, 1.5),
-              FlSpot(2, 1.4),
-              FlSpot(3, 3.4),
-              FlSpot(4, 2),
-              FlSpot(5, 2.2),
-              FlSpot(6, 1.8),
-              FlSpot(7, 3),
-            ]),
+            // Placeholder for the graph
+            StockChart(),
             const SizedBox(height: 20.0),
             const Text('Your stocks'),
-            const ListTile(
-              leading: CircleAvatar(child: Text('7')),
-              title: Text('Subsea 7'),
-              subtitle: Text('204,85 NOK'),
-              trailing: Text('+7,34%'),
-            ),
-            const ListTile(
-              leading: CircleAvatar(child: Text('F')),
-              title: Text('Frontline PLC'),
-              subtitle: Text('175,35 NOK'),
-              trailing: Text('+5,97%'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: stocks.length,
+                itemBuilder: (context, index) {
+                  final stock = stocks[index];
+                  return ListTile(
+                    leading: CircleAvatar(child: Text(stock.symbol)),
+                    title: Text(stock.name),
+                    subtitle: Text('${stock.price} NOK'),
+                    trailing: Text('+${stock.percentageChange.toStringAsFixed(2)}%'),
+                    onTap: () => _goToStockDetailPage(stock),
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
-      // Removed the bottom navigation bar from here
     );
   }
 }

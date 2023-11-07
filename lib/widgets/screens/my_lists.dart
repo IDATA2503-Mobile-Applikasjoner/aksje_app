@@ -1,8 +1,8 @@
-import 'package:aksje_app/models/StockList.dart';
+import 'package:aksje_app/models/stock_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:aksje_app/widgets/pages/add_list.dart';
+import 'package:aksje_app/widgets/screens/add_list.dart';
 import 'package:aksje_app/models/user.dart';
 import 'package:aksje_app/models/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +15,14 @@ class MyListsPage extends StatefulWidget {
 }
 
 class _MyListsPageState extends State<MyListsPage> {
-  List<StockList> lists = [];
+  List<StockListModel> lists = [];
 
   @override
   void initState() {
     super.initState();
   }
 
-    @override
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fetchDataFromServer();
@@ -30,7 +30,6 @@ class _MyListsPageState extends State<MyListsPage> {
 
   void _fetchDataFromServer() async {
     try {
-
       UserProvider userProvider = Provider.of<UserProvider>(context);
       var uid = userProvider.user!.uid;
       print(uid);
@@ -40,7 +39,9 @@ class _MyListsPageState extends State<MyListsPage> {
       if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
         setState(() {
-          lists = responseData.map((data) => StockList.fromJson(data)).toList();
+          lists = responseData
+              .map((data) => StockListModel.fromJson(data))
+              .toList();
         });
       } else {
         print('Request failed with status: ${response.statusCode}.');
@@ -74,7 +75,7 @@ class _MyListsPageState extends State<MyListsPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddListPage()),
+            MaterialPageRoute(builder: (context) => const AddListPage()),
           );
         },
         child: const Icon(Icons.add),
