@@ -5,6 +5,8 @@ import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/screens/log-in.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // Stock model class
 
@@ -16,9 +18,18 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
-  final List<Stock> stocks = [
-    // Add more stocks with unique ids as needed
-  ];
+  List<Stock> stocks = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+    @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fecthStockDataFromServe();
+  }
 
   void navLoginPage() {
     Navigator.push(
@@ -34,6 +45,26 @@ class _InventoryState extends State<Inventory> {
         builder: (context) => StockDetailPage(stock: stock),
       ),
     );
+  }
+
+  void _fecthStockDataFromServe() async {
+    try {
+      UserProvider userProvider = Provider.of(context);
+      var uid = userProvider.user!.uid;
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfolio/stocks/$uid");
+      var response = await http.get(baseURL);
+
+      if(response.statusCode == 200) {
+        List responseData = jsonDecode(response.body);
+        setState(() {
+          stocks = responseData.map((data) => Stock.fromJson(data)).toList();
+        });
+      } else {
+        print('${response.statusCode}');
+      }
+    } catch(e) {
+      print(e);
+    }
   }
 
   @override
@@ -65,14 +96,13 @@ class _InventoryState extends State<Inventory> {
                     if (userProvider.user != null) {
                       return Text(userProvider.user!.email);
                     } else {
-                      return const SizedBox.shrink(); // Hide the email if the user is null
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
               ],
             ),
             const SizedBox(height: 20.0),
-            // Placeholder for the graph
             StockChart(),
             const SizedBox(height: 20.0),
             const Text('Your stocks'),
