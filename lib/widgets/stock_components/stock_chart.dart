@@ -1,26 +1,36 @@
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class StockChart extends StatelessWidget {
-  StockChart({Key? key}) : super(key: key);
+  const StockChart({Key? key}) : super(key: key);
 
-  final List<Color> gradientColors = [
-    Colors.white,
-    Colors.black38,
-  ];
+  // You can define your data map here
+  // final Map<int, double> data = {...};
 
   @override
   Widget build(BuildContext context) {
+    // Determine the gradient color based on the data start and end points
+    final isPositiveChange = data[data.length - 1]! < data[0]!;
+    final List<Color> gradientColors = [
+      if (isPositiveChange) ...[
+        Colors.greenAccent,
+        Colors.green,
+      ] else ...[
+        Colors.redAccent,
+        Colors.red,
+      ],
+    ];
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
         width: 2000,
         height: 400,
         child: Padding(
-          padding: const EdgeInsets.only(
-              right: 18.0, left: 12.0, top: 24, bottom: 12),
+          padding: const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
           child: LineChart(
-            mainData(),
+            mainData(gradientColors),
           ),
         ),
       ),
@@ -35,6 +45,7 @@ class StockChart extends StatelessWidget {
     );
     Widget text = const Text('', style: style);
 
+    // Calculate the step dynamically based on your data size
     final step = data.length ~/ 4;
     if (value.toInt() % step == 0) {
       final index = value.toInt() ~/ step;
@@ -65,7 +76,7 @@ class StockChart extends StatelessWidget {
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
-  LineChartData mainData() {
+  LineChartData mainData(List<Color> gradientColors) {
     return LineChartData(
       gridData: const FlGridData(
         show: false,
@@ -96,18 +107,17 @@ class StockChart extends StatelessWidget {
         ),
       ),
       borderData: FlBorderData(
-          show: false,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
+          show: true,
+          border: Border.all(width: 0)),
       minX: 0,
-      maxX: data.length - 1,
+      maxX: data.length.toDouble() - 1,
       minY: 0,
-      maxY: 10,
+      maxY: 10, // You might want to dynamically calculate this value
       lineBarsData: [
         LineChartBarData(
-          spots: [
-            for (final entry in data.entries)
-              FlSpot(entry.key.toDouble(), entry.value.toDouble())
-          ],
+          spots: data.entries
+              .map((entry) => FlSpot(entry.key.toDouble(), entry.value.toDouble()))
+              .toList(),
           color: Colors.white,
           barWidth: 2,
           isStrokeCapRound: true,

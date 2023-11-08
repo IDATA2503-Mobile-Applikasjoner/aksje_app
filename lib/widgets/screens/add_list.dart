@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:aksje_app/models/user_provider.dart';
+import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddListPage extends  StatefulWidget {

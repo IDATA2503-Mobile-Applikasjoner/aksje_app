@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/widgets/screens/add_list.dart';
 import 'package:aksje_app/models/user.dart';
-import 'package:aksje_app/models/user_provider.dart';
+import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class MyListsPage extends StatefulWidget {

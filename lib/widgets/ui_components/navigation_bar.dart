@@ -20,8 +20,6 @@ class CustomNavigationBar extends StatelessWidget {
       ],
       currentIndex: selectedIndex,
       onTap: onItemTapped,
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.black.withOpacity(0.6),
       selectedIconTheme: const IconThemeData(size: 30),
       unselectedIconTheme: const IconThemeData(size: 28),
       selectedLabelStyle: const TextStyle(fontSize: 16),

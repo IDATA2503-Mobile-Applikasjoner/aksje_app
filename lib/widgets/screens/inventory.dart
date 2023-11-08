@@ -1,7 +1,7 @@
 import 'package:aksje_app/models/stock.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:aksje_app/models/user_provider.dart';
+import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/screens/log-in.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
