@@ -85,20 +85,20 @@ void getLoginUser() async {
 }
 
 // Storing the token securely
-void storeToken(String token) async {
-  await storage.write(key: 'jwt_token', value: token);
-}
+  void storeToken(String token) async {
+    await storage.write(key: 'jwt_token', value: token);
+  }
 
-// Fetching the stored token
-Future<String?> getToken() async {
-  String? token = await storage.read(key: 'jwt_token');
-  return token;
-}
+  // Fetching the stored token
+  Future<String?> getToken() async {
+    String? token = await storage.read(key: 'jwt_token');
+    return token;
+  }
 
-// Removing the token when the user logs out
-void removeToken() async {
-  await storage.delete(key: 'jwt_token');
-}
+  // Removing the token when the user logs out
+  void removeToken() async {
+    await storage.delete(key: 'jwt_token');
+  }
 
     void navSignUpPage() {
     Navigator.push(
@@ -110,11 +110,6 @@ void removeToken() async {
 
   @override
   Widget build(BuildContext context) {
- //   if(isLoggedIn) {
- //     return const Scaffold(
-//        body: Text("Test"),
-//      );
-///    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login Page'),
