@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:aksje_app/widgets/screens/inventory.dart';
 
 Widget buildLoginButton(
-  bool isLoading, TextEditingController emailController, TextEditingController passwordController, Function login) {
+    bool isLoading,
+    TextEditingController emailController,
+    TextEditingController passwordController,
+    Function login,
+    BuildContext context) {
   if (isLoading) {
     return const Center(
       child: CircularProgressIndicator(),
@@ -13,12 +18,16 @@ Widget buildLoginButton(
         String password = passwordController.text;
         print('Login button pressed');
 
-        // Add a 1-second delay here to simulate loading
-        Future.delayed(const Duration(seconds: 3), () {
-          login(email, password);
-        });
+        login(email, password, context);
       },
       child: const Text('Login'),
     );
   }
+}
+
+void navInventory(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const Inventory()),
+  );
 }

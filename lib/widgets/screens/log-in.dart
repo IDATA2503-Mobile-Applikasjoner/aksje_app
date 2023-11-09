@@ -7,8 +7,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
+import 'package:aksje_app/widgets/screens/inventory.dart';
 
 class LoginPage extends StatefulWidget {
+  
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -22,9 +24,10 @@ class LoginPage extends StatefulWidget {
     final storage = const FlutterSecureStorage();
     bool isLoggedIn = false;
     bool isLoading = false;
+    
 
 
-void login(String email, String password) async {
+void login(String email, String password, BuildContext context) async {
 
     setState(() {
     isLoading = true;
@@ -53,6 +56,8 @@ void login(String email, String password) async {
     getLoginUser();
     isLoading = false;
   });
+
+  navInventory(context);
 }
 
 void getLoginUser() async {
@@ -138,7 +143,7 @@ void removeToken() async {
               ),
             ),
             const SizedBox(height: 20),
-            buildLoginButton(isLoading, emailController, passwordController, login),
+            buildLoginButton(isLoading, emailController, passwordController, login, context),
             ElevatedButton(
               onPressed: () {
                 navSignUpPage();
