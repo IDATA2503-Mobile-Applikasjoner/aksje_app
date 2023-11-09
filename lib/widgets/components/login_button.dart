@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aksje_app/widgets/screens/inventory.dart';
+import 'package:aksje_app/widgets/screens/main_page.dart';
 
 Widget buildLoginButton(
     bool isLoading,
@@ -26,8 +26,8 @@ Widget buildLoginButton(
 }
 
 void navInventory(BuildContext context) {
-  Navigator.push(
+  Navigator.pushReplacement(
     context,
-    MaterialPageRoute(builder: (context) => const Inventory()),
-  );
+    MaterialPageRoute(builder: (context) => MainPage()),
+    );
 }

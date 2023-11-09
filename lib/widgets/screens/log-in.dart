@@ -10,7 +10,6 @@ import 'package:aksje_app/widgets/components/login_button.dart';
 import 'package:aksje_app/widgets/screens/inventory.dart';
 
 class LoginPage extends StatefulWidget {
-  
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -24,7 +23,6 @@ class LoginPage extends StatefulWidget {
     final storage = const FlutterSecureStorage();
     bool isLoggedIn = false;
     bool isLoading = false;
-    
 
 
 void login(String email, String password, BuildContext context) async {
@@ -56,8 +54,6 @@ void login(String email, String password, BuildContext context) async {
     getLoginUser();
     isLoading = false;
   });
-
-  navInventory(context);
 }
 
 void getLoginUser() async {
@@ -77,6 +73,7 @@ void getLoginUser() async {
       var user = User.fromJson(jsonResponse); // Assuming User class with fromJson method
 
       Provider.of<UserProvider>(context, listen: false).setUser(user);
+      navInventory(context);
 
       print('User: ${user.toJson()}'); // Assuming toJson method is defined in User class
     } else {

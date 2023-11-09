@@ -7,7 +7,6 @@ import 'package:aksje_app/widgets/ui_components/navigation_bar.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
-import 'package:aksje_app/widgets/screens/log-in.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 255, 255, 255),
@@ -115,20 +114,7 @@ class _MyAppState extends State<MyApp> {
         ),
         // ... Other dark theme properties ...
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(''), // Keep this empty to not show any title
-          leading:
-              Container(), // This can be empty if you don't want any leading widget in AppBar
-        ),
-        body: Center(
-          child: _pages.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: CustomNavigationBar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped,
-        ),
-      ),
+      home: LoginPage(),
     );
   }
 }
