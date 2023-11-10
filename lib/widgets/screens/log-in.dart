@@ -42,18 +42,26 @@ void login(String email, String password, BuildContext context) async {
       'password': password,
     }),
   );
-  String token = jsonDecode(response.body)['jwt'];
-  print('JWT Token: $token');
-  
-  // Store the token securely
-  storeToken(token);
 
-  // Set the user as logged in
-  setState(() {
-    isLoggedIn = true;
-    getLoginUser();
-    isLoading = false;
-  });
+  if(response.statusCode == 200) {
+    String token = jsonDecode(response.body)['jwt'];
+      storeToken(token);
+      setState(() {
+        isLoggedIn = true;
+        getLoginUser();
+        isLoading = false;
+      }
+    );
+  } else {
+    setState(() {
+      isLoading = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Wrong email or password"),
+      ),
+    );
+  }
 }
 
 void getLoginUser() async {

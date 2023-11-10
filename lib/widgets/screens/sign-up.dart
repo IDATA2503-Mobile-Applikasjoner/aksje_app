@@ -11,46 +11,47 @@ class SignUp extends StatefulWidget {
 }
 
   class _SingUpSate extends State<SignUp> {
-      final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController confirmPasswordController = TextEditingController();
 
-  bool checkPassowrd(String password, String confirmPassword) {
-    return password == confirmPassword;
-  }
-
-  Future<void> createUser(BuildContext context, String email, String password) async {
-    var url = Uri.parse('http://10.0.2.2:8080/api/user');
-    var body = jsonEncode({'email': email, 'password': password});
-
-    try {
-      var response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: body,
-      );
-        if (response.statusCode == 201) {
-          print('User created successfully');
-        } 
-        else if (response.statusCode == 400) {
-          var errorMessage = response.body;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorMessage),
-            ),
-          );
-        }
-    } catch (e) {
-      //print('Failed to create user. Error: $e');
+    bool checkPassowrd(String password, String confirmPassword) {
+      return password == confirmPassword;
     }
-  }
+
+    Future<void> createUser(BuildContext context, String email, String password) async {
+      var url = Uri.parse('http://10.0.2.2:8080/api/user');
+      var body = jsonEncode({'email': email, 'password': password});
+
+      try {
+        var response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: body,
+        );
+          if (response.statusCode == 201) {
+            print('User created successfully');
+          } 
+          else if (response.statusCode == 400) {
+            var errorMessage = response.body;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMessage),
+              ),
+            );
+          }
+      } catch (e) {
+        //print('Failed to create user. Error: $e');
+      }
+    }
+    
     void cancel() {
-    Navigator.pop(
-      context
-    );
-  }
+      Navigator.pop(
+        context
+      );
+    }
   
 
   @override

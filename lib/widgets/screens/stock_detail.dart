@@ -7,6 +7,7 @@ import 'package:aksje_app/providers/user_provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'dart:core';
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -56,6 +57,43 @@ class _StockDetailPageState extends State<StockDetailPage> {
         );
         if(response.statusCode == 200) {
           print("Stock was added to list");
+        }
+      }catch(e) {
+        print(e);
+      }
+    }
+
+    void _buyStockAndAddToServer() async {
+      try {
+        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+        var uid = userProvider.user!.uid;
+        DateTime date = DateTime.now();
+        var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease");
+        var body = jsonEncode(
+          {
+            "date": date.toIso8601String(),
+            "price": widget.stock.currentPrice,
+            "quantity": 1,
+            "stock": {
+              "id": widget.stock.id
+            },
+            "portfolio": {
+              "pid":uid
+            }
+          }
+        );
+        var response = await http.post(
+          baseURL,
+          headers: <String, String> {
+            'Content-Type':'application/json; charset=UTF-8',
+          },
+          body: body,
+        );
+        if(response.statusCode == 201) {
+          print("stock purchase was created.");
+        }
+        else {
+          print("Fail creating stock pruchase");
         }
       }catch(e) {
         print(e);
@@ -158,7 +196,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Logic for buying the stock goes here.
+                      _buyStockAndAddToServer();
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
