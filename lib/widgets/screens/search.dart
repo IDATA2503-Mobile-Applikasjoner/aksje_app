@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:aksje_app/models/stock.dart';
@@ -16,14 +15,15 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   List<Stock> stocks = [];
   List<Stock> filteredStocks = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _fectStockDataFromServer();
+    _fectStocskDataFromServer();
   }
 
-  void _fectStockDataFromServer() async {
+  void _fectStocskDataFromServer() async {
     try {
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks");
       var response = await http.get(baseURL);
@@ -33,10 +33,12 @@ class _SearchPageState extends State<SearchPage> {
           List responseData = jsonDecode(response.body);
           stocks = responseData.map((data) => Stock.fromJson(data)).toList();
           filteredStocks = List.from(stocks);
+          isLoading = false; // Set loading to false when data is loaded
         });
       }
     } catch (e) {
       print(e);
+      isLoading = false; // Set loading to false if an error occurs
     }
   }
 
@@ -49,16 +51,30 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-    void _goToStockDetailPage(Stock stock) {
-    Navigator.push(
+  void _goToStockDetailPage(Stock stock) async {
+    try {
+      var id = stock.id;
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
+      var response = await http.get(baseURL);
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        var stock1 = Stock.fromJson(responseData);
+        _navToStockDetailPage(stock1);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _navToStockDetailPage(Stock stock) {
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => StockDetailPage(stock: stock),
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +97,12 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           Expanded(
-              child: StockList(
-              stocks: filteredStocks,
-              onStockTap: (stock) => _goToStockDetailPage(stock),
-            ),
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator()) // Display the loading indicator
+                : StockList(
+                    stocks: filteredStocks,
+                    onStockTap: (stock) => _goToStockDetailPage(stock),
+                  ),
           ),
         ],
       ),

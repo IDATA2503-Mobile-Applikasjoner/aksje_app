@@ -28,6 +28,6 @@ Widget buildLoginButton(
 void navInventory(BuildContext context) {
   Navigator.pushReplacement(
     context,
-    MaterialPageRoute(builder: (context) => MainPage()),
+    MaterialPageRoute(builder: (context) => const MainPage(selectedIndex: 0)),
     );
 }

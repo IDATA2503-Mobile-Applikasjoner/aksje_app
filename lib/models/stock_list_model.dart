@@ -1,7 +1,7 @@
 class StockListModel {
   final int lid;
   final String name;
-  final List<String> stocks;
+  final List<Map<String, dynamic>> stocks; // Update the type of stocks to match the JSON structure
   final bool valid;
 
   StockListModel({
@@ -15,7 +15,7 @@ class StockListModel {
     return StockListModel(
       lid: json['lid'] as int,
       name: json['name'] as String,
-      stocks: List<String>.from(json['stocks']),
+      stocks: List<Map<String, dynamic>>.from(json['stocks']), // Adjust the type of stocks
       valid: json['valid'] as bool,
     );
   }

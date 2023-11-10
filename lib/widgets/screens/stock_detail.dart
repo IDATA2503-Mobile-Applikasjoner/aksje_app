@@ -1,3 +1,4 @@
+import 'package:aksje_app/widgets/screens/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/models/stock.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
@@ -15,6 +16,16 @@ class StockDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(context, 
+            MaterialPageRoute(
+              builder: (context) => const MainPage(selectedIndex: 2),
+              ),
+            );
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
         actions: <Widget>[
           // Popup menu to perform stock-related actions.
           PopupMenuButton<String>(

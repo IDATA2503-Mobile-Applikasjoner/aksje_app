@@ -4,16 +4,18 @@ import 'package:aksje_app/widgets/screens/my_lists.dart';
 import 'package:aksje_app/widgets/screens/search.dart';
 import 'package:aksje_app/widgets/ui_components/navigation_bar.dart';
 
+int _selectedIndex = 0;
+
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final int selectedIndex;
 
+  const MainPage({Key? key, required this.selectedIndex}) : super(key: key);
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
 
     static const List<Widget> _pages = <Widget>[
     Inventory(),
