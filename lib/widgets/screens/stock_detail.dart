@@ -1,15 +1,90 @@
-import 'package:aksje_app/widgets/screens/main_page.dart';
+import 'package:aksje_app/models/stock_list_model.dart';
 import 'package:flutter/material.dart';
+import 'package:aksje_app/widgets/screens/main_page.dart';
 import 'package:aksje_app/models/stock.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
+import 'package:aksje_app/providers/user_provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
-/// A page that displays detailed information about a specific stock.
-class StockDetailPage extends StatelessWidget {
-  /// The stock for which to display the details.
+class StockDetailPage extends StatefulWidget {
   final Stock stock;
 
-  /// Constructs a [StockDetailPage] which displays details of [stock].
   const StockDetailPage({Key? key, required this.stock}) : super(key: key);
+
+  @override
+  _StockDetailPageState createState() => _StockDetailPageState();
+}
+
+class _StockDetailPageState extends State<StockDetailPage> {
+  List<StockListModel> stockLists = [];
+
+  void _fetcListDataFromServer() async {
+    try {
+        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+        var uid = userProvider.user!.uid;
+        var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/listsbyuid/$uid");
+        var response = await http.get(baseURL);
+
+        if (response.statusCode == 200) {
+          List responseData = jsonDecode(response.body);
+          setState(() {
+            stockLists = responseData.map((data) => StockListModel.fromJson(data)).toList();
+          });
+          _showAddToListDialog();
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    void _addStockToListInServer(var lid) async {
+      try {
+        var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/addStock/$lid");
+        var body = jsonEncode(
+          {
+            "id": widget.stock.id
+          }
+        );
+        var response = await http.post(
+          baseURL,
+          headers: <String, String> {
+            'Content-Type':'application/json; charset=UTF-8',
+          },
+          body: body,
+        );
+        if(response.statusCode == 200) {
+          print("Stock was added to list");
+        }
+      }catch(e) {
+        print(e);
+      }
+    }
+
+  void _showAddToListDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select a List'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: stockLists.map((stockList) {
+                return ListTile(
+                  title: Text(stockList.name),
+                  onTap: () {
+                    _addStockToListInServer(stockList.lid);
+                    Navigator.of(context).pop();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +93,21 @@ class StockDetailPage extends StatelessWidget {
         title: const Text(''),
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacement(context, 
-            MaterialPageRoute(
-              builder: (context) => const MainPage(selectedIndex: 2),
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainPage(selectedIndex: 2),
               ),
             );
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
         actions: <Widget>[
-          // Popup menu to perform stock-related actions.
           PopupMenuButton<String>(
             onSelected: (String result) {
               switch (result) {
                 case 'Add to List':
-                  // Logic to add stock to the list goes here.
+                  _fetcListDataFromServer();
                   break;
                 case 'Add to Live Activity':
                   // Logic to add stock to live activity goes here.
@@ -58,35 +133,29 @@ class StockDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Displays the stock exchange open status.
               const Text(
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 'Oslo Børs Open',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              // Displays the stock symbol and name.
               Text(
-                '${stock.symbol} ${stock.name}',
+                '${widget.stock.symbol} ${widget.stock.name}',
                 style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              // Displays the current price and percentage change of the stock.
               Text(
-                '${stock.currentPrice.toString()} NOK (${stock.percentChangeIntraday.toString()}%)',
+                '${widget.stock.currentPrice.toString()} NOK (${widget.stock.percentChangeIntraday.toString()}%)',
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              // Chart representing the stock's performance.
               const SizedBox(
                 height: 300,
                 child: StockChart(),
               ),
               const SizedBox(height: 60),
-              // Row of buttons for buying or selling the stock.
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // Buy button
                   ElevatedButton(
                     onPressed: () {
                       // Logic for buying the stock goes here.
@@ -101,7 +170,6 @@ class StockDetailPage extends StatelessWidget {
                     ),
                     child: const Text('Buy'),
                   ),
-                  // Sell button
                   ElevatedButton(
                     onPressed: () {
                       // Logic for selling the stock goes here.
@@ -118,7 +186,6 @@ class StockDetailPage extends StatelessWidget {
                   ),
                 ],
               ),
-              // Additional stock details can be added here.
             ],
           ),
         ),
