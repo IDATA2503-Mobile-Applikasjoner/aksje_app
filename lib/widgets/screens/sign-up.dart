@@ -1,6 +1,8 @@
+import 'package:aksje_app/widgets/screens/log-in.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:aksje_app/widgets/screens/sign_up_success.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key? key}) : super(key: key);
@@ -33,6 +35,7 @@ class SignUp extends StatefulWidget {
         );
           if (response.statusCode == 201) {
             print('User created successfully');
+            navToLoginSuccessScreen();
           } 
           else if (response.statusCode == 400) {
             var errorMessage = response.body;
@@ -46,10 +49,20 @@ class SignUp extends StatefulWidget {
         //print('Failed to create user. Error: $e');
       }
     }
+
+    void navToLoginSuccessScreen() {
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const SignUpSuccessPage()
+        )
+      );
+    }
     
     void cancel() {
-      Navigator.pop(
-        context
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage())
       );
     }
   

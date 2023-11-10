@@ -7,7 +7,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
-import 'package:aksje_app/widgets/screens/inventory.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -109,7 +108,7 @@ void getLoginUser() async {
   }
 
     void navSignUpPage() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => (SignUp())),
     );
@@ -151,6 +150,7 @@ void getLoginUser() async {
               child: const Text('Create account'),
             ),
           ],
+          
         ),
       ),
     );
