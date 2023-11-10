@@ -1,4 +1,5 @@
 import 'package:aksje_app/models/stock_list_model.dart';
+import 'package:aksje_app/widgets/stock_components/stock_list.dart';
 import 'package:aksje_app/widgets/stock_list_components/stock_list_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:aksje_app/widgets/screens/add_list.dart';
 import 'package:aksje_app/models/user.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:aksje_app/widgets/screens/a_list.dart';
 
 class MyListsPage extends StatefulWidget {
   const MyListsPage({Key? key}) : super(key: key);
@@ -53,6 +55,40 @@ class _MyListsPageState extends State<MyListsPage> {
     }
   }
 
+  void _navToAddListPage() {
+    Navigator.pushReplacement(context, 
+      MaterialPageRoute(
+        builder: (context) => const AddListPage(),
+      )
+    );
+  }
+
+  void _goTiListPageWithDataFromServer(StockListModel stockListModel) async {
+    try {
+      var lid = stockListModel.lid;
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/$lid");
+      var response = await http.get(baseURL);
+
+      if(response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      var stockList = StockListModel.fromJson(responseData);
+      _navToListPage(stockList);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+  void _navToListPage(StockListModel stockListModel) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AListPage(stockList: stockListModel)
+      )
+    );
+  }
+
 @override
 Widget build(BuildContext context) {
   UserProvider userProvider = Provider.of<UserProvider>(context);
@@ -80,6 +116,12 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('My Lists'),
+      actions: [
+          IconButton(
+            onPressed: _navToAddListPage, 
+            icon: const Icon(Icons.add_outlined))
+        ],
+      //toolbarHeight: 40,
     ),
     body: lists.isEmpty
         ? Center(
@@ -101,19 +143,11 @@ Widget build(BuildContext context) {
               Expanded(
                 child: StockListModelList(
                   stockLists: lists,
+                  onStockListTap: (stockListModel) => _goTiListPageWithDataFromServer(stockListModel)
                 ),
               )
             ],
           ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddListPage()),
-        );
-      },
-      child: const Icon(Icons.add),
-    ),
-  );
-}
+    );
+  }
 }

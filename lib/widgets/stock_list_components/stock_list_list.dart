@@ -4,10 +4,12 @@ import 'package:aksje_app/widgets/stock_list_components/stock_list_item.dart';
 
 class StockListModelList extends StatelessWidget {
   final List<StockListModel> stockLists;
+  final Function(StockListModel) onStockListTap;
 
   const StockListModelList({
     Key? key,
     required this.stockLists,
+    required this.onStockListTap
   }) : super(key: key);
 
   @override
@@ -15,7 +17,7 @@ class StockListModelList extends StatelessWidget {
     return ListView.builder(
       itemCount: stockLists.length,
       itemBuilder: (ctx, index) {
-        return StockListItem(stockList: stockLists[index]);
+        return StockListItem(stockList: stockLists[index], onStockListTap: onStockListTap);
       },
     );
   }

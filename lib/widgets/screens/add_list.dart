@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:aksje_app/widgets/screens/main_page.dart';
 
 class AddListPage extends  StatefulWidget {
   const AddListPage({Key? key}) : super(key: key);
@@ -54,31 +55,40 @@ class _AddListPage extends State<AddListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add List"),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(context, 
+            MaterialPageRoute(
+              builder: (context) => const MainPage(selectedIndex: 1),
+              ),
+            );
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(100),
-            child: Column(
-              children: [
-                const Text('Name'),
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Name'
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    String name = nameController.text;
-                    createList(context, name);
-                  }, 
-                  child: const Text('Create List'))
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: "New List Name",
+              ),
             ),
-          )
-        ],
-      ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                String name = nameController.text;
+                createList(context, name);
+              }, 
+              child: const Text('Create List'))
+          ],
+        ),
+      )
+
     );
   }
 }

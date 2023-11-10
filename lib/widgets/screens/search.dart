@@ -98,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           Expanded(
             child: isLoading
-                ? const Center(child: CircularProgressIndicator()) // Display the loading indicator
+                ? const Center(child: CircularProgressIndicator())
                 : StockList(
                     stocks: filteredStocks,
                     onStockTap: (stock) => _goToStockDetailPage(stock),

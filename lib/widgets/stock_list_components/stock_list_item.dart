@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class StockListItem extends StatelessWidget {
   final StockListModel stockList;
+  final Function(StockListModel) onStockListTap;
 
-  const StockListItem({Key? key, required this.stockList}) : super(key: key);
+  const StockListItem({Key? key, required this.stockList, required this.onStockListTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,9 @@ class StockListItem extends StatelessWidget {
               ),
               const SizedBox(width: 4), // Adjust the width as needed
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  onStockListTap(stockList);
+                },
                 icon: const Icon(Icons.arrow_forward_ios),
               ),
             ],
