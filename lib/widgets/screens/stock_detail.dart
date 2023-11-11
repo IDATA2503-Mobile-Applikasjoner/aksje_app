@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:core';
+import 'package:another_flushbar/flushbar.dart';
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -91,6 +92,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
         );
         if(response.statusCode == 201) {
           print("stock purchase was created.");
+          showFloatingFlushbar(context);
         }
         else {
           print("Fail creating stock pruchase");
@@ -100,134 +102,159 @@ class _StockDetailPageState extends State<StockDetailPage> {
       }
     }
 
-  void _showAddToListDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Select a List'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: stockLists.map((stockList) {
-                return ListTile(
-                  title: Text(stockList.name),
-                  onTap: () {
-                    _addStockToListInServer(stockList.lid);
-                    Navigator.of(context).pop();
-                  },
-                );
-              }).toList(),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainPage(selectedIndex: 2),
-              ),
-            );
-          },
-          icon: const Icon(Icons.arrow_back_ios),
+    void showFloatingFlushbar(BuildContext context) {
+      Flushbar(
+        padding: const EdgeInsets.all(10),
+        borderRadius: BorderRadius.circular(8),
+        backgroundGradient: const LinearGradient(
+          colors: [Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0)],
+          stops: [0.6, 1],
         ),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: (String result) {
-              switch (result) {
-                case 'Add to List':
-                  _fetcListDataFromServer();
-                  break;
-                case 'Add to Live Activity':
-                  // Logic to add stock to live activity goes here.
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
-                value: 'Add to List',
-                child: Text('Add to List'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'Add to Live Activity',
-                child: Text('Add to Live Activity'),
-              ),
-            ],
+        boxShadows: const [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
           ),
         ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                'Oslo Børs Open',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                '${widget.stock.symbol} ${widget.stock.name}',
-                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                '${widget.stock.currentPrice.toString()} NOK (${widget.stock.percentChangeIntraday.toString()}%)',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              const SizedBox(
-                height: 300,
-                child: StockChart(),
-              ),
-              const SizedBox(height: 60),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      _buyStockAndAddToServer();
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'Info',
+        message: 'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.',
+        margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
+        flushbarPosition: FlushbarPosition.TOP, 
+        duration: const Duration(seconds: 5),
+    ).show(context);
+    }
+
+    void _showAddToListDialog() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Select a List'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: stockLists.map((stockList) {
+                  return ListTile(
+                    title: Text(stockList.name),
+                    onTap: () {
+                      _addStockToListInServer(stockList.lid);
+                      Navigator.of(context).pop();
                     },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: const Color.fromARGB(255, 79, 117, 205),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
-                    ),
-                    child: const Text('Buy'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Logic for selling the stock goes here.
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: const Color.fromARGB(255, 185, 56, 47),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
-                    ),
-                    child: const Text('Sell'),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
-            ],
+            ),
+          );
+        },
+      );
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(''),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainPage(selectedIndex: 2),
+                ),
+              );
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: (String result) {
+                switch (result) {
+                  case 'Add to List':
+                    _fetcListDataFromServer();
+                    break;
+                  case 'Add to Live Activity':
+                    // Logic to add stock to live activity goes here.
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'Add to List',
+                  child: Text('Add to List'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Add to Live Activity',
+                  child: Text('Add to Live Activity'),
+                ),
+              ],
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Text(
+                  'Oslo Børs Open',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  '${widget.stock.symbol} ${widget.stock.name}',
+                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  '${widget.stock.currentPrice.toString()} NOK (${widget.stock.percentChangeIntraday.toString()}%)',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                const SizedBox(
+                  height: 300,
+                  child: StockChart(),
+                ),
+                const SizedBox(height: 60),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _buyStockAndAddToServer();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: const Color.fromARGB(255, 79, 117, 205),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
+                      ),
+                      child: const Text('Buy'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Logic for selling the stock goes here.
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: const Color.fromARGB(255, 185, 56, 47),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
+                      ),
+                      child: const Text('Sell'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
