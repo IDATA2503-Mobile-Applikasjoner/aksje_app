@@ -6,6 +6,7 @@ import 'package:aksje_app/models/stock.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
+import 'dart:async';
 
 class AListPage extends StatefulWidget {
   final StockListModel stockList;
@@ -18,10 +19,17 @@ class AListPage extends StatefulWidget {
 class _AListPageState extends State<AListPage> {
   List<Stock> stocks = [];
   bool isLoading = true;
+  
   @override
   void initState() {
     super.initState();
     fetchStocksDataFromServer();
+
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      setState(() {
+        fetchStocksDataFromServer();
+      });
+    });
   }
 
   void fetchStocksDataFromServer() async {

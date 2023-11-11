@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:core';
 import 'package:another_flushbar/flushbar.dart';
+import 'dart:async';
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -22,6 +23,16 @@ class StockDetailPage extends StatefulWidget {
 class _StockDetailPageState extends State<StockDetailPage> {
   List<StockListModel> stockLists = [];
   late Stock stock = widget.stock;
+
+  @override
+  void initState() {
+    Timer.periodic(Duration(seconds: 30), (timer) async {
+      Stock newStock = await _getStockDataFromServer();
+      setState(() {
+        stock = newStock;
+      });
+    });
+  }
 
   void _fetcListDataFromServer() async {
     try {

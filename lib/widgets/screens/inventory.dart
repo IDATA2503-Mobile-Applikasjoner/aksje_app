@@ -7,6 +7,7 @@ import 'package:aksje_app/widgets/screens/stock_detail.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/widgets/components/pop_up_menu_profile.dart';
+import 'dart:async';
 
 // Stock model class
 
@@ -29,6 +30,13 @@ class _InventoryState extends State<Inventory> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fecthStockDataFromServe();
+
+
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      setState(() {
+        _fecthStockDataFromServe();
+      });
+    });
   }
 
   void _goToStockDetailPage(Stock stock) {

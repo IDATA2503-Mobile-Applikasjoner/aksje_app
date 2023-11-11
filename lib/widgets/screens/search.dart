@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:aksje_app/models/stock.dart';
 import 'package:aksje_app/widgets/stock_components/stock_list.dart';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
+import 'dart:async';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -21,6 +22,12 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     _fectStocskDataFromServer();
+
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      setState(() {
+        _fectStocskDataFromServer();
+      });
+    });
   }
 
   void _fectStocskDataFromServer() async {
