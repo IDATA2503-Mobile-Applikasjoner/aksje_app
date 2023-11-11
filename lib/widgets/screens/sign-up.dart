@@ -82,7 +82,7 @@ class SignUp extends StatefulWidget {
         forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
         title: 'Error',
         message: errorMessage,
-        margin: const EdgeInsets.only(top: 100),
+        margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
         flushbarPosition: FlushbarPosition.TOP, 
         duration: const Duration(seconds: 3),
       ).show(context);

@@ -7,6 +7,7 @@ import 'package:aksje_app/widgets/ui_components/navigation_bar.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
+import 'package:aksje_app/widgets/screens/splash_screen.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 255, 255, 255),
@@ -114,7 +115,7 @@ class _MyAppState extends State<MyApp> {
         ),
         // ... Other dark theme properties ...
       ),
-      home: LoginPage(),
+      home: Splash(),
     );
   }
 }

@@ -141,7 +141,7 @@ void getLoginUser() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('InvestBro'),
+        title: const Text('Log In'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
