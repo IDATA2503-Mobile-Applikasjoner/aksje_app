@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/widgets/screens/sign_up_success.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key? key}) : super(key: key);
@@ -39,14 +40,10 @@ class SignUp extends StatefulWidget {
           } 
           else if (response.statusCode == 400) {
             var errorMessage = response.body;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(errorMessage),
-              ),
-            );
+            showFloatingFlushbar(context, errorMessage);
           }
       } catch (e) {
-        //print('Failed to create user. Error: $e');
+        print('Failed to create user. Error: $e');
       }
     }
 
@@ -65,7 +62,32 @@ class SignUp extends StatefulWidget {
         MaterialPageRoute(builder: (context) => const LoginPage())
       );
     }
-  
+
+    void showFloatingFlushbar(BuildContext context, String errorMessage) {
+      Flushbar(
+        padding: const EdgeInsets.all(10),
+        borderRadius: BorderRadius.circular(8),
+        backgroundGradient: const LinearGradient(
+          colors: [Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0)],
+          stops: [0.6, 1],
+        ),
+        boxShadows: const [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          ),
+        ],
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'Error',
+        message: errorMessage,
+        margin: const EdgeInsets.only(top: 100),
+        flushbarPosition: FlushbarPosition.TOP, 
+        duration: const Duration(seconds: 3),
+      ).show(context);
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,11 +133,7 @@ class SignUp extends StatefulWidget {
                   createUser(context, email, password);
                   }
                 else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("The passwords didn't match"),
-                    ),
-                  );
+                  showFloatingFlushbar(context, "The passwords didn't match");
                 }
               },
               child: const Text('Sign Up'),

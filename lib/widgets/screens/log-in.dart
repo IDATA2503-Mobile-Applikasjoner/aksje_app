@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -55,11 +56,7 @@ void login(String email, String password, BuildContext context) async {
     setState(() {
       isLoading = false;
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Wrong email or password"),
-      ),
-    );
+    showFloatingFlushbar(context);
   }
 }
 
@@ -114,12 +111,37 @@ void getLoginUser() async {
     );
   }
 
+  void showFloatingFlushbar(BuildContext context) {
+    Flushbar(
+      padding: const EdgeInsets.all(10),
+      borderRadius: BorderRadius.circular(8),
+      backgroundGradient: const LinearGradient(
+        colors: [Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0)],
+        stops: [0.6, 1],
+      ),
+      boxShadows: const [
+        BoxShadow(
+          color: Colors.black45,
+          offset: Offset(3, 3),
+          blurRadius: 3,
+        ),
+      ],
+      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+      title: 'Error',
+      message: 'Email or password is wrong',
+      margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
+      flushbarPosition: FlushbarPosition.TOP, 
+      duration: const Duration(seconds: 3),
+    ).show(context);
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login Page'),
+        title: const Text('InvestBro'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
