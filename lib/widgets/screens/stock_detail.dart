@@ -21,6 +21,7 @@ class StockDetailPage extends StatefulWidget {
 
 class _StockDetailPageState extends State<StockDetailPage> {
   List<StockListModel> stockLists = [];
+  late Stock stock = widget.stock;
 
   void _fetcListDataFromServer() async {
     try {
@@ -102,6 +103,28 @@ class _StockDetailPageState extends State<StockDetailPage> {
       }
     }
 
+    Future<Stock> _getStockDataFromServer() async {
+      try {
+        var id = widget.stock.id;
+        var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
+        var response = await http.get(baseURL);
+
+        if(response.statusCode == 200) {
+          var responseData = jsonDecode(response.body);
+          var newStock = Stock.fromJson(responseData);
+          return newStock;
+        }
+        
+        // Return a rejected Future with an error message
+        return Future.error("Failed to fetch stock data. Status code: ${response.statusCode}");
+      } catch (e) {
+        print(e);
+        
+        // Return a rejected Future with the exception message
+        return Future.error("Error occurred while fetching stock data: $e");
+      }
+    }
+
     void showFloatingFlushbar(BuildContext context) {
       Flushbar(
         padding: const EdgeInsets.all(10),
@@ -123,7 +146,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
         message: 'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.',
         margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
         flushbarPosition: FlushbarPosition.TOP, 
-        duration: const Duration(seconds: 5),
+        duration: const Duration(seconds: 6),
     ).show(context);
     }
 
@@ -149,6 +172,18 @@ class _StockDetailPageState extends State<StockDetailPage> {
           );
         },
       );
+    }
+
+    Future<void> _onRefresh() async {
+      try {
+        Stock newStock = await _getStockDataFromServer();
+        setState(() {
+          stock = newStock;
+        });
+      } catch (error) {
+        // Handle errors appropriately (e.g., show an error message).
+        print("Error refreshing data: $error");
+      }
     }
 
     @override
@@ -192,67 +227,72 @@ class _StockDetailPageState extends State<StockDetailPage> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const Text(
-                  'Oslo Børs Open',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  '${widget.stock.symbol} ${widget.stock.name}',
-                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  '${widget.stock.currentPrice.toString()} NOK (${widget.stock.percentChangeIntraday.toString()}%)',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                const SizedBox(
-                  height: 300,
-                  child: StockChart(),
-                ),
-                const SizedBox(height: 60),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _buyStockAndAddToServer();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: const Color.fromARGB(255, 79, 117, 205),
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
-                      ),
-                      child: const Text('Buy'),
+        body: RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Oslo Børs Open',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Logic for selling the stock goes here.
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: const Color.fromARGB(255, 185, 56, 47),
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
-                      ),
-                      child: const Text('Sell'),
+                    const SizedBox(height: 20),
+                    Text(
+                      '${stock.symbol} ${stock.name}',
+                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '${stock.currentPrice.toString()} NOK (${stock.percentChangeIntraday.toString()}%)',
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    const SizedBox(
+                      height: 300,
+                      child: StockChart(),
+                    ),
+                    const SizedBox(height: 60),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _buyStockAndAddToServer();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: const Color.fromARGB(255, 79, 117, 205),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
+                          ),
+                          child: const Text('Buy'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Logic for selling the stock goes here.
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: const Color.fromARGB(255, 185, 56, 47),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            padding: const EdgeInsets.symmetric(horizontal: 62, vertical: 12),
+                          ),
+                          child: const Text('Sell'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );

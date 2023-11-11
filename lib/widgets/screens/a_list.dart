@@ -67,6 +67,12 @@ class _AListPageState extends State<AListPage> {
     );
   }
 
+  Future<void> _onRefresh() async {
+    setState(() {
+      fetchStocksDataFromServer();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,18 +91,21 @@ class _AListPageState extends State<AListPage> {
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : StockList(
-                stocks: stocks,
-                onStockTap: (stock) => _goToStockDetailPage(stock),
-              ),
-          ),
-        ],
-      ),
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : StockList(
+                  stocks: stocks,
+                  onStockTap: (stock) => _goToStockDetailPage(stock),
+                ),
+            ),
+          ],
+        ),
+      )
     );
   }
 }

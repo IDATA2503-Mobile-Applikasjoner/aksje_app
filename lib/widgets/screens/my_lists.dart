@@ -93,61 +93,41 @@ class _MyListsPageState extends State<MyListsPage> {
 Widget build(BuildContext context) {
   UserProvider userProvider = Provider.of<UserProvider>(context);
   User? user = userProvider.user;
-  if (userProvider.user == null) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Lists'),
-      ),
-      body: const Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Login to see lists"),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   return Scaffold(
     appBar: AppBar(
       title: const Text('My Lists'),
       actions: [
           IconButton(
             onPressed: _navToAddListPage, 
-            icon: const Icon(Icons.add_outlined))
-        ],
-      //toolbarHeight: 40,
-    ),
-    body: lists.isEmpty
-        ? Center(
-            child: isLoading
-                ? CircularProgressIndicator()
-                : const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("No lists found. Press + button to add a new list"),
-                      ],
-                    ),
-                  ),
-          )
-        : Column(
-            children: <Widget>[
-              Expanded(
-                child: StockListModelList(
-                  stockLists: lists,
-                  onStockListTap: (stockListModel) => _goTiListPageWithDataFromServer(stockListModel)
-                ),
-              )
-            ],
+            icon: const Icon(Icons.add_outlined)
           ),
+        ],
+      ),
+      body: lists.isEmpty
+        ? Center(
+          child: isLoading
+            ? CircularProgressIndicator()
+            : const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("No lists found. Press + button to add a new list"),
+                  ],
+                ),
+              ),
+            )
+          : Column(
+              children: <Widget>[
+                Expanded(
+                  child: StockListModelList(
+                    stockLists: lists,
+                    onStockListTap: (stockListModel) => _goTiListPageWithDataFromServer(stockListModel)
+                  ),
+                )
+              ],
+            ),
     );
   }
 }

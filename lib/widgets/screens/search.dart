@@ -76,35 +76,44 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  @override
+    Future<void> _onRefresh() async {
+    setState(() {
+      _fectStocskDataFromServer();
+    });
+  }
+
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: 'Search',
-                suffixIcon: Icon(Icons.search),
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  labelText: 'Search',
+                  suffixIcon: Icon(Icons.search),
+                ),
+                onChanged: (value) {
+                  _filterStocks(value);
+                },
               ),
-              onChanged: (value) {
-                _filterStocks(value);
-              },
             ),
-          ),
-          Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : StockList(
-                    stocks: filteredStocks,
-                    onStockTap: (stock) => _goToStockDetailPage(stock),
-                  ),
-          ),
-        ],
+            Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : StockList(
+                      stocks: filteredStocks,
+                      onStockTap: (stock) => _goToStockDetailPage(stock),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

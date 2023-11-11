@@ -42,7 +42,7 @@ class _InventoryState extends State<Inventory> {
 
   void _fecthStockDataFromServe() async {
     try {
-      UserProvider userProvider = Provider.of(context);
+      UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfolio/stocks/$uid");
       var response = await http.get(baseURL);
@@ -60,48 +60,55 @@ class _InventoryState extends State<Inventory> {
     }
   }
 
+  Future<void> _onRefresh() async {
+    setState(() {
+      _fecthStockDataFromServe();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inventory'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        appBar: AppBar(
+          title: const Text('Inventory'),
+        ),
+        body: RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: Padding(
+          padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Your development today'),
-                buildPopUpMenuProfile(context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Your development today'),
+                    buildPopUpMenuProfile(context),
+                  ],
+                ),
+                const SizedBox(height: 20.0),
+                StockChart(),
+                const SizedBox(height: 20.0),
+                const Text('Your stocks'),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: stocks.length,
+                    itemBuilder: (context, index) {
+                      final stock = stocks[index];
+                      return ListTile(
+                        leading: CircleAvatar(child: Text(stock.symbol)),
+                        title: Text(stock.name),
+                        subtitle: Text('${stock.currentPrice} NOK'),
+                        trailing: Text('+${stock.percentChangeIntraday.toStringAsFixed(2)}%'),
+                        onTap: () => _goToStockDetailPage(stock),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 20.0),
-            StockChart(),
-            const SizedBox(height: 20.0),
-            const Text('Your stocks'),
-            Expanded(
-              child: ListView.builder(
-                itemCount: stocks.length,
-                itemBuilder: (context, index) {
-                  final stock = stocks[index];
-                  return ListTile(
-                    leading: CircleAvatar(child: Text(stock.symbol)),
-                    title: Text(stock.name),
-                    subtitle: Text('${stock.currentPrice} NOK'),
-                    trailing: Text('+${stock.percentChangeIntraday.toStringAsFixed(2)}%'),
-                    onTap: () => _goToStockDetailPage(stock),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-        
-      ),
-      
-    );
-  }
+          ),
+        )
+      );
+    }
 }
