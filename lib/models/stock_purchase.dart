@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:aksje_app/models/stock.dart';
-import 'package:aksje_app/models/portfolio.dart';
 
 class StockPurchase {
   late int spid;

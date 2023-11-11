@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'package:aksje_app/models/user.dart';
-import 'package:aksje_app/models/stock_purchease.dart';
+import 'package:aksje_app/models/stock_purchase.dart';
 
 class Portfolio {
   late int pid;

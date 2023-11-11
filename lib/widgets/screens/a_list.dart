@@ -25,7 +25,7 @@ class _AListPageState extends State<AListPage> {
     super.initState();
     fetchStocksDataFromServer();
 
-    Timer.periodic(Duration(seconds: 30), (timer) {
+    Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
         fetchStocksDataFromServer();
       });

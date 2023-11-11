@@ -1,5 +1,4 @@
 import 'package:aksje_app/models/stock_list_model.dart';
-import 'package:aksje_app/widgets/stock_components/stock_list.dart';
 import 'package:aksje_app/widgets/stock_list_components/stock_list_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -106,7 +105,7 @@ Widget build(BuildContext context) {
       body: lists.isEmpty
         ? Center(
           child: isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(

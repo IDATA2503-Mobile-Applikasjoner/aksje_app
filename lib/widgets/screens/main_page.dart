@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/inventory.dart';
 import 'package:aksje_app/widgets/screens/my_lists.dart';
-import 'package:aksje_app/widgets/screens/search.dart';
-import 'package:aksje_app/widgets/ui_components/navigation_bar.dart';
+import 'package:aksje_app/widgets/screens/explore.dart';
+import 'package:aksje_app/widgets/components/navigation_bar.dart';
 
 int _selectedIndex = 0;
-
 
 class MainPage extends StatefulWidget {
   final int selectedIndex;
@@ -16,14 +15,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
-    static const List<Widget> _pages = <Widget>[
+  static const List<Widget> _pages = <Widget>[
     Inventory(),
     MyListsPage(),
-    SearchPage(),
+    ExplorePage(),
   ];
 
-    void _onItemTapped(int index) {
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -32,18 +30,17 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(''),
-          leading:
-              Container(),
-        ),
-        body: Center(
-          child: _pages.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: CustomNavigationBar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped,
-        ),
-      );
-    }
+      appBar: AppBar(
+        title: const Text(''),
+        leading: Container(),
+      ),
+      body: Center(
+        child: _pages.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: CustomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
+    );
+  }
 }

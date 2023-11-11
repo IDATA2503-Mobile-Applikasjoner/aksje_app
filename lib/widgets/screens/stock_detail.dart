@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'dart:core';
 import 'package:another_flushbar/flushbar.dart';
 import 'dart:async';
-import 'package:aksje_app/models/stock_purchease.dart';
+import 'package:aksje_app/models/stock_purchase.dart';
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -27,7 +27,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
 
   @override
   void initState() {
-    Timer.periodic(Duration(seconds: 30), (timer) async {
+    Timer.periodic(const Duration(seconds: 30), (timer) async {
       Stock newStock = await _getStockDataFromServer();
       setState(() {
         stock = newStock;
@@ -281,7 +281,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Select a List'),
+            title: const Text('Select a List'),
             content: SingleChildScrollView(
               child: Column(
                 children: stockLists.map((stockList) {

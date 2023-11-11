@@ -1,9 +1,7 @@
-import 'package:aksje_app/widgets/screens/log-in.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/inventory.dart';
 import 'package:aksje_app/widgets/screens/my_lists.dart';
-import 'package:aksje_app/widgets/screens/search.dart';
-import 'package:aksje_app/widgets/ui_components/navigation_bar.dart';
+import 'package:aksje_app/widgets/screens/explore.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
@@ -40,7 +38,7 @@ class _MyAppState extends State<MyApp> {
   static const List<Widget> _pages = <Widget>[
     Inventory(),
     MyListsPage(),
-    SearchPage(),
+    ExplorePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -91,8 +89,8 @@ class _MyAppState extends State<MyApp> {
           Theme.of(context).textTheme,
         ).copyWith(
           bodyLarge: const TextStyle(fontSize: 20, color: Colors.white),
-          bodyMedium: const TextStyle(fontSize: 16,color: Colors.white),
-          bodySmall: const TextStyle(fontSize: 12,color: Colors.white),
+          bodyMedium: const TextStyle(fontSize: 16, color: Colors.white),
+          bodySmall: const TextStyle(fontSize: 12, color: Colors.white),
         ),
         appBarTheme: AppBarTheme(
           backgroundColor:
@@ -115,7 +113,7 @@ class _MyAppState extends State<MyApp> {
         ),
         // ... Other dark theme properties ...
       ),
-      home: Splash(),
+      home: const Splash(),
     );
   }
 }

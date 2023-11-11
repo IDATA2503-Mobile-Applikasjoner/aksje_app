@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:aksje_app/widgets/screens/log-in.dart';
 
 class Splash extends StatefulWidget {
+  const Splash({super.key});
+
   @override
   _Splash createState() => _Splash();
 }
@@ -18,7 +20,7 @@ class _Splash extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     Timer(
-      Duration(seconds: 3),
+      const Duration(seconds: 3),
         () =>
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => const LoginPage()
@@ -29,8 +31,8 @@ class _Splash extends State<Splash> {
     return MaterialApp(
       home: Scaffold(
         body: Container(
-          decoration: new BoxDecoration(color: Colors.white),
-          child: new Center(
+          decoration: const BoxDecoration(color: Colors.white),
+          child: Center(
             child: image,
           ),
         ), 

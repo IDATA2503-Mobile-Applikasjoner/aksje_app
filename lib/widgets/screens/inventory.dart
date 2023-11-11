@@ -32,7 +32,7 @@ class _InventoryState extends State<Inventory> {
     _fecthStockDataFromServe();
 
 
-    Timer.periodic(Duration(seconds: 30), (timer) {
+    Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
         _fecthStockDataFromServe();
       });
@@ -40,7 +40,7 @@ class _InventoryState extends State<Inventory> {
   }
 
   void _goToStockDetailPage(Stock stock) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => StockDetailPage(stock: stock),
@@ -95,7 +95,7 @@ class _InventoryState extends State<Inventory> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                StockChart(),
+                const StockChart(),
                 const SizedBox(height: 20.0),
                 const Text('Your stocks'),
                 Expanded(

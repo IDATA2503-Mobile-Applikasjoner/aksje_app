@@ -6,7 +6,7 @@ import 'package:aksje_app/widgets/screens/sign_up_success.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 class SignUp extends StatefulWidget {
-  SignUp({Key? key}) : super(key: key);
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   _SingUpSate createState() => _SingUpSate();

@@ -17,77 +17,75 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-  class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final storage = const FlutterSecureStorage();
+  bool isLoggedIn = false;
+  bool isLoading = false;
 
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final storage = const FlutterSecureStorage();
-    bool isLoggedIn = false;
-    bool isLoading = false;
-
-
-void login(String email, String password, BuildContext context) async {
-
+  void login(String email, String password, BuildContext context) async {
     setState(() {
-    isLoading = true;
-  });
+      isLoading = true;
+    });
 
-  var url = Uri.parse('http://10.0.2.2:8080/api/user/authenticate');
-  var response = await http.post(
-    url,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'email': email,
-      'password': password,
-    }),
-  );
+    var url = Uri.parse('http://10.0.2.2:8080/api/user/authenticate');
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+      }),
+    );
 
-  if(response.statusCode == 200) {
-    String token = jsonDecode(response.body)['jwt'];
+    if (response.statusCode == 200) {
+      String token = jsonDecode(response.body)['jwt'];
       storeToken(token);
       setState(() {
         isLoggedIn = true;
         getLoginUser();
         isLoading = false;
-      }
-    );
-  } else {
-    setState(() {
-      isLoading = false;
-    });
-    showFloatingFlushbar(context);
-  }
-}
-
-void getLoginUser() async {
-  String? token = await getToken();
-  if (token != null) {
-    var url = Uri.parse('http://10.0.2.2:8080/api/user/sessionuser');
-    var response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token', // Include the token in the header
-      },
-    );
-
-    if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      var user = User.fromJson(jsonResponse); // Assuming User class with fromJson method
-
-      Provider.of<UserProvider>(context, listen: false).setUser(user);
-      navInventory(context);
-
-      print('User: ${user.toJson()}'); // Assuming toJson method is defined in User class
+      });
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      setState(() {
+        isLoading = false;
+      });
+      showFloatingFlushbar(context);
     }
-  } else {
-    print('Token not found');
   }
-}
+
+  void getLoginUser() async {
+    String? token = await getToken();
+    if (token != null) {
+      var url = Uri.parse('http://10.0.2.2:8080/api/user/sessionuser');
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token', // Include the token in the header
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        var user = User.fromJson(
+            jsonResponse); // Assuming User class with fromJson method
+
+        Provider.of<UserProvider>(context, listen: false).setUser(user);
+        navMainPage(context);
+
+        print(
+            'User: ${user.toJson()}'); // Assuming toJson method is defined in User class
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    } else {
+      print('Token not found');
+    }
+  }
 
   void storeToken(String token) async {
     TokenManager.storeToken(token);
@@ -102,10 +100,10 @@ void getLoginUser() async {
     TokenManager.removeToken();
   }
 
-    void navSignUpPage() {
+  void navSignUpPage() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => (SignUp())),
+      MaterialPageRoute(builder: (context) => (const SignUp())),
     );
   }
 
@@ -114,7 +112,10 @@ void getLoginUser() async {
       padding: const EdgeInsets.all(10),
       borderRadius: BorderRadius.circular(8),
       backgroundGradient: const LinearGradient(
-        colors: [Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0)],
+        colors: [
+          Color.fromARGB(255, 175, 25, 25),
+          Color.fromARGB(255, 233, 0, 0)
+        ],
         stops: [0.6, 1],
       ),
       boxShadows: const [
@@ -129,11 +130,10 @@ void getLoginUser() async {
       title: 'Error',
       message: 'Email or password is wrong',
       margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
-      flushbarPosition: FlushbarPosition.TOP, 
+      flushbarPosition: FlushbarPosition.TOP,
       duration: const Duration(seconds: 3),
     ).show(context);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +162,8 @@ void getLoginUser() async {
               ),
             ),
             const SizedBox(height: 20),
-            buildLoginButton(isLoading, emailController, passwordController, login, context),
+            buildLoginButton(
+                isLoading, emailController, passwordController, login, context),
             ElevatedButton(
               onPressed: () {
                 navSignUpPage();
@@ -170,7 +171,6 @@ void getLoginUser() async {
               child: const Text('Create account'),
             ),
           ],
-          
         ),
       ),
     );
