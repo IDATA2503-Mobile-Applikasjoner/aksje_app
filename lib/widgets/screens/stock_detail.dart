@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'dart:core';
 import 'package:another_flushbar/flushbar.dart';
 import 'dart:async';
+import 'package:aksje_app/models/stock_purchease.dart';
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -104,7 +105,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
         );
         if(response.statusCode == 201) {
           print("stock purchase was created.");
-          showFloatingFlushbar(context);
+          _showFloatingFlushbarByStock(context);
         }
         else {
           print("Fail creating stock pruchase");
@@ -136,7 +137,121 @@ class _StockDetailPageState extends State<StockDetailPage> {
       }
     }
 
-    void showFloatingFlushbar(BuildContext context) {
+    Future<List<Stock>> _getPrucheasStockStocksFromServer() async {
+      try {
+        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+        var uid = userProvider.user!.uid;
+        var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfolio/stocks/$uid");
+        var response = await http.get(baseURL);
+
+        if(response.statusCode == 200) {
+          List responseData = jsonDecode(response.body);
+          List<Stock> stocks = responseData.map((data) => Stock.fromJson(data)).toList();
+          return stocks;
+        }
+        return Future.error("error geting stocks");
+      }catch(e) {
+        return Future.error("error geting stocks");
+      }
+    }
+
+    Future<bool> _checkIfUserOwnStock() async {
+      var stocks = await _getPrucheasStockStocksFromServer();
+      var stock = await _getStockDataFromServer();
+      for(Stock stockCheck in stocks) {
+        if(stock.id == stockCheck.id) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    Future<StockPurchase> _getPrucheasStockFromServer() async {
+      try {
+        var id = stock.id;
+        var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease/$id/stockpurchease");
+        var response = await http.get(baseURL);
+
+        if(response.statusCode == 200) {
+          var responseData = jsonDecode(response.body);
+         print(responseData);
+          var stockPurchease = StockPurchase.fromJson(responseData);
+          return stockPurchease;
+        }
+        return Future.error("error geting stockPurchease");
+      }catch (e) {
+        print("Error during deserialization: $e");
+        return Future.error("error geting stockPurchease");
+      }
+    }
+
+    Future<void> _removeStockPruch() async {
+      try {
+        StockPurchase stockPurchease = await _getPrucheasStockFromServer();
+        var spid = stockPurchease.spid;
+        var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease/$spid");
+        var response = await http.delete(baseURL);
+        
+        if(response.statusCode == 200) {
+          print("stock purcheas was removed");
+        }
+      }catch (e) {
+        return Future.error("error removeing stocks prucheas");
+      }
+    }
+
+    void _showFloatingFlushbarSelStockTrue(BuildContext context) {
+      Flushbar(
+        padding: const EdgeInsets.all(10),
+        borderRadius: BorderRadius.circular(8),
+        backgroundGradient: const LinearGradient(
+          colors: [Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0)],
+          stops: [0.6, 1],
+        ),
+        boxShadows: const [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          ),
+        ],
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'Info',
+        message: 'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory',
+        margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
+        flushbarPosition: FlushbarPosition.TOP, 
+        duration: const Duration(seconds: 6),
+      ).show(context);
+    }
+
+    void _showFloatingFlushbarSelStockFalse(BuildContext context) {
+      Flushbar(
+        padding: const EdgeInsets.all(10),
+        borderRadius: BorderRadius.circular(8),
+        backgroundGradient: const LinearGradient(
+          colors: [Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0)],
+          stops: [0.6, 1],
+        ),
+        boxShadows: const [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          ),
+        ],
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'Info',
+        message: 'You dont own this stock',
+        margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
+        flushbarPosition: FlushbarPosition.TOP, 
+        duration: const Duration(seconds: 6),
+      ).show(context);
+    }
+    
+
+    void _showFloatingFlushbarByStock(BuildContext context) {
       Flushbar(
         padding: const EdgeInsets.all(10),
         borderRadius: BorderRadius.circular(8),
@@ -158,7 +273,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
         margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
         flushbarPosition: FlushbarPosition.TOP, 
         duration: const Duration(seconds: 6),
-    ).show(context);
+      ).show(context);
     }
 
     void _showAddToListDialog() {
@@ -285,8 +400,14 @@ class _StockDetailPageState extends State<StockDetailPage> {
                           child: const Text('Buy'),
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            // Logic for selling the stock goes here.
+                          onPressed: () async {
+                            if( await _checkIfUserOwnStock()) {
+                              await _removeStockPruch();
+                              _showFloatingFlushbarSelStockTrue(context);
+                            }
+                            else {
+                              _showFloatingFlushbarSelStockFalse(context);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
