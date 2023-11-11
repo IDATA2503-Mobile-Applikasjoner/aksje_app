@@ -2,11 +2,11 @@ import 'package:aksje_app/models/stock.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
-import 'package:aksje_app/widgets/screens/log-in.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:aksje_app/widgets/components/pop_up_menu_profile.dart';
 
 // Stock model class
 
@@ -29,13 +29,6 @@ class _InventoryState extends State<Inventory> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fecthStockDataFromServe();
-  }
-
-  void navLoginPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
   }
 
   void _goToStockDetailPage(Stock stock) {
@@ -82,24 +75,7 @@ class _InventoryState extends State<Inventory> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text('Your development today'),
-                OutlinedButton(
-                  onPressed: navLoginPage,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    side: MaterialStateProperty.all(BorderSide.none),
-                  ),
-                  child: const Icon(Icons.person, color: Colors.black),
-                ),
-                Consumer<UserProvider>(
-                  builder: (context, userProvider, _) {
-                    if (userProvider.user != null) {
-                      return Text(userProvider.user!.email);
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
+                buildPopUpMenuProfile(context),
               ],
             ),
             const SizedBox(height: 20.0),

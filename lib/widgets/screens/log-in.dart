@@ -1,4 +1,5 @@
 import 'package:aksje_app/models/user.dart';
+import 'package:aksje_app/providers/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/sign-up.dart';
 import 'package:http/http.dart' as http;
@@ -88,20 +89,17 @@ void getLoginUser() async {
   }
 }
 
-// Storing the token securely
   void storeToken(String token) async {
-    await storage.write(key: 'jwt_token', value: token);
+    TokenManager.storeToken(token);
   }
 
-  // Fetching the stored token
   Future<String?> getToken() async {
-    String? token = await storage.read(key: 'jwt_token');
+    String? token = await TokenManager.getToken();
     return token;
   }
 
-  // Removing the token when the user logs out
   void removeToken() async {
-    await storage.delete(key: 'jwt_token');
+    TokenManager.removeToken();
   }
 
     void navSignUpPage() {
