@@ -1,4 +1,5 @@
 import 'package:aksje_app/models/stock.dart';
+import 'package:aksje_app/widgets/stock_components/stock_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
@@ -26,11 +27,10 @@ class _InventoryState extends State<Inventory> {
     super.initState();
   }
 
-    @override
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fecthStockDataFromServe();
-
 
     Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
@@ -50,12 +50,13 @@ class _InventoryState extends State<Inventory> {
 
   void _fecthStockDataFromServe() async {
     try {
-      UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfolio/stocks/$uid");
       var response = await http.get(baseURL);
 
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
         setState(() {
           stocks = responseData.map((data) => Stock.fromJson(data)).toList();
@@ -63,7 +64,7 @@ class _InventoryState extends State<Inventory> {
       } else {
         print('${response.statusCode}');
       }
-    } catch(e) {
+    } catch (e) {
       print(e);
     }
   }
@@ -77,13 +78,15 @@ class _InventoryState extends State<Inventory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Inventory'),
-        ),
-        body: RefreshIndicator(
-          onRefresh: _onRefresh,
+      appBar: AppBar(
+        title: const Text('Inventory'),
+      ),
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: SingleChildScrollView(
+          // Allows vertical scrolling
           child: Padding(
-          padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -95,28 +98,31 @@ class _InventoryState extends State<Inventory> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                const StockChart(),
+                const SizedBox(
+                  height: 300,
+                  child: StockChart(),
+                ),
                 const SizedBox(height: 20.0),
                 const Text('Your stocks'),
-                Expanded(
+                SizedBox(
+                  height: 200, // Adjust the height as needed
                   child: ListView.builder(
+                    scrollDirection: Axis.horizontal, // Set to horizontal
                     itemCount: stocks.length,
                     itemBuilder: (context, index) {
-                      final stock = stocks[index];
-                      return ListTile(
-                        leading: CircleAvatar(child: Text(stock.symbol)),
-                        title: Text(stock.name),
-                        subtitle: Text('${stock.currentPrice} NOK'),
-                        trailing: Text('+${stock.percentChangeIntraday.toStringAsFixed(2)}%'),
-                        onTap: () => _goToStockDetailPage(stock),
+                      return StockCard(
+                        stock: stocks[index],
+                        onTap: () => _goToStockDetailPage(stocks[index]),
                       );
                     },
                   ),
                 ),
+                // ... [other widgets]
               ],
             ),
           ),
-        )
-      );
-    }
+        ),
+      ),
+    );
+  }
 }

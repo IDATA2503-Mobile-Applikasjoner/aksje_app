@@ -50,6 +50,31 @@ class _ExplorePageState extends State<ExplorePage> {
     if (mounted) setState(() {});
   }
 
+  void _goToStockDetailPage(Stock stock) async {
+    try {
+      var id = stock.id;
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
+      var response = await http.get(baseURL);
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        var stock1 = Stock.fromJson(responseData);
+        _navToStockDetailPage(stock1);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _navToStockDetailPage(Stock stock) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StockDetailPage(stock: stock),
+      ),
+    );
+  }
+
   void _filterStocks(String query) {
     setState(() {
       filteredStocks = stocks
@@ -87,14 +112,6 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
-  void _goToStockDetailPage(Stock stock) async {
-    // Navigate to Stock Detail Page
-  }
-
-  Future<void> _onRefresh() async {
-    _fetchStocksDataFromServer();
-  }
-
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -103,32 +120,32 @@ class _ExplorePageState extends State<ExplorePage> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.arrow_upward),
-                title: Text('Highest Price'),
+                leading: const Icon(Icons.arrow_upward),
+                title: const Text('Highest Price'),
                 onTap: () {
                   _sortStocksByHighestPrice();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.arrow_downward),
-                title: Text('Lowest Price'),
+                leading: const Icon(Icons.arrow_downward),
+                title: const Text('Lowest Price'),
                 onTap: () {
                   _sortStocksByLowestPrice();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.trending_up),
-                title: Text('Biggest Earner'),
+                leading: const Icon(Icons.trending_up),
+                title: const Text('Biggest Earner'),
                 onTap: () {
                   _sortStocksByBiggestEarner();
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.trending_down),
-                title: Text('Biggest Loser'),
+                leading: const Icon(Icons.trending_down),
+                title: const Text('Biggest Loser'),
                 onTap: () {
                   _sortStocksByBiggestLoser();
                   Navigator.pop(context);
@@ -139,6 +156,10 @@ class _ExplorePageState extends State<ExplorePage> {
         );
       },
     );
+  }
+
+  Future<void> _onRefresh() async {
+    _fetchStocksDataFromServer();
   }
 
   @override
