@@ -362,7 +362,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                   const SizedBox(height: 10),
                   const SizedBox(
                     height: 300,
-                    child: StockChart(),
+                    child: StockChart(stock: stock),
                   ),
                   const SizedBox(height: 60),
                   Row(

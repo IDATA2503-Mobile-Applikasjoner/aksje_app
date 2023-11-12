@@ -1,4 +1,6 @@
 //Represent a stock
+import 'package:aksje_app/models/stock_history.dart';
+
 class Stock {
   int id;
   String symbol;
