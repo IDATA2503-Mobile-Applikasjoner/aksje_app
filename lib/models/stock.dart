@@ -1,3 +1,4 @@
+//Represent a stock
 class Stock {
   int id;
   String symbol;
@@ -15,6 +16,7 @@ class Stock {
     required this.percentChangeIntraday,
   });
 
+  //Translate json data to stock
   factory Stock.fromJson(Map<String, dynamic> json) {
     return Stock(
       id: json['id'] as int,

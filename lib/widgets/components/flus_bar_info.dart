@@ -1,7 +1,7 @@
   import 'package:flutter/material.dart';
   import 'package:another_flushbar/flushbar.dart';
 
-
+  //A flus bar that givs info massage afther an action
   void buildFlushBarInfo(BuildContext context, String infoMassage) {
     Flushbar(
       padding: const EdgeInsets.all(10),

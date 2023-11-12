@@ -1,3 +1,4 @@
+//Represent Stock list 
 class StockListModel {
   final int lid;
   final String name;
@@ -11,6 +12,7 @@ class StockListModel {
     required this.valid,
   });
 
+  //Translate json datat to a stock list.
   factory StockListModel.fromJson(Map<String, dynamic> json) {
     return StockListModel(
       lid: json['lid'] as int,

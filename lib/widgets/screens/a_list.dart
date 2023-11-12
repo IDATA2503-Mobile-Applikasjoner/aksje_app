@@ -8,6 +8,8 @@ import 'dart:convert';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
 import 'dart:async';
 
+//The A list page
+//Contis the list and what stock the user have in that list.
 class AListPage extends StatefulWidget {
   final StockListModel stockList;
   const AListPage({Key? key, required this.stockList}) : super(key: key);
@@ -23,34 +25,43 @@ class _AListPageState extends State<AListPage> {
   @override
   void initState() {
     super.initState();
-    fetchStocksDataFromServer();
+    _setStocksData();
 
     Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
-        fetchStocksDataFromServer();
+        _setStocksData();
       });
     });
   }
 
-  void fetchStocksDataFromServer() async {
+  //
+  Future<List<Stock>> _fetchStocksDataFromServer() async {
     try {
       var lid = widget.stockList.lid;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/lists/$lid/stocks");
       var response = await http.get(baseURL);
 
       if(response.statusCode == 200) {
-        setState(() {
           List responseData = jsonDecode(response.body);
-          stocks = responseData.map((data) => Stock.fromJson(data)).toList();
-          isLoading = false;
-        });
+          List<Stock> stocksData = responseData.map((data) => Stock.fromJson(data)).toList();
+          return stocksData;
       }
+      return Future.error("Didn't find stock data");
     }catch(e) {
-      print(e);
+       return Future.error(e);
     }
   }
 
-    void _goToStockDetailPage(Stock stock) async {
+  //Sets the stock data to the stocks list
+  void _setStocksData() async {
+    List<Stock> newStocks = await _fetchStocksDataFromServer();
+    setState(() {
+      isLoading = false;
+      stocks = newStocks;
+    });
+  }
+
+    Future<Stock> _getStockDataFromnServer(Stock stock) async {
     try {
       var id = stock.id;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
@@ -58,12 +69,18 @@ class _AListPageState extends State<AListPage> {
 
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
-        var stock1 = Stock.fromJson(responseData);
-        _navToStockDetailPage(stock1);
+        var newStock = Stock.fromJson(responseData);
+        return newStock;
       }
+      return Future.error("Didn't find stock");
     } catch (e) {
-      print(e);
+      return Future.error(e);
     }
+  }
+
+  void _goToStockDetailPage(Stock stock) async{
+    Stock serverStock = await _getStockDataFromnServer(stock);
+    _navToStockDetailPage(serverStock);
   }
 
   void _navToStockDetailPage(Stock stock) {
@@ -77,7 +94,7 @@ class _AListPageState extends State<AListPage> {
 
   Future<void> _onRefresh() async {
     setState(() {
-      fetchStocksDataFromServer();
+      _setStocksData();
     });
   }
 

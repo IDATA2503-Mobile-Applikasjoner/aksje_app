@@ -1,3 +1,4 @@
+//Represent a user
 class User {
   final String email;
   final String password;
@@ -9,6 +10,7 @@ class User {
     required this.uid
   });
 
+    //Translate a user to json data
     Map<String, dynamic> toJson() {
     return {
       'email': email,
@@ -17,6 +19,7 @@ class User {
     };
   }
 
+    //Translate json data to a user.
     factory User.fromJson(Map<String, dynamic> json) {
     return User(
       email: json['email'],

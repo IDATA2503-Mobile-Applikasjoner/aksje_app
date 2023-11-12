@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/main_page.dart';
 
+//Button with loding symbol for login
 Widget buildLoginButton(
     bool isLoading,
     TextEditingController emailController,

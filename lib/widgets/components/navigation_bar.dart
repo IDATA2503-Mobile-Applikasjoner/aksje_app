@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//This class represent the navigator bar
 class CustomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;

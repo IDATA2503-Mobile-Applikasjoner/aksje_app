@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:another_flushbar/flushbar.dart';
 
+//Error masage afther user trying to do an action it can not do.
 void buildFlushBarError(BuildContext context, String errorMassage) {
   Flushbar(
     padding: const EdgeInsets.all(10),

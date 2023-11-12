@@ -1,4 +1,5 @@
 
+//Represent a stock purchase
 class StockPurchase {
   late int spid;
   late DateTime date;
@@ -12,6 +13,7 @@ class StockPurchase {
     required this.quantity,
   });
 
+  //Translate json data to stock purchase.
   factory StockPurchase.fromJson(Map<String, dynamic> json) {
     return StockPurchase(
       spid: json['spid'] as int ,

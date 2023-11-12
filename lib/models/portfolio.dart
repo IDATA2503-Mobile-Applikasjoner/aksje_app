@@ -1,6 +1,7 @@
 import 'package:aksje_app/models/user.dart';
 import 'package:aksje_app/models/stock_purchase.dart';
 
+//Class that represent a portfolio
 class Portfolio {
   late int pid;
   late User user;
@@ -12,6 +13,7 @@ class Portfolio {
     required this.stockPurchases,
   });
 
+  //Translate json data to a portfolio
   factory Portfolio.fromJson(Map<String, dynamic> json) {
     return Portfolio(
       pid: json['pid'] as int,
