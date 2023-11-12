@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:aksje_app/widgets/components/flus_bar_info.dart';
 
+//Represent the login page.
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -24,7 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoggedIn = false;
   bool isLoading = false;
 
-  void login(String email, String password, BuildContext context) async {
+  //Sends authetication request to the server
+  Future<void> login(String email, String password, BuildContext context) async {
     setState(() {
       isLoading = true;
     });
@@ -40,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
         'password': password,
       }),
     );
-
     if (response.statusCode == 200) {
       String token = jsonDecode(response.body)['jwt'];
       storeToken(token);
@@ -53,11 +55,12 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = false;
       });
-      showFloatingFlushbar(context);
+      buildFlushBarInfo(context, 'Email or password is wrong');
     }
   }
 
-  void getLoginUser() async {
+  //Gets the authenticated user from the server.
+  Future<void> getLoginUser() async {
     String? token = await getToken();
     if (token != null) {
       var url = Uri.parse('http://10.0.2.2:8080/api/user/sessionuser');
@@ -65,20 +68,20 @@ class _LoginPageState extends State<LoginPage> {
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token', // Include the token in the header
+          'Authorization': 'Bearer $token',
         },
       );
 
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         var user = User.fromJson(
-            jsonResponse); // Assuming User class with fromJson method
+            jsonResponse);
 
         Provider.of<UserProvider>(context, listen: false).setUser(user);
         navMainPage(context);
 
         print(
-            'User: ${user.toJson()}'); // Assuming toJson method is defined in User class
+            'User: ${user.toJson()}');
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }
@@ -87,52 +90,28 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
   
+  //Store the JWT toke in the TokeManager
   void storeToken(String token) async {
     TokenManager.storeToken(token);
   }
 
+  //Gets the JWT toke from TokeManager
   Future<String?> getToken() async {
     String? token = await TokenManager.getToken();
     return token;
   }
 
+  //Removes JWT token from Toke Manager
   void removeToken() async {
     TokenManager.removeToken();
   }
 
+  //Navigates to sign up page.
   void navSignUpPage() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => (const SignUp())),
     );
-  }
-
-  void showFloatingFlushbar(BuildContext context) {
-    Flushbar(
-      padding: const EdgeInsets.all(10),
-      borderRadius: BorderRadius.circular(8),
-      backgroundGradient: const LinearGradient(
-        colors: [
-          Color.fromARGB(255, 175, 25, 25),
-          Color.fromARGB(255, 233, 0, 0)
-        ],
-        stops: [0.6, 1],
-      ),
-      boxShadows: const [
-        BoxShadow(
-          color: Colors.black45,
-          offset: Offset(3, 3),
-          blurRadius: 3,
-        ),
-      ],
-      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-      title: 'Error',
-      message: 'Email or password is wrong',
-      margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
-      flushbarPosition: FlushbarPosition.TOP,
-      duration: const Duration(seconds: 3),
-    ).show(context);
   }
 
   @override

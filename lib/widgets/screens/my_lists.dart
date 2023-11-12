@@ -9,6 +9,8 @@ import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/widgets/screens/a_list.dart';
 
+//Represent my list page.
+//User can see what list he has.
 class MyListsPage extends StatefulWidget {
   const MyListsPage({Key? key}) : super(key: key);
 
@@ -31,6 +33,7 @@ class _MyListsPageState extends State<MyListsPage> {
     _fetchDataFromServer();
   }
 
+  //Gets stock list data from the server and sets the lists to that data.
   Future<void> _fetchDataFromServer() async {
     try {
       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -45,15 +48,16 @@ class _MyListsPageState extends State<MyListsPage> {
           isLoading = false;
         });
       } else {
-        print('Request failed with status: ${response.statusCode}.');
+        Future.error('Request failed with status: ${response.statusCode}.');
         isLoading = false;
       }
     } catch (e) {
-      print(e);
+      Future.error(e);
       isLoading = false;
     }
   }
 
+  //Navigates to add list page
   void _navToAddListPage() {
     Navigator.pushReplacement(context, 
       MaterialPageRoute(
@@ -62,7 +66,8 @@ class _MyListsPageState extends State<MyListsPage> {
     );
   }
 
-  void _goTiListPageWithDataFromServer(StockListModel stockListModel) async {
+  //Get list from database and navigates to that list.
+  Future<void> _goTiListPageWithDataFromServer(StockListModel stockListModel) async {
     try {
       var lid = stockListModel.lid;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/$lid");
@@ -78,7 +83,7 @@ class _MyListsPageState extends State<MyListsPage> {
     }
   }
 
-
+  //Navigates to list page.
   void _navToListPage(StockListModel stockListModel) {
     Navigator.pushReplacement(
       context,

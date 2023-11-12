@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/log-in.dart';
 
+//Shows the sign up success page
 class SignUpSuccessPage extends StatelessWidget {
   const SignUpSuccessPage({super.key});
 

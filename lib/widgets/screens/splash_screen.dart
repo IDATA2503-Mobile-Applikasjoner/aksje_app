@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:aksje_app/widgets/screens/log-in.dart';
 
+//Repsresent the start up screen for the app
+//Screen shows for 3 secunds before going to Login Page.
 class Splash extends StatefulWidget {
   const Splash({super.key});
 

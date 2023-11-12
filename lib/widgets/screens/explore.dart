@@ -28,7 +28,8 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
-  void _fetchStocksDataFromServer() async {
+  //Gets the stock data form the server and sets the stocks to that data.
+  Future<void> _fetchStocksDataFromServer() async {
     setState(() {
       isLoading = true;
     });
@@ -40,17 +41,17 @@ class _ExplorePageState extends State<ExplorePage> {
         List responseData = jsonDecode(response.body);
         stocks = responseData.map((data) => Stock.fromJson(data)).toList();
         filteredStocks = List.from(stocks);
-        isLoading = false; // Set loading to false when data is loaded
+        isLoading = false;
       }
     } catch (e) {
-      print(e);
-      isLoading = false; // Set loading to false if an error occurs
+      isLoading = false;
+      return Future.error(e);
     }
-    // Refresh the UI
     if (mounted) setState(() {});
   }
 
-  void _goToStockDetailPage(Stock stock) async {
+  //Get the stocks from the database and uses that stock to call the _naviagteToStockDetailPage
+  Future<void> _goToStockDetailPage(Stock stock) async {
     try {
       var id = stock.id;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
@@ -62,10 +63,11 @@ class _ExplorePageState extends State<ExplorePage> {
         _navToStockDetailPage(stock1);
       }
     } catch (e) {
-      print(e);
+      return Future.error(e);
     }
   }
 
+  //Naviagest to the stock detail page, based on the stock that user clickt on.
   void _navToStockDetailPage(Stock stock) {
     Navigator.pushReplacement(
       context,
@@ -75,6 +77,7 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  //Filter stock by what you are searching for.
   void _filterStocks(String query) {
     setState(() {
       filteredStocks = stocks
@@ -84,20 +87,23 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
+  //Sorts the stocks by higest price
   void _sortStocksByHighestPrice() {
     setState(() {
       filteredStocks.sort((a, b) =>
-          b.currentPrice.compareTo(a.currentPrice)); // Descending order
+          b.currentPrice.compareTo(a.currentPrice));
     });
   }
 
+  //Sortst the stock by lowest price
   void _sortStocksByLowestPrice() {
     setState(() {
       filteredStocks.sort((a, b) =>
-          a.currentPrice.compareTo(b.currentPrice)); // Ascending order
+          a.currentPrice.compareTo(b.currentPrice));
     });
   }
 
+  //Sorts the stock by biggest earner
   void _sortStocksByBiggestEarner() {
     setState(() {
       filteredStocks.sort(
@@ -105,6 +111,7 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
+  //Sorts the stock by the biggest loser
   void _sortStocksByBiggestLoser() {
     setState(() {
       filteredStocks.sort(
@@ -112,6 +119,7 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
+  //Shows the sorting options lists
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -158,6 +166,7 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
+  //Refreshces the stocks with new data on the page.
   Future<void> _onRefresh() async {
     _fetchStocksDataFromServer();
   }
