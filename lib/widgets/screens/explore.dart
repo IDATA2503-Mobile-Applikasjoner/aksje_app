@@ -67,7 +67,7 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   void _navToStockDetailPage(Stock stock) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => StockDetailPage(stock: stock),
