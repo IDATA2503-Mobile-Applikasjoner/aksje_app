@@ -33,6 +33,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
 
   @override
   void initState() {
+    _setSTockHistriesWithDataFromServer();
     timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (mounted) {
         Stock newStock = await _getStockDataFromServer();
@@ -225,6 +226,9 @@ class _StockDetailPageState extends State<StockDetailPage> {
       if(response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
         List<StockHistory> newStockHistories = responseData.map((data) => StockHistory.fromJson(data)).toList();
+        setState(() {
+          stockHistries = newStockHistories;
+        });
         return newStockHistories;
       }
       return Future.error("Didn't get data");
