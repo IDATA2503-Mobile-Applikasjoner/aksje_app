@@ -31,7 +31,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
   @override
   void initState() {
     timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
-      // Check if the widget is still mounted before updating the state
       if (mounted) {
         Stock newStock = await _getStockDataFromServer();
         setState(() {
@@ -44,7 +43,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
 
   @override
   void dispose() {
-    // Cancel the timer when the widget is disposed
     timer.cancel();
     super.dispose();
   }
@@ -72,7 +70,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
   // Shows all the list that the user have.
   void _showListOptions() async {
     setState(() async {
-      print("here");
       stockLists = await _fetcListDataFromServer();
       _showAddToListDialog();
     });
@@ -203,7 +200,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
       var baseURL = Uri.parse(
           "http://10.0.2.2:8080/api/stockpurchease/$id/stockpurchease");
       var response = await http.get(baseURL);
-      print(response.statusCode);
 
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
@@ -212,7 +208,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
       }
       return Future.error("error geting stockPurchease");
     } catch (e) {
-      print("Error during deserialization: $e");
       return Future.error("error geting stockPurchease");
     }
   }
@@ -225,8 +220,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease/$spid");
       var response = await http.delete(baseURL);
 
-      if (response.statusCode == 200) {
-        print("stock purcheas was removed");
+      if (response.statusCode != 200) {
+        return Future.error("error removeing stocks prucheas");
       }
     } catch (e) {
       return Future.error("error removeing stocks prucheas");
@@ -266,8 +261,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
         stock = newStock;
       });
     } catch (error) {
-      // Handle errors appropriately (e.g., show an error message).
-      print("Error refreshing data: $error");
+      return Future.error(error);
     }
   }
 
