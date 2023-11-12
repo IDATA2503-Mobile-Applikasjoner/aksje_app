@@ -10,8 +10,7 @@ import 'dart:convert';
 import 'package:aksje_app/widgets/components/pop_up_menu_profile.dart';
 import 'dart:async';
 
-// Stock model class
-
+//The Inventory page
 class Inventory extends StatefulWidget {
   const Inventory({Key? key}) : super(key: key);
 
@@ -39,6 +38,7 @@ class _InventoryState extends State<Inventory> {
     });
   }
 
+  //Naviagte to stock detail page
   void _goToStockDetailPage(Stock stock) {
     Navigator.pushReplacement(
       context,
@@ -48,7 +48,8 @@ class _InventoryState extends State<Inventory> {
     );
   }
 
-  void _fecthStockDataFromServe() async {
+  //Gets stock data from server and set stocks to that data.
+  Future<void> _fecthStockDataFromServe() async {
     try {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
@@ -62,13 +63,14 @@ class _InventoryState extends State<Inventory> {
           stocks = responseData.map((data) => Stock.fromJson(data)).toList();
         });
       } else {
-        print('${response.statusCode}');
+        return Future.error("Didn't get stocks");
       }
     } catch (e) {
-      print(e);
+      return Future.error(e);
     }
   }
 
+  //Refreshes the page
   Future<void> _onRefresh() async {
     setState(() {
       _fecthStockDataFromServe();
@@ -105,9 +107,9 @@ class _InventoryState extends State<Inventory> {
                 const SizedBox(height: 20.0),
                 const Text('Your stocks'),
                 SizedBox(
-                  height: 200, // Adjust the height as needed
+                  height: 200,
                   child: ListView.builder(
-                    scrollDirection: Axis.horizontal, // Set to horizontal
+                    scrollDirection: Axis.horizontal,
                     itemCount: stocks.length,
                     itemBuilder: (context, index) {
                       return StockCard(
@@ -117,7 +119,6 @@ class _InventoryState extends State<Inventory> {
                     },
                   ),
                 ),
-                // ... [other widgets]
               ],
             ),
           ),
