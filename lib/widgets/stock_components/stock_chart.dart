@@ -1,34 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:aksje_app/models/stock.dart';
 import 'package:aksje_app/models/stock_history.dart'; // Import the StockHistory model
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-class StockChart extends StatefulWidget {
-  final StockHistory stock;
-
-  const StockChart({Key? key, required this.stock}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Use the stock's historical data as the data source for the chart
-    List<StockHistory> chartData =
-        stock.shid as List<StockHistory>; // Assuming 'stock.history' is a List<StockHistory>
-
-    return SfCartesianChart(
-      primaryXAxis: DateTimeAxis(),
-      series: <LineSeries<StockHistory, DateTime>>[
-        LineSeries<StockHistory, DateTime>(
-          dataSource: chartData,
-          xValueMapper: (StockHistory data, _) => data.time,
-          yValueMapper: (StockHistory data, _) => data.price,
-        )
-      ],
-    );
-  }
-  
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
+Widget buildStockChart(
+  List<StockHistory> stockHistries
+  ) {
+  return Column(
+    children: [
+      SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        title: ChartTitle(text: ''),
+        legend: Legend(isVisible: true),
+        tooltipBehavior: TooltipBehavior(enable: true),
+        series: <ChartSeries<StockHistory, String>> [
+          LineSeries<StockHistory, String>(
+            dataSource: stockHistries,
+            xValueMapper: (StockHistory stockHistory, _) => stockHistory.date,
+            yValueMapper: (StockHistory stockHistory, _) => stockHistory.price,
+            name: "price",
+            dataLabelSettings: DataLabelSettings(isVisible: true)
+          ),
+        ],
+      ),
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SfSparkLineChart.custom(
+            trackball: SparkChartTrackball(
+              activationMode: SparkChartActivationMode.tap
+            ),
+            marker: SparkChartMarker(
+              displayMode: SparkChartMarkerDisplayMode.all
+            ),
+            labelDisplayMode: SparkChartLabelDisplayMode.all,
+            xValueMapper: (int index) => stockHistries[index].date,
+            yValueMapper: (int index) => stockHistries[index].price,
+          ),
+        ),
+      )
+    ],
+  );
 }

@@ -1,3 +1,4 @@
+import 'package:aksje_app/models/stock_history.dart';
 import 'package:aksje_app/models/stock_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/main_page.dart';
@@ -13,6 +14,7 @@ import 'dart:async';
 import 'package:aksje_app/models/stock_purchase.dart';
 import 'package:aksje_app/widgets/components/flush_bar_error.dart';
 import 'package:aksje_app/widgets/components/flus_bar_info.dart';
+import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -27,14 +29,17 @@ class _StockDetailPageState extends State<StockDetailPage> {
   List<StockListModel> stockLists = [];
   late Stock stock = widget.stock;
   late Timer timer;
+  late List<StockHistory> stockHistries = [];
 
   @override
   void initState() {
     timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (mounted) {
         Stock newStock = await _getStockDataFromServer();
+        List<StockHistory> newStockHistories = await _setSTockHistriesWithDataFromServer();
         setState(() {
           stock = newStock;
+          stockHistries = newStockHistories;
         });
       }
     });
@@ -212,6 +217,22 @@ class _StockDetailPageState extends State<StockDetailPage> {
     }
   }
 
+  Future<List<StockHistory>> _setSTockHistriesWithDataFromServer() async {
+    try {
+      var id = stock.id;
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockhistory/stocks/$id");
+      var response = await http.get(baseURL);
+      if(response.statusCode == 200) {
+        List responseData = jsonDecode(response.body);
+        List<StockHistory> newStockHistories = responseData.map((data) => StockHistory.fromJson(data)).toList();
+        return newStockHistories;
+      }
+      return Future.error("Didn't get data");
+    }catch(e) {
+      return Future.error("Didnt get data");
+    }
+  }
+
   // Removes a stock purcheas from the database.
   Future<void> _removeStockPruch() async {
     try {
@@ -360,9 +381,9 @@ class _StockDetailPageState extends State<StockDetailPage> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const SizedBox(
+                  SizedBox(
                     height: 300,
-                    child: StockChart(stock: stock),
+                    child: buildStockChart(stockHistries),
                   ),
                   const SizedBox(height: 60),
                   Row(

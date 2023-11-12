@@ -1,15 +1,19 @@
 class StockHistory {
-  final String shid;
-  final DateTime time;
+  final int shid;
+  final String date;
   final double price;
 
-  StockHistory({required this.shid, required this.time, required this.price});
+  StockHistory({
+    required this.shid, 
+    required this.date, 
+    required this.price
+    });
 
   // Factory constructor to create a StockHistory instance from JSON
   factory StockHistory.fromJson(Map<String, dynamic> json) {
     return StockHistory(
-      shid: json['shid'] as String,
-      time: DateTime.parse(json['time'] as String),
+      shid: json['shid'] as int,
+      date: json['date'] as String,
       price: json['price'] as double,
     );
   }
