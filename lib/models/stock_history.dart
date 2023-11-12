@@ -3,11 +3,7 @@ class StockHistory {
   final String date;
   final double price;
 
-  StockHistory({
-    required this.shid, 
-    required this.date, 
-    required this.price
-    });
+  StockHistory({required this.shid, required this.date, required this.price});
 
   // Factory constructor to create a StockHistory instance from JSON
   factory StockHistory.fromJson(Map<String, dynamic> json) {

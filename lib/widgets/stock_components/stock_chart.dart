@@ -3,23 +3,39 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:aksje_app/models/stock_history.dart'; // Import the StockHistory model
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-Widget buildStockChart(
-  List<StockHistory> stockHistries
-  ) {
+Widget buildStockChart(List<StockHistory> stockHistories) {
   return Column(
     children: [
       SfCartesianChart(
         primaryXAxis: CategoryAxis(),
-        title: ChartTitle(text: ''),
-        legend: Legend(isVisible: true),
-        tooltipBehavior: TooltipBehavior(enable: true),
-        series: <ChartSeries<StockHistory, String>> [
+        trackballBehavior: TrackballBehavior(
+          enable: true,
+          tooltipAlignment: ChartAlignment.near,
+          tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+        ),
+        zoomPanBehavior: ZoomPanBehavior(
+          enablePinching: true,
+          enablePanning: true,
+          enableDoubleTapZooming: true,
+          enableSelectionZooming: true,
+          enableMouseWheelZooming: true,
+        ),
+        series: <ChartSeries<StockHistory, String>>[
           LineSeries<StockHistory, String>(
-            dataSource: stockHistries,
+            dataSource: stockHistories,
             xValueMapper: (StockHistory stockHistory, _) => stockHistory.date,
             yValueMapper: (StockHistory stockHistory, _) => stockHistory.price,
-            name: "price",
-            dataLabelSettings: DataLabelSettings(isVisible: true)
+            name: "Price",
+            pointColorMapper: (StockHistory stockHistory, _) {
+              int index = stockHistories.indexOf(stockHistory);
+              if (index == 0 ||
+                  stockHistories[index].price <
+                      stockHistories[index - 1].price) {
+                return Colors.red;
+              } else {
+                return Colors.green;
+              }
+            },
           ),
         ],
       ),
@@ -27,18 +43,16 @@ Widget buildStockChart(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SfSparkLineChart.custom(
-            trackball: SparkChartTrackball(
-              activationMode: SparkChartActivationMode.tap
-            ),
-            marker: SparkChartMarker(
-              displayMode: SparkChartMarkerDisplayMode.all
-            ),
+            trackball: const SparkChartTrackball(
+                activationMode: SparkChartActivationMode.tap),
+            marker: const SparkChartMarker(
+                displayMode: SparkChartMarkerDisplayMode.all),
             labelDisplayMode: SparkChartLabelDisplayMode.all,
-            xValueMapper: (int index) => stockHistries[index].date,
-            yValueMapper: (int index) => stockHistries[index].price,
+            xValueMapper: (int index) => stockHistories[index].date,
+            yValueMapper: (int index) => stockHistories[index].price,
           ),
         ),
-      )
+      ),
     ],
   );
 }

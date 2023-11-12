@@ -90,16 +90,14 @@ class _ExplorePageState extends State<ExplorePage> {
   //Sorts the stocks by higest price
   void _sortStocksByHighestPrice() {
     setState(() {
-      filteredStocks.sort((a, b) =>
-          b.currentPrice.compareTo(a.currentPrice));
+      filteredStocks.sort((a, b) => b.currentPrice.compareTo(a.currentPrice));
     });
   }
 
   //Sortst the stock by lowest price
   void _sortStocksByLowestPrice() {
     setState(() {
-      filteredStocks.sort((a, b) =>
-          a.currentPrice.compareTo(b.currentPrice));
+      filteredStocks.sort((a, b) => a.currentPrice.compareTo(b.currentPrice));
     });
   }
 
@@ -176,6 +174,12 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Explore'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.sort),
+            onPressed: () => _showSortOptions(context),
+          ),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
@@ -191,16 +195,6 @@ class _ExplorePageState extends State<ExplorePage> {
                 onChanged: (value) {
                   _filterStocks(value);
                 },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: FractionallySizedBox(
-                widthFactor: 0.33,
-                child: ElevatedButton(
-                  onPressed: () => _showSortOptions(context),
-                  child: const Text('Sort'),
-                ),
               ),
             ),
             Expanded(
