@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+//Class that handels the JWT token
 class TokenManager {
   static const storage = FlutterSecureStorage();
 

@@ -34,7 +34,7 @@ class _AListPageState extends State<AListPage> {
     });
   }
 
-  //
+  // Gets the stocks data from the server
   Future<List<Stock>> _fetchStocksDataFromServer() async {
     try {
       var lid = widget.stockList.lid;
@@ -61,7 +61,8 @@ class _AListPageState extends State<AListPage> {
     });
   }
 
-    Future<Stock> _getStockDataFromnServer(Stock stock) async {
+  //Get the stock data form the server
+  Future<Stock> _getStockDataFromnServer(Stock stock) async {
     try {
       var id = stock.id;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
@@ -78,11 +79,13 @@ class _AListPageState extends State<AListPage> {
     }
   }
 
+  //Gose to stock detail page based on the data of the stock from the database.
   void _goToStockDetailPage(Stock stock) async{
     Stock serverStock = await _getStockDataFromnServer(stock);
     _navToStockDetailPage(serverStock);
   }
 
+  //Naviagtest to stock detail page.
   void _navToStockDetailPage(Stock stock) {
     Navigator.pushReplacement(
       context,
@@ -92,6 +95,7 @@ class _AListPageState extends State<AListPage> {
     );
   }
 
+  //Refreshes the page with new data.
   Future<void> _onRefresh() async {
     setState(() {
       _setStocksData();

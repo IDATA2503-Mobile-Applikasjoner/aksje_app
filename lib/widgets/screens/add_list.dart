@@ -4,7 +4,10 @@ import 'dart:convert';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/widgets/screens/main_page.dart';
+import 'package:aksje_app/widgets/components/flus_bar_info.dart';
+import 'package:aksje_app/widgets/components/flush_bar_error.dart';
 
+//Page that can add a list.
 class AddListPage extends  StatefulWidget {
   const AddListPage({Key? key}) : super(key: key);
 
@@ -13,21 +16,21 @@ class AddListPage extends  StatefulWidget {
 }
 
 class _AddListPage extends State<AddListPage> {
-
   final TextEditingController nameController = TextEditingController();
 
-  Future<void> createList(BuildContext context, String name) async {
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    var uid = userProvider.user!.uid;
-    print(uid);
-    var baseURL = Uri.parse('http://10.0.2.2:8080/api/list');
-    var body = jsonEncode({
-      "name": name,
-      "user": {
-        "uid": uid
-      }
-    });
+  //Adds a list to the databasee
+  Future<bool> _addListToServer(BuildContext context, String name) async {
     try {
+      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+      var uid = userProvider.user!.uid;
+      bool added = false;
+      var baseURL = Uri.parse('http://10.0.2.2:8080/api/list');
+      var body = jsonEncode({
+        "name": name,
+        "user": {
+          "uid": uid
+        }
+      });
       var response = await http.post(
         baseURL,
         headers: <String, String> {
@@ -36,18 +39,35 @@ class _AddListPage extends State<AddListPage> {
         body: body,
       );
       if(response.statusCode == 201) {
-        print('List created');
-      }else if (response.statusCode == 400) {
-        var errorMessage = json.decode(response.body);
-        print('Error message: $errorMessage');
-        ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-        );
+        added = true;
       }
+      return added;
     }
     catch(e) {
-      print(e);
+      return Future.error(e);
     }
+  }
+
+  //Creates a list.
+  void _createList(BuildContext context, String name) async {
+    bool added = await _addListToServer(context, name);
+    if(added == true) {
+      String infoMassage = "List was created";
+      buildFlushBarInfo(context, infoMassage);
+    }
+    else {
+      String errorMassage = "Could not create list";
+      buildFlushBarError(context, errorMassage);
+    }
+  }
+
+  //Checks if the list name is valid
+  bool _checkIfNameIsValid(String name) {
+    bool isValid = true;
+    if(name == "Favorites" || name == "favorites") {
+      isValid = false;
+    }
+    return isValid;
   }
 
   @override
@@ -82,7 +102,12 @@ class _AddListPage extends State<AddListPage> {
             ElevatedButton(
               onPressed: () {
                 String name = nameController.text;
-                createList(context, name);
+                if(_checkIfNameIsValid(name) == false) {
+                  String errorMessage = "List with name $name already exists";
+                }
+                else {
+                  _createList(context, name);
+                }
               }, 
               child: const Text('Create List'))
           ],
