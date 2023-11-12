@@ -11,6 +11,8 @@ import 'dart:core';
 import 'package:another_flushbar/flushbar.dart';
 import 'dart:async';
 import 'package:aksje_app/models/stock_purchase.dart';
+import 'package:aksje_app/widgets/components/flush_bar_error.dart';
+import 'package:aksje_app/widgets/components/flus_bar_info.dart';
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -24,18 +26,31 @@ class StockDetailPage extends StatefulWidget {
 class _StockDetailPageState extends State<StockDetailPage> {
   List<StockListModel> stockLists = [];
   late Stock stock = widget.stock;
+  late Timer timer;
 
   @override
   void initState() {
-    Timer.periodic(const Duration(seconds: 30), (timer) async {
-      Stock newStock = await _getStockDataFromServer();
-      setState(() {
-        stock = newStock;
-      });
+    timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+      // Check if the widget is still mounted before updating the state
+      if (mounted) {
+        Stock newStock = await _getStockDataFromServer();
+        setState(() {
+          stock = newStock;
+        });
+      }
     });
+    super.initState();
   }
 
-  void _fetcListDataFromServer() async {
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    timer.cancel();
+    super.dispose();
+  }
+
+  // Gets the stock lists that the user have from the database.
+  Future<List<StockListModel>> _fetcListDataFromServer() async {
     try {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
@@ -45,19 +60,26 @@ class _StockDetailPageState extends State<StockDetailPage> {
 
       if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
-        setState(() {
-          stockLists = responseData
-              .map((data) => StockListModel.fromJson(data))
-              .toList();
-        });
-        _showAddToListDialog();
+        List<StockListModel> newStockList = responseData.map((data) => StockListModel.fromJson(data)).toList();
+        return newStockList;
       }
+      return Future.error("Failed to fetch stockList data. Status code: ${response.statusCode}");
     } catch (e) {
-      print(e);
+      return Future.error("Error geting stockLists");
     }
   }
 
-  void _addStockToListInServer(var lid) async {
+  // Shows all the list that the user have.
+  void _showListOptions() async {
+    setState(() async {
+      print("here");
+      stockLists = await _fetcListDataFromServer();
+      _showAddToListDialog();
+    });
+  }
+
+  // Add a stock to a list then saves it in the database.
+  Future<void> _addStockToListInServer(var lid) async {
     try {
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/addStock/$lid");
       var body = jsonEncode({"id": widget.stock.id});
@@ -68,18 +90,20 @@ class _StockDetailPageState extends State<StockDetailPage> {
         },
         body: body,
       );
-      if (response.statusCode == 200) {
-        print("Stock was added to list");
+      if (response.statusCode != 200) {
+        return Future.error("Faild to add stock to a list. Status code: ${response.statusCode}");
       }
     } catch (e) {
-      print(e);
+      return Future.error("Fail to add stock to a list.");
     }
   }
 
-  void _buyStockAndAddToServer() async {
+  // Creates a stock pruchase then save it in the database.
+  Future<bool> _addStockPrchaseToServer() async {
+    bool added = false;
     try {
       UserProvider userProvider =
-          Provider.of<UserProvider>(context, listen: false);
+      Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       DateTime date = DateTime.now();
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease");
@@ -98,16 +122,28 @@ class _StockDetailPageState extends State<StockDetailPage> {
         body: body,
       );
       if (response.statusCode == 201) {
-        print("stock purchase was created.");
-        _showFloatingFlushbarByStock(context);
-      } else {
-        print("Fail creating stock pruchase");
+        added = true;
+        return added;
       }
+      return added;
     } catch (e) {
-      print(e);
+      return Future.error("Fail to added ");
     }
   }
 
+  // checks if the stock is beeing added to the server and shows a Flushbar
+  // informing the user that the stock is beeing bought
+  void _buyStock() async {
+    bool added = await _addStockPrchaseToServer();
+    if(added = true) {
+      String infoMassage = 'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.';
+      buildFlushBarInfo(context, infoMassage);
+      //_showFloatingFlushbarByStock(context);
+    }
+  }
+
+  // Gets the stock data from the database, from the stock you are in now.
+  // Used to update the stock price for the user.
   Future<Stock> _getStockDataFromServer() async {
     try {
       var id = widget.stock.id;
@@ -119,18 +155,14 @@ class _StockDetailPageState extends State<StockDetailPage> {
         var newStock = Stock.fromJson(responseData);
         return newStock;
       }
-
-      // Return a rejected Future with an error message
       return Future.error(
           "Failed to fetch stock data. Status code: ${response.statusCode}");
     } catch (e) {
-      print(e);
-
-      // Return a rejected Future with the exception message
       return Future.error("Error occurred while fetching stock data: $e");
     }
   }
 
+  // Gets the Stock form the pruchsase stocks from the database based on the user.
   Future<List<Stock>> _getPrucheasStockStocksFromServer() async {
     try {
       UserProvider userProvider =
@@ -151,6 +183,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
     }
   }
 
+  // Checks if the user allredy owns the stock
+  //Returns true if the user owns it, false if not.
   Future<bool> _checkIfUserOwnStock() async {
     var stocks = await _getPrucheasStockStocksFromServer();
     var stock = await _getStockDataFromServer();
@@ -162,16 +196,17 @@ class _StockDetailPageState extends State<StockDetailPage> {
     return false;
   }
 
+  // Gets all stock purcheas from the database.
   Future<StockPurchase> _getPrucheasStockFromServer() async {
     try {
       var id = stock.id;
       var baseURL = Uri.parse(
           "http://10.0.2.2:8080/api/stockpurchease/$id/stockpurchease");
       var response = await http.get(baseURL);
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
-        print(responseData);
         var stockPurchease = StockPurchase.fromJson(responseData);
         return stockPurchease;
       }
@@ -182,6 +217,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     }
   }
 
+  // Removes a stock purcheas from the database.
   Future<void> _removeStockPruch() async {
     try {
       StockPurchase stockPurchease = await _getPrucheasStockFromServer();
@@ -197,92 +233,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     }
   }
 
-  void _showFloatingFlushbarSelStockTrue(BuildContext context) {
-    Flushbar(
-      padding: const EdgeInsets.all(10),
-      borderRadius: BorderRadius.circular(8),
-      backgroundGradient: const LinearGradient(
-        colors: [
-          Color.fromARGB(255, 38, 104, 35),
-          Color.fromARGB(255, 45, 143, 0)
-        ],
-        stops: [0.6, 1],
-      ),
-      boxShadows: const [
-        BoxShadow(
-          color: Colors.black45,
-          offset: Offset(3, 3),
-          blurRadius: 3,
-        ),
-      ],
-      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-      title: 'Info',
-      message:
-          'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory',
-      margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
-      flushbarPosition: FlushbarPosition.TOP,
-      duration: const Duration(seconds: 6),
-    ).show(context);
-  }
-
-  void _showFloatingFlushbarSelStockFalse(BuildContext context) {
-    Flushbar(
-      padding: const EdgeInsets.all(10),
-      borderRadius: BorderRadius.circular(8),
-      backgroundGradient: const LinearGradient(
-        colors: [
-          Color.fromARGB(255, 175, 25, 25),
-          Color.fromARGB(255, 233, 0, 0)
-        ],
-        stops: [0.6, 1],
-      ),
-      boxShadows: const [
-        BoxShadow(
-          color: Colors.black45,
-          offset: Offset(3, 3),
-          blurRadius: 3,
-        ),
-      ],
-      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-      title: 'Info',
-      message: 'You dont own this stock',
-      margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
-      flushbarPosition: FlushbarPosition.TOP,
-      duration: const Duration(seconds: 6),
-    ).show(context);
-  }
-
-  void _showFloatingFlushbarByStock(BuildContext context) {
-    Flushbar(
-      padding: const EdgeInsets.all(10),
-      borderRadius: BorderRadius.circular(8),
-      backgroundGradient: const LinearGradient(
-        colors: [
-          Color.fromARGB(255, 38, 104, 35),
-          Color.fromARGB(255, 45, 143, 0)
-        ],
-        stops: [0.6, 1],
-      ),
-      boxShadows: const [
-        BoxShadow(
-          color: Colors.black45,
-          offset: Offset(3, 3),
-          blurRadius: 3,
-        ),
-      ],
-      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-      title: 'Info',
-      message:
-          'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.',
-      margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
-      flushbarPosition: FlushbarPosition.TOP,
-      duration: const Duration(seconds: 6),
-    ).show(context);
-  }
-
+  // All the list you can add the stock to.
   void _showAddToListDialog() {
     showDialog(
       context: context,
@@ -307,6 +258,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     );
   }
 
+  // Refreshes the data on the page.
   Future<void> _onRefresh() async {
     try {
       Stock newStock = await _getStockDataFromServer();
@@ -317,15 +269,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
       // Handle errors appropriately (e.g., show an error message).
       print("Error refreshing data: $error");
     }
-  }
-
-  void _goToStockDetailPage(Stock stock) async {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => StockDetailPage(stock: stock),
-      ),
-    );
   }
 
   @override
@@ -349,7 +292,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
             onSelected: (String result) {
               switch (result) {
                 case 'Add to List':
-                  _fetcListDataFromServer();
+                  _showListOptions();
                   break;
                 case 'Add to Live Activity':
                   // Logic to add stock to live activity goes here.
@@ -432,8 +375,14 @@ class _StockDetailPageState extends State<StockDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
-                          _buyStockAndAddToServer();
+                        onPressed: () async {
+                          if(!await _checkIfUserOwnStock()) {
+                            _buyStock();
+                          }
+                          else {
+                            String errorMassage = "User already owns this stock";
+                            buildFlushBarError(context, errorMassage);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -451,9 +400,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
                         onPressed: () async {
                           if (await _checkIfUserOwnStock()) {
                             await _removeStockPruch();
-                            _showFloatingFlushbarSelStockTrue(context);
+                            String infoMassage = 'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory';
+                            buildFlushBarInfo(context, infoMassage);
                           } else {
-                            _showFloatingFlushbarSelStockFalse(context);
+                            String errorMassage = 'You dont own this stock.';
+                            buildFlushBarError(context, errorMassage);
                           }
                         },
                         style: ElevatedButton.styleFrom(

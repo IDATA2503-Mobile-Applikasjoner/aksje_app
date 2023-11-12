@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
       print('Token not found');
     }
   }
-
+  
   void storeToken(String token) async {
     TokenManager.storeToken(token);
   }
