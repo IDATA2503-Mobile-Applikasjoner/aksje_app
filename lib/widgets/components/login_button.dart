@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/main_page.dart';
 
-//Button with loding symbol for login
+/// Builds a login button with a loading indicator.
+///
+/// Displays a circular progress indicator when [isLoading] is true, otherwise
+/// displays an elevated button for login.
+/// [emailController] and [passwordController] are used to retrieve user input.
+/// [login] is the function to be executed when the button is pressed.
+/// [context] is the BuildContext for navigation or UI updates.
 Widget buildLoginButton(
     bool isLoading,
     TextEditingController emailController,
@@ -26,6 +32,10 @@ Widget buildLoginButton(
   }
 }
 
+/// Navigates to the MainPage.
+///
+/// Replaces the current page in the navigation stack with [MainPage].
+/// [context] is the BuildContext used for navigation.
 void navMainPage(BuildContext context) {
   Navigator.pushReplacement(
     context,

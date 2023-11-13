@@ -25,7 +25,6 @@ class StockCard extends StatelessWidget {
         // The hover effect color
         splashColor: Colors.grey.withOpacity(0.2),
         child: Card(
-          color: Colors.white, // Card is now white
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -45,7 +44,6 @@ class StockCard extends StatelessWidget {
                     Text(
                       stock.symbol,
                       style: const TextStyle(
-                        color: Colors.black, // Text color for dark mode
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -56,7 +54,6 @@ class StockCard extends StatelessWidget {
                 Text(
                   '${stock.currentPrice.toStringAsFixed(2)} NOK',
                   style: const TextStyle(
-                    color: Colors.black, // Text color for dark mode
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),

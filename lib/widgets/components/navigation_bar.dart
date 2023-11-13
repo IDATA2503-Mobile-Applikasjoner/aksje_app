@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-//This class represent the navigator bar
+/// Custom navigation bar widget for app navigation.
+///
+/// Displays a bottom navigation bar with predefined items.
+/// [selectedIndex] is the index of the currently selected tab.
+/// [onItemTapped] is the callback function to handle item tap events.
 class CustomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;

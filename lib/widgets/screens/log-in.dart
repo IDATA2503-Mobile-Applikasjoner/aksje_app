@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:aksje_app/widgets/components/flus_bar_info.dart';
+import 'package:aksje_app/widgets/components/flush_bar_info.dart';
 
 //Represent the login page.
 class LoginPage extends StatefulWidget {
@@ -27,7 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
   //Sends authetication request to the server
-  Future<void> login(String email, String password, BuildContext context) async {
+  Future<void> login(
+      String email, String password, BuildContext context) async {
     setState(() {
       isLoading = true;
     });
@@ -74,14 +75,12 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
-        var user = User.fromJson(
-            jsonResponse);
+        var user = User.fromJson(jsonResponse);
 
         Provider.of<UserProvider>(context, listen: false).setUser(user);
         navMainPage(context);
 
-        print(
-            'User: ${user.toJson()}');
+        print('User: ${user.toJson()}');
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }
@@ -89,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
       print('Token not found');
     }
   }
-  
+
   //Store the JWT toke in the TokeManager
   void storeToken(String token) async {
     TokenManager.storeToken(token);
@@ -144,6 +143,9 @@ class _LoginPageState extends State<LoginPage> {
             buildLoginButton(
                 isLoading, emailController, passwordController, login, context),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 100, 100, 100),
+              ),
               onPressed: () {
                 navSignUpPage();
               },

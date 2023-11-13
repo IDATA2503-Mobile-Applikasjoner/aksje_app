@@ -13,7 +13,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'dart:async';
 import 'package:aksje_app/models/stock_purchase.dart';
 import 'package:aksje_app/widgets/components/flush_bar_error.dart';
-import 'package:aksje_app/widgets/components/flus_bar_info.dart';
+import 'package:aksje_app/widgets/components/flush_bar_info.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 
 class StockDetailPage extends StatefulWidget {
@@ -37,7 +37,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
     timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (mounted) {
         Stock newStock = await _getStockDataFromServer();
-        List<StockHistory> newStockHistories = await _setSTockHistriesWithDataFromServer();
+        List<StockHistory> newStockHistories =
+            await _setSTockHistriesWithDataFromServer();
         setState(() {
           stock = newStock;
           stockHistries = newStockHistories;
@@ -64,10 +65,12 @@ class _StockDetailPageState extends State<StockDetailPage> {
 
       if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
-        List<StockListModel> newStockList = responseData.map((data) => StockListModel.fromJson(data)).toList();
+        List<StockListModel> newStockList =
+            responseData.map((data) => StockListModel.fromJson(data)).toList();
         return newStockList;
       }
-      return Future.error("Failed to fetch stockList data. Status code: ${response.statusCode}");
+      return Future.error(
+          "Failed to fetch stockList data. Status code: ${response.statusCode}");
     } catch (e) {
       return Future.error("Error geting stockLists");
     }
@@ -94,7 +97,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
         body: body,
       );
       if (response.statusCode != 200) {
-        return Future.error("Faild to add stock to a list. Status code: ${response.statusCode}");
+        return Future.error(
+            "Faild to add stock to a list. Status code: ${response.statusCode}");
       }
     } catch (e) {
       return Future.error("Fail to add stock to a list.");
@@ -106,7 +110,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     bool added = false;
     try {
       UserProvider userProvider =
-      Provider.of<UserProvider>(context, listen: false);
+          Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       DateTime date = DateTime.now();
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease");
@@ -138,8 +142,9 @@ class _StockDetailPageState extends State<StockDetailPage> {
   // informing the user that the stock is beeing bought
   void _buyStock() async {
     bool added = await _addStockPrchaseToServer();
-    if(added = true) {
-      String infoMassage = 'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.';
+    if (added = true) {
+      String infoMassage =
+          'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.';
       buildFlushBarInfo(context, infoMassage);
       //_showFloatingFlushbarByStock(context);
     }
@@ -221,18 +226,20 @@ class _StockDetailPageState extends State<StockDetailPage> {
   Future<List<StockHistory>> _setSTockHistriesWithDataFromServer() async {
     try {
       var id = stock.id;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockhistory/stocks/$id");
+      var baseURL =
+          Uri.parse("http://10.0.2.2:8080/api/stockhistory/stocks/$id");
       var response = await http.get(baseURL);
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
-        List<StockHistory> newStockHistories = responseData.map((data) => StockHistory.fromJson(data)).toList();
+        List<StockHistory> newStockHistories =
+            responseData.map((data) => StockHistory.fromJson(data)).toList();
         setState(() {
           stockHistries = newStockHistories;
         });
         return newStockHistories;
       }
       return Future.error("Didn't get data");
-    }catch(e) {
+    } catch (e) {
       return Future.error("Didnt get data");
     }
   }
@@ -360,7 +367,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black, // Default text color
                         ),
                       ),
                       Text(
@@ -395,11 +401,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
-                          if(!await _checkIfUserOwnStock()) {
+                          if (!await _checkIfUserOwnStock()) {
                             _buyStock();
-                          }
-                          else {
-                            String errorMassage = "User already owns this stock";
+                          } else {
+                            String errorMassage =
+                                "User already owns this stock";
                             buildFlushBarError(context, errorMassage);
                           }
                         },
@@ -411,7 +417,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 62, vertical: 12),
+                              horizontal: 62, vertical: 16),
                         ),
                         child: const Text('Buy'),
                       ),
@@ -419,7 +425,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
                         onPressed: () async {
                           if (await _checkIfUserOwnStock()) {
                             await _removeStockPruch();
-                            String infoMassage = 'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory';
+                            String infoMassage =
+                                'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory';
                             buildFlushBarInfo(context, infoMassage);
                           } else {
                             String errorMassage = 'You dont own this stock.';
@@ -434,7 +441,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 62, vertical: 12),
+                              horizontal: 62, vertical: 16),
                         ),
                         child: const Text('Sell'),
                       ),

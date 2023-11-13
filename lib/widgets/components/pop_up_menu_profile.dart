@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:aksje_app/providers/token_manager.dart';
 import 'package:aksje_app/widgets/screens/log-in.dart';
 
-//Pop up menu for Login out
+/// Builds a popup menu for profile actions, including logout.
+///
+/// [context] is the BuildContext in which the popup menu will be displayed.
 Widget buildPopUpMenuProfile(BuildContext context) {
   return PopupMenuButton(
     icon: const Icon(Icons.person, color: Colors.black),
@@ -25,22 +27,26 @@ Widget buildPopUpMenuProfile(BuildContext context) {
   );
 }
 
-  //Handel the log out function
-  //Delete JWT token.
-  void logOut(BuildContext context) async {
-    TokenManager.removeToken();
-    String? toke = await TokenManager.getToken();
-    if(toke == null) {
-      navToLoginPage(context);
-    }
+/// Handles the logout functionality.
+///
+/// Removes the JWT token and navigates to the login page if successful.
+/// [context] is the BuildContext used for navigation.
+void logOut(BuildContext context) async {
+  TokenManager.removeToken();
+  String? token = await TokenManager.getToken();
+  if (token == null) {
+    navToLoginPage(context);
   }
+}
 
-  //Navigates to login page.
-  void navToLoginPage(BuildContext context) {
+/// Navigates to the login page.
+///
+/// Replaces the current page in the navigation stack with [LoginPage].
+/// [context] is the BuildContext used for navigation.
+void navToLoginPage(BuildContext context) {
   Navigator.pushReplacement(
-    context, 
-    MaterialPageRoute(
-    builder: (context) => const LoginPage(),
-    )
-  );
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ));
 }

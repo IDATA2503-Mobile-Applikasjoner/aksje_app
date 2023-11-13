@@ -54,25 +54,35 @@ class _MyAppState extends State<MyApp> {
           bodySmall: const TextStyle(fontSize: 12, color: Colors.black),
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.transparent, // Make AppBar transparent
-          elevation: 0, // Remove shadow
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           iconTheme: IconThemeData(color: kColorScheme.onBackground),
           titleTextStyle: GoogleFonts.roboto(
-            color: kColorScheme
-                .onBackground, // Text color for AppBar title in light mode
+            color: kColorScheme.onBackground,
             fontSize: 30,
           ),
         ),
-
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor:
-              kColorScheme.surface, // Background color for light mode
-          selectedItemColor:
-              kColorScheme.onSurface, // Selected item color for light mode
-          unselectedItemColor: kColorScheme.onSurface
-              .withOpacity(0.5), // Unselected item color for light mode
+          backgroundColor: kColorScheme.surface,
+          selectedItemColor: kColorScheme.onSurface,
+          unselectedItemColor: kColorScheme.onSurface.withOpacity(0.5),
         ),
-        // ... Other theme properties ...
+        cardTheme: CardTheme(
+          color: kColorScheme.surface,
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 79, 117, 205),
+            foregroundColor: kColorScheme.onPrimary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
       ),
       darkTheme: ThemeData.dark().copyWith(
         useMaterial3: true,
@@ -85,25 +95,36 @@ class _MyAppState extends State<MyApp> {
           bodySmall: const TextStyle(fontSize: 12, color: Colors.white),
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor:
-              Colors.transparent, // Make AppBar transparent in dark mode
-          elevation: 0, // Remove shadow in dark mode
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           iconTheme: IconThemeData(color: kDarkColorScheme.onBackground),
           titleTextStyle: GoogleFonts.roboto(
-            color: kDarkColorScheme
-                .onBackground, // Text color for AppBar title in dark mode
+            color: kDarkColorScheme.onBackground,
             fontSize: 30,
           ),
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor:
-              kDarkColorScheme.surface, // Background color for dark mode
-          selectedItemColor:
-              kDarkColorScheme.onSurface, // Selected item color for dark mode
-          unselectedItemColor: kDarkColorScheme.onSurface
-              .withOpacity(0.5), // Unselected item color for dark mode
+          backgroundColor: kDarkColorScheme.surface,
+          selectedItemColor: kDarkColorScheme.onSurface,
+          unselectedItemColor: kDarkColorScheme.onSurface.withOpacity(0.5),
         ),
-        // ... Other dark theme properties ...
+        cardTheme: CardTheme(
+          color: kDarkColorScheme.surface,
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 79, 117,
+                205), // Adjust this color for dark theme if needed
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
       ),
       home: const Splash(),
     );

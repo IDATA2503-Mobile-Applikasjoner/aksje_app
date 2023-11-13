@@ -7,7 +7,7 @@ import 'package:aksje_app/widgets/screens/add_list.dart';
 import 'package:aksje_app/models/user.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:aksje_app/widgets/screens/a_list.dart';
+import 'package:aksje_app/widgets/screens/stock_watchlist_page.dart';
 
 //Represent my list page.
 //User can see what list he has.
@@ -36,7 +36,8 @@ class _MyListsPageState extends State<MyListsPage> {
   //Gets stock list data from the server and sets the lists to that data.
   Future<void> _fetchDataFromServer() async {
     try {
-      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/listsbyuid/$uid");
       var response = await http.get(baseURL);
@@ -44,7 +45,9 @@ class _MyListsPageState extends State<MyListsPage> {
       if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
         setState(() {
-          lists = responseData.map((data) => StockListModel.fromJson(data)).toList();
+          lists = responseData
+              .map((data) => StockListModel.fromJson(data))
+              .toList();
           isLoading = false;
         });
       } else {
@@ -59,24 +62,25 @@ class _MyListsPageState extends State<MyListsPage> {
 
   //Navigates to add list page
   void _navToAddListPage() {
-    Navigator.pushReplacement(context, 
-      MaterialPageRoute(
-        builder: (context) => const AddListPage(),
-      )
-    );
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AddListPage(),
+        ));
   }
 
   //Get list from database and navigates to that list.
-  Future<void> _goTiListPageWithDataFromServer(StockListModel stockListModel) async {
+  Future<void> _goTiListPageWithDataFromServer(
+      StockListModel stockListModel) async {
     try {
       var lid = stockListModel.lid;
       var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/$lid");
       var response = await http.get(baseURL);
 
-      if(response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-      var stockList = StockListModel.fromJson(responseData);
-      _navToListPage(stockList);
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        var stockList = StockListModel.fromJson(responseData);
+        _navToListPage(stockList);
       }
     } catch (e) {
       print(e);
@@ -86,49 +90,48 @@ class _MyListsPageState extends State<MyListsPage> {
   //Navigates to list page.
   void _navToListPage(StockListModel stockListModel) {
     Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AListPage(stockList: stockListModel)
-      )
-    );
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                StockWatchlistPage(stockList: stockListModel)));
   }
 
-@override
-Widget build(BuildContext context) {
-  UserProvider userProvider = Provider.of<UserProvider>(context);
-  User? user = userProvider.user;
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('My Lists'),
-      actions: [
+  @override
+  Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    User? user = userProvider.user;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Lists'),
+        actions: [
           IconButton(
-            onPressed: _navToAddListPage, 
-            icon: const Icon(Icons.add_outlined)
-          ),
+              onPressed: _navToAddListPage,
+              icon: const Icon(Icons.add_outlined)),
         ],
       ),
       body: lists.isEmpty
-        ? Center(
-          child: isLoading
-            ? const CircularProgressIndicator()
-            : const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("No lists found. Press + button to add a new list"),
-                  ],
-                ),
-              ),
+          ? Center(
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                              "No lists found. Press + button to add a new list"),
+                        ],
+                      ),
+                    ),
             )
           : Column(
               children: <Widget>[
                 Expanded(
                   child: StockListModelList(
-                    stockLists: lists,
-                    onStockListTap: (stockListModel) => _goTiListPageWithDataFromServer(stockListModel)
-                  ),
+                      stockLists: lists,
+                      onStockListTap: (stockListModel) =>
+                          _goTiListPageWithDataFromServer(stockListModel)),
                 )
               ],
             ),

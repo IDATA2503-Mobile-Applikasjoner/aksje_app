@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:another_flushbar/flushbar.dart';
 
-/// Builds and displays an error message using Flushbar.
+/// Builds and displays an informational message using Flushbar.
 ///
-/// This function is used to show an error message after a user attempts an unauthorized action.
+/// This function is used to provide feedback after an action is performed.
 /// [context] is the BuildContext in which the Flushbar will be shown.
-/// [errorMessage] is the text content of the error message.
-void buildFlushBarError(BuildContext context, String errorMessage) {
+/// [infoMessage] is the text content of the information message.
+void buildFlushBarInfo(BuildContext context, String infoMessage) {
   Flushbar(
     padding: const EdgeInsets.all(10),
     borderRadius: BorderRadius.circular(8),
     backgroundGradient: const LinearGradient(
       colors: [
-        Color.fromARGB(255, 175, 25, 25),
-        Color.fromARGB(255, 233, 0, 0),
+        Color.fromARGB(255, 38, 104, 35),
+        Color.fromARGB(255, 45, 143, 0),
       ],
       stops: [0.6, 1],
     ),
@@ -26,8 +26,8 @@ void buildFlushBarError(BuildContext context, String errorMessage) {
     ],
     dismissDirection: FlushbarDismissDirection.HORIZONTAL,
     forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-    title: 'Error',
-    message: errorMessage,
+    title: 'Info',
+    message: infoMessage,
     margin: const EdgeInsets.only(top: 100, left: 20, right: 20),
     flushbarPosition: FlushbarPosition.TOP,
     duration: const Duration(seconds: 6),

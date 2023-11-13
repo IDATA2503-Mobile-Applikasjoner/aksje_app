@@ -10,18 +10,18 @@ import 'dart:async';
 
 //The A list page
 //Contis the list and what stock the user have in that list.
-class AListPage extends StatefulWidget {
+class StockWatchlistPage extends StatefulWidget {
   final StockListModel stockList;
-  const AListPage({Key? key, required this.stockList}) : super(key: key);
+  const StockWatchlistPage({super.key, required this.stockList});
 
   @override
-  _AListPageState createState() => _AListPageState();
+  _StockWatchlistPageState createState() => _StockWatchlistPageState();
 }
 
-class _AListPageState extends State<AListPage> {
+class _StockWatchlistPageState extends State<StockWatchlistPage> {
   List<Stock> stocks = [];
   bool isLoading = true;
-  
+
   @override
   void initState() {
     super.initState();
@@ -38,17 +38,19 @@ class _AListPageState extends State<AListPage> {
   Future<List<Stock>> _fetchStocksDataFromServer() async {
     try {
       var lid = widget.stockList.lid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/lists/$lid/stocks");
+      var baseURL =
+          Uri.parse("http://10.0.2.2:8080/api/stocks/lists/$lid/stocks");
       var response = await http.get(baseURL);
 
-      if(response.statusCode == 200) {
-          List responseData = jsonDecode(response.body);
-          List<Stock> stocksData = responseData.map((data) => Stock.fromJson(data)).toList();
-          return stocksData;
+      if (response.statusCode == 200) {
+        List responseData = jsonDecode(response.body);
+        List<Stock> stocksData =
+            responseData.map((data) => Stock.fromJson(data)).toList();
+        return stocksData;
       }
       return Future.error("Didn't find stock data");
-    }catch(e) {
-       return Future.error(e);
+    } catch (e) {
+      return Future.error(e);
     }
   }
 
@@ -80,7 +82,7 @@ class _AListPageState extends State<AListPage> {
   }
 
   //Gose to stock detail page based on the data of the stock from the database.
-  void _goToStockDetailPage(Stock stock) async{
+  void _goToStockDetailPage(Stock stock) async {
     Stock serverStock = await _getStockDataFromnServer(stock);
     _navToStockDetailPage(serverStock);
   }
@@ -102,39 +104,37 @@ class _AListPageState extends State<AListPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.stockList.name),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainPage(selectedIndex: 1),
-              ),
-            );
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : StockList(
-                  stocks: stocks,
-                  onStockTap: (stock) => _goToStockDetailPage(stock),
+        appBar: AppBar(
+          title: Text(widget.stockList.name),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainPage(selectedIndex: 1),
                 ),
-            ),
-          ],
+              );
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
         ),
-      )
-    );
+        body: RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : StockList(
+                        stocks: stocks,
+                        onStockTap: (stock) => _goToStockDetailPage(stock),
+                      ),
+              ),
+            ],
+          ),
+        ));
   }
 }
