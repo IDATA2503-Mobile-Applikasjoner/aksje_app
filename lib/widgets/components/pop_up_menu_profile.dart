@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aksje_app/providers/token_manager.dart';
-import 'package:aksje_app/widgets/screens/log-in.dart';
+import 'package:aksje_app/widgets/screens/log_in.dart';
 
 /// Builds a popup menu for profile actions, including logout.
 ///

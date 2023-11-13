@@ -1,3 +1,4 @@
+import 'package:aksje_app/widgets/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:aksje_app/widgets/screens/inventory.dart';
 import 'package:aksje_app/widgets/screens/my_lists.dart';
@@ -5,7 +6,7 @@ import 'package:aksje_app/widgets/screens/explore.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
-import 'package:aksje_app/widgets/screens/splash_screen.dart';
+import 'package:aksje_app/widgets/screens/new_user.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 255, 255, 255),
