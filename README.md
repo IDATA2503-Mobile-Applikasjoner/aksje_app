@@ -8,7 +8,7 @@ Welcome to StockApp, a Flutter project developed by students at NTNU for the cou
 
 1. **View Stocks:** As a user, I want to view a list of available stocks from the Oslo Børs so I can see my options.
    
-2. **Detailed Stock View:** As a user, I want to click on a stock and view its detailed information including its historical performance, current price, and related news.
+2. **Detailed Stock View:** As a user, I want to click on a stock and view its detailed information including its historical performance, and current price.
     
 3. **Buy Stocks:** As a user, I want to buy stocks by specifying the number of shares I want so that they can be added to my portfolio.
     
