@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:aksje_app/models/stock_history.dart';
+import 'package:aksje_app/models/portfolio_history.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-Widget buildStockChart(List<StockHistory> stockHistories) {
+Widget buildStockChartInventory(List<PortfolioHistory> portfolioHistory) {
   return Column(
     children: [
       SfCartesianChart(
@@ -20,17 +20,17 @@ Widget buildStockChart(List<StockHistory> stockHistories) {
           enableSelectionZooming: true,
           enableMouseWheelZooming: true,
         ),
-        series: <ChartSeries<StockHistory, String>>[
-          LineSeries<StockHistory, String>(
-            dataSource: stockHistories,
-            xValueMapper: (StockHistory stockHistory, _) => stockHistory.date,
-            yValueMapper: (StockHistory stockHistory, _) => stockHistory.price,
+        series: <ChartSeries<PortfolioHistory, String>>[
+          LineSeries<PortfolioHistory, String>(
+            dataSource: portfolioHistory,
+            xValueMapper: (PortfolioHistory portfolioHistory, _) => portfolioHistory.date,
+            yValueMapper: (PortfolioHistory portfolioHistory, _) => portfolioHistory.price,
             name: "Price",
-            pointColorMapper: (StockHistory stockHistory, _) {
-              int index = stockHistories.indexOf(stockHistory);
+            pointColorMapper: (PortfolioHistory stockHistory, _) {
+              int index = portfolioHistory.indexOf(stockHistory);
               if (index == 0 ||
-                  stockHistories[index].price <
-                      stockHistories[index - 1].price) {
+                  portfolioHistory[index].price <
+                      portfolioHistory[index - 1].price) {
                 return Colors.red;
               } else {
                 return Colors.green;
@@ -48,8 +48,8 @@ Widget buildStockChart(List<StockHistory> stockHistories) {
             marker: const SparkChartMarker(
                 displayMode: SparkChartMarkerDisplayMode.all),
             labelDisplayMode: SparkChartLabelDisplayMode.all,
-            xValueMapper: (int index) => stockHistories[index].date,
-            yValueMapper: (int index) => stockHistories[index].price,
+            xValueMapper: (int index) => portfolioHistory[index].date,
+            yValueMapper: (int index) => portfolioHistory[index].price,
           ),
         ),
       ),

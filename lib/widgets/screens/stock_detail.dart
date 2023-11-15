@@ -260,6 +260,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
     }
   }
 
+  
+
   // All the list you can add the stock to.
   void _showAddToListDialog() {
     showDialog(

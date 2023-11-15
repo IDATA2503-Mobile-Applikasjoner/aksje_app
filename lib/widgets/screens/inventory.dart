@@ -3,12 +3,13 @@ import 'package:aksje_app/widgets/stock_components/stock_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
-import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aksje_app/widgets/components/pop_up_menu_profile.dart';
 import 'dart:async';
+import 'package:aksje_app/models/portfolio_history.dart';
+import 'package:aksje_app/widgets/stock_components/stock_chart_inventory.dart';
 
 //The Inventory page
 class Inventory extends StatefulWidget {
@@ -20,6 +21,7 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
   List<Stock> stocks = [];
+  late List<PortfolioHistory> portfolioHistory = [];
 
   @override
   void initState() {
@@ -30,10 +32,12 @@ class _InventoryState extends State<Inventory> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fecthStockDataFromServe();
+    _setSTockHistriesWithDataFromServer();
 
     Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
         _fecthStockDataFromServe();
+        _setSTockHistriesWithDataFromServer();
       });
     });
   }
@@ -70,6 +74,26 @@ class _InventoryState extends State<Inventory> {
     }
   }
 
+    Future<List<PortfolioHistory>> _setSTockHistriesWithDataFromServer() async {
+    try {
+      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+      var pid = userProvider.user!.uid;
+      var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfoliohistory/portfolios/$pid");
+      var response = await http.get(baseURL);
+      if(response.statusCode == 200) {
+        List responseData = jsonDecode(response.body);
+        List<PortfolioHistory> newPortfolioHistory = responseData.map((data) => PortfolioHistory.fromJson(data)).toList();
+        setState(() {
+          portfolioHistory = newPortfolioHistory;
+        });
+        return newPortfolioHistory;
+      }
+      return Future.error("Didn't get data");
+    }catch(e) {
+      return Future.error("Didnt get data");
+    }
+  }
+
   //Refreshes the page
   Future<void> _onRefresh() async {
     setState(() {
@@ -100,10 +124,7 @@ class _InventoryState extends State<Inventory> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                //   const SizedBox(
-                //    height: 300,
-                //     child: StockChart(),
-                //    ),
+                  child: buildStockChartInventory(portfolioHistory),
                 const SizedBox(height: 20.0),
                 const Text('Your stocks'),
                 const SizedBox(height: 10.0),
