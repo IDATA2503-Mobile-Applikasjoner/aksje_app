@@ -124,7 +124,10 @@ class _InventoryState extends State<Inventory> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
+                SizedBox(
+                  height: 300,
                   child: buildStockChartInventory(portfolioHistory),
+                ),
                 const SizedBox(height: 20.0),
                 const Text('Your stocks'),
                 const SizedBox(height: 10.0),
