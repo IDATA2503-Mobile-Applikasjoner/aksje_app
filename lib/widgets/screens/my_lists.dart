@@ -39,7 +39,7 @@ class _MyListsPageState extends State<MyListsPage> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/listsbyuid/$uid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/list/listsbyuid/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -74,7 +74,7 @@ class _MyListsPageState extends State<MyListsPage> {
       StockListModel stockListModel) async {
     try {
       var lid = stockListModel.lid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/$lid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/list/$lid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {

@@ -58,7 +58,7 @@ class _InventoryState extends State<Inventory> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfolio/stocks/$uid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/portfolio/stocks/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -78,7 +78,7 @@ class _InventoryState extends State<Inventory> {
     try {
       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
       var pid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfoliohistory/portfolios/$pid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/portfoliohistory/portfolios/$pid");
       var response = await http.get(baseURL);
       if(response.statusCode == 200) {
         List responseData = jsonDecode(response.body);

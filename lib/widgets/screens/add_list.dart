@@ -25,7 +25,7 @@ class _AddListPageState extends State<AddListPage> {
     try {
       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse('http://10.0.2.2:8080/api/list');
+      var baseURL = Uri.parse('http://10.212.25.216:8080/api/list');
       var body = jsonEncode({
         "name": name,
         "user": {"uid": uid}

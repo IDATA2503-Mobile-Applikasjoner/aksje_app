@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    var url = Uri.parse('http://10.0.2.2:8080/api/user/authenticate');
+    var url = Uri.parse('http://10.212.25.216:8080/api/user/authenticate');
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> getLoginUser() async {
     String? token = await getToken();
     if (token != null) {
-      var url = Uri.parse('http://10.0.2.2:8080/api/user/sessionuser');
+      var url = Uri.parse('http://10.212.25.216:8080/api/user/sessionuser');
       var response = await http.get(
         url,
         headers: <String, String>{

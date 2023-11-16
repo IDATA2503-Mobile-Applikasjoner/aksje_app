@@ -27,7 +27,7 @@ class _SingUpSate extends State<SignUp> {
   //Creates a new user
   Future<void> createUser(
       BuildContext context, String email, String password) async {
-    var url = Uri.parse('http://10.0.2.2:8080/api/user');
+    var url = Uri.parse('http://10.212.25.216:8080/api/user');
     var body = jsonEncode({'email': email, 'password': password});
 
     try {

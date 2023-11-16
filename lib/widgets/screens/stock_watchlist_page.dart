@@ -39,7 +39,7 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     try {
       var lid = widget.stockList.lid;
       var baseURL =
-          Uri.parse("http://10.0.2.2:8080/api/stocks/lists/$lid/stocks");
+          Uri.parse("http://10.212.25.216:8080/api/stocks/lists/$lid/stocks");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -67,7 +67,7 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
   Future<Stock> _getStockDataFromnServer(Stock stock) async {
     try {
       var id = stock.id;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stocks/$id");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {

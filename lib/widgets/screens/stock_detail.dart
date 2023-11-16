@@ -60,7 +60,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/listsbyuid/$uid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/list/listsbyuid/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -87,7 +87,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
   // Add a stock to a list then saves it in the database.
   Future<void> _addStockToListInServer(var lid) async {
     try {
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/list/addStock/$lid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/list/addStock/$lid");
       var body = jsonEncode({"id": widget.stock.id});
       var response = await http.post(
         baseURL,
@@ -113,7 +113,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       DateTime date = DateTime.now();
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stockpurchease");
       var body = jsonEncode({
         "date": date.toIso8601String(),
         "price": widget.stock.currentPrice,
@@ -155,7 +155,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
   Future<Stock> _getStockDataFromServer() async {
     try {
       var id = widget.stock.id;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stocks/$id");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stocks/$id");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -176,7 +176,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/portfolio/stocks/$uid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/portfolio/stocks/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -209,7 +209,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     try {
       var id = stock.id;
       var baseURL = Uri.parse(
-          "http://10.0.2.2:8080/api/stockpurchease/$id/stockpurchease");
+          "http://10.212.25.216:8080/api/stockpurchease/$id/stockpurchease");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -227,7 +227,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     try {
       var id = stock.id;
       var baseURL =
-          Uri.parse("http://10.0.2.2:8080/api/stockhistory/stocks/$id");
+          Uri.parse("http://10.212.25.216:8080/api/stockhistory/stocks/$id");
       var response = await http.get(baseURL);
       if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
@@ -249,7 +249,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     try {
       StockPurchase stockPurchease = await _getPrucheasStockFromServer();
       var spid = stockPurchease.spid;
-      var baseURL = Uri.parse("http://10.0.2.2:8080/api/stockpurchease/$spid");
+      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stockpurchease/$spid");
       var response = await http.delete(baseURL);
 
       if (response.statusCode != 200) {
