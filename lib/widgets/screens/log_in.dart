@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:aksje_app/widgets/components/flush_bar_info.dart';
+import 'package:aksje_app/widgets/components/flush_bar.dart';
 
 //Represent the login page.
 class LoginPage extends StatefulWidget {
@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = false;
       });
-      buildFlushBarInfo(context, 'Email or password is wrong');
+      buildFlushBarInfo(context, 'Email or password is wrong', "Info", Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
     }
   }
 

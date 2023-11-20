@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/widgets/screens/main_page.dart';
-import 'package:aksje_app/widgets/components/flush_bar_info.dart';
+import 'package:aksje_app/widgets/components/flush_bar.dart';
 import 'package:aksje_app/widgets/components/flush_bar_error.dart';
 
 /// Page for adding a new list.
@@ -50,7 +50,7 @@ class _AddListPageState extends State<AddListPage> {
     try {
       bool added = await _addListToServer(context, name);
       if (added) {
-        buildFlushBarInfo(context, "List was created");
+        buildFlushBarInfo(context, "List was created", "Info", Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
       } else {
         buildFlushBarError(context, "Could not create list");
       }

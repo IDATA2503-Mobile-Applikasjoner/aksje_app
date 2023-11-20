@@ -13,7 +13,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'dart:async';
 import 'package:aksje_app/models/stock_purchase.dart';
 import 'package:aksje_app/widgets/components/flush_bar_error.dart';
-import 'package:aksje_app/widgets/components/flush_bar_info.dart';
+import 'package:aksje_app/widgets/components/flush_bar.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
 
 class StockDetailPage extends StatefulWidget {
@@ -145,7 +145,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     if (added = true) {
       String infoMassage =
           'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.';
-      buildFlushBarInfo(context, infoMassage);
+      buildFlushBarInfo(context, infoMassage, "Info", Color.fromARGB(255, 38, 104, 35),Color.fromARGB(255, 45, 143, 0));
       //_showFloatingFlushbarByStock(context);
     }
   }
@@ -429,7 +429,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                             await _removeStockPruch();
                             String infoMassage =
                                 'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory';
-                            buildFlushBarInfo(context, infoMassage);
+                            buildFlushBarInfo(context, infoMassage, "Info", Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
                           } else {
                             String errorMassage = 'You dont own this stock.';
                             buildFlushBarError(context, errorMassage);
