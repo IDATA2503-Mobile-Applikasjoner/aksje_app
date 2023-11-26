@@ -6,7 +6,7 @@ import 'package:another_flushbar/flushbar.dart';
 /// This function is used to provide feedback after an action is performed.
 /// [context] is the BuildContext in which the Flushbar will be shown.
 /// [infoMessage] is the text content of the information message.
-void buildFlushBarInfo(BuildContext context, String infoMessage, String title, Color color1, Color color2) {
+void buildFlushBar(BuildContext context, String infoMessage, String title, Color color1, Color color2) {
   Flushbar(
     padding: const EdgeInsets.all(10),
     borderRadius: BorderRadius.circular(8),
