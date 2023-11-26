@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:aksje_app/widgets/components/flush_bar_error.dart';
+import 'package:aksje_app/widgets/components/flush_bar.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -42,7 +42,7 @@ class _SingUpSate extends State<SignUp> {
         navToLoginSuccessScreen();
       } else if (response.statusCode == 400) {
         var errorMessage = response.body;
-        buildFlushBarError(context, errorMessage);
+        buildFlushBar(context, errorMessage, "Error", Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
       return Future.error(e);
@@ -98,7 +98,7 @@ class _SingUpSate extends State<SignUp> {
                 if (checkPassowrd(password, confirmPassword)) {
                   createUser(context, email, password);
                 } else {
-                  buildFlushBarError(context, "The passwords didn't match");
+                  buildFlushBar(context, "The passwords didn't match", "Error", Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
                 }
               },
               child: const Text('Sign Up'),

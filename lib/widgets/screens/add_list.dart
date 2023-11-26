@@ -5,7 +5,6 @@ import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/widgets/screens/main_page.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
-import 'package:aksje_app/widgets/components/flush_bar_error.dart';
 
 /// Page for adding a new list.
 class AddListPage extends StatefulWidget {
@@ -50,12 +49,12 @@ class _AddListPageState extends State<AddListPage> {
     try {
       bool added = await _addListToServer(context, name);
       if (added) {
-        buildFlushBarInfo(context, "List was created", "Info", Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
+        buildFlushBar(context, "List was created", "Info", Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
       } else {
-        buildFlushBarError(context, "Could not create list");
+        buildFlushBar(context, "Could not create list", "Error", Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
-      buildFlushBarError(context, "Error: ${e.toString()}");
+      buildFlushBar(context, "Error: ${e.toString()}", "Error",Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
     }
   }
 
@@ -94,7 +93,7 @@ class _AddListPageState extends State<AddListPage> {
               onPressed: () {
                 String name = nameController.text;
                 if (!_checkIfNameIsValid(name)) {
-                  buildFlushBarError(context, "List with name $name already exists");
+                  buildFlushBar(context, "List with name $name already exists", "Error", Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
                 } else {
                   _createList(context, name);
                 }
