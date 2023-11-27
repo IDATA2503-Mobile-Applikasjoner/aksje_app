@@ -116,6 +116,9 @@ class _SignUpState extends State<SignUp> {
               child: const Text('Sign Up'),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 100, 100, 100),
+              ),
               onPressed: () {
                 cancel();
               },
