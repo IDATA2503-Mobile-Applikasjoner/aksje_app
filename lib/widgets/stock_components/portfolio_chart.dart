@@ -10,32 +10,36 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 /// It displays the portfolio value over time, with different colors indicating
 /// increases or decreases in value.
 ///
-/// [portfolioHistory]
+/// [portfolioHistory] is a list of PortfolioHistory objects containing the historical data.
 Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
   return Column(
     children: [
+      // SfCartesianChart is used to create a line chart.
       SfCartesianChart(
         primaryXAxis: CategoryAxis(
           labelPlacement: LabelPlacement.onTicks,
           majorGridLines: const MajorGridLines(width: 0),
-        ),
+        ), // X-axis is categorized by dates.
         primaryYAxis: NumericAxis(),
         series: <ChartSeries<PortfolioHistory, String>>[
           AreaSeries<PortfolioHistory, String>(
-            dataSource: portfolioHistory,
-            xValueMapper: (PortfolioHistory history, _) => history.date,
-            yValueMapper: (PortfolioHistory history, _) => history.price,
-            name: "Price",
+            dataSource: portfolioHistory, // Data source for the chart.
+            xValueMapper: (PortfolioHistory history, _) =>
+                history.date, // Mapping the date for the X-axis.
+            yValueMapper: (PortfolioHistory history, _) =>
+                history.price, // Mapping the price for the Y-axis.
+            name: "Price", // Name of the series.
             borderWidth: 2,
             borderColor: Colors.blue,
             gradient: const LinearGradient(
+              // Define the gradient colors and stops.
               colors: [
-                Colors.blue,
-                Colors.transparent,
+                Colors.blue, // Blue at the line.
+                Colors.transparent, // Transparent at the bottom.
               ],
               stops: [0.0, 1.0],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter, // Start the gradient from the top.
+              end: Alignment.bottomCenter, // End the gradient at the bottom.
             ),
           ),
         ],
