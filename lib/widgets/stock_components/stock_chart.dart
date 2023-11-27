@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:aksje_app/models/stock_history.dart';
 import 'package:candlesticks/candlesticks.dart';
@@ -14,17 +16,19 @@ Widget buildStockChart(List<StockHistory> stockHistories) {
   List<Candle> candleHistories = [];
 
   for (var stockHistory in stockHistories) {
-    candleHistories.add(Candle(
+    Candle candle = Candle(
         open: stockHistory.open,
         high: stockHistory.high,
         low: stockHistory.low,
         close: stockHistory.close,
         date: stockHistory.date,
-        volume: 0));
+        volume: stockHistory.volume.toDouble());
+    candleHistories.add(candle);
   }
-  return Column(
-    children: [
-      Candlesticks(candles: candleHistories),
-    ],
+
+  //print(candleHistories.toList());
+
+  return Center(
+    child: Candlesticks(candles: candleHistories.reversed.toList()),
   );
 }

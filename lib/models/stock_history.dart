@@ -11,6 +11,8 @@ class StockHistory {
 
   final double low;
 
+  final int volume;
+
   /// Constructs a [StockHistory] instance with a given [shid], [date], and [price].
   StockHistory({
     required this.open,
@@ -18,6 +20,7 @@ class StockHistory {
     required this.close,
     required this.high,
     required this.low,
+    required this.volume,
   });
 
   /// Creates a [StockHistory] instance from JSON data.
@@ -30,6 +33,7 @@ class StockHistory {
       close: json['close'] as double,
       high: json['high'] as double,
       low: json['low'] as double,
+      volume: json['volume'] as int,
     );
   }
 }
