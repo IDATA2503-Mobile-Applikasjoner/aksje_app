@@ -490,6 +490,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
                       ElevatedButton(
                         onPressed: () async {
                           await _removeStockPurchase();
+                          String massage = "The stock was sold.";
+                          buildFlushBar(context, massage, "Info", const Color.fromARGB(255, 38, 104, 35),const Color.fromARGB(255, 45, 143, 0));
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

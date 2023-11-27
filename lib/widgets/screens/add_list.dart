@@ -51,8 +51,6 @@ class _AddListPageState extends State<AddListPage> {
     try {
       bool added = await _addListToServer(context, name);
       if (added) {
-        buildFlushBar(context, "List was created", "Info", const Color.fromARGB(255, 38, 104, 35), const Color.fromARGB(255, 45, 143, 0));
-      } else {
         buildFlushBar(context, "Could not create list", "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
@@ -66,6 +64,16 @@ class _AddListPageState extends State<AddListPage> {
   bool _checkIfNameIsValid(String name) {
     return !(name == "Favorites" || name == "favorites");
   }
+  ///Navigate to my list page
+  void _navMyListPage() {
+     Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainPage(selectedIndex: 1),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +81,9 @@ class _AddListPageState extends State<AddListPage> {
       appBar: AppBar(
         title: const Text("Add List"),
         leading: IconButton(
-          onPressed: () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const MainPage(selectedIndex: 1)),
-          ),
+          onPressed: () {
+            _navMyListPage();
+          },
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
@@ -99,6 +105,7 @@ class _AddListPageState extends State<AddListPage> {
                   buildFlushBar(context, "List with name $name already exists", "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
                 } else {
                   _createList(context, name);
+                  _navMyListPage();
                 }
               },
               child: const Text('Create List'),

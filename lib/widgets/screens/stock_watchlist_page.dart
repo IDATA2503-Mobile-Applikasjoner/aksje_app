@@ -118,6 +118,10 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     }
   }
 
+  /// Update the list name
+  ///
+  ///Sends a put request to update stock name.
+  ///Returns error if the name wasent updated
   Future<void> _updateListName(String name) async {
     try {
       var lid = widget.stockList.lid;
@@ -130,6 +134,20 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
         body: name,
       );
     } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  ///Delete stock list
+  ///
+  ///Sends a delete request to delete stock list
+  ///Return error if the stock list was not removed.
+  Future<void> _removeList() async {
+    try {
+      var lid = widget.stockList.lid;
+      var baseURL = Uri.parse("${globals.baseUrl}/api/list/$lid");
+      var responds = await http.delete(baseURL);
+    }catch(e) {
       return Future.error(e);
     }
   }
@@ -164,6 +182,11 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     });
   }
 
+  /// Displays a dialog allowing the user can update stock list name or delete stock list.
+  ///
+  /// Opens an AlertDialog displaying a list of available stock lists.
+  /// When [_updateListName] is called the the stock list name is updated.
+  /// and the dialog is closed.
   void _showNewNameOption(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -218,6 +241,16 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     );
   }
 
+  ///Navigate to my list page
+  void _navMyListPage() {
+     Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainPage(selectedIndex: 1),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,20 +258,35 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
           title: Text(widget.stockList.name),
           leading: IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MainPage(selectedIndex: 1),
-                ),
-              );
+             _navMyListPage();
             },
             icon: const Icon(Icons.arrow_back_ios),
           ),
           actions: <Widget>[
-            IconButton(
-                onPressed: () => _showNewNameOption(context),
-                icon: const Icon(Icons.sort))
-          ],
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              switch (result) {
+                case 'Change list name':
+                  _showNewNameOption(context);
+                  break;
+                case 'Delete list':
+                  _removeList();
+                  _navMyListPage();
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Change list name',
+                child: Text('Change list name'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Delete list',
+                child: Text('Delete list'),
+              ),
+            ],
+          ),
+        ],
         ),
         body: RefreshIndicator(
           onRefresh: _onRefresh,
