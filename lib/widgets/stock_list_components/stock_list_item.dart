@@ -7,7 +7,7 @@ class StockListItem extends StatelessWidget {
 
   const StockListItem({Key? key, required this.stockList, required this.onStockListTap}) : super(key: key);
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -18,25 +18,30 @@ class StockListItem extends StatelessWidget {
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 16.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    stockList.name,
-                    style: Theme.of(context).textTheme.bodyMedium,
+          child: InkWell(
+            onTap: () {
+              onStockListTap(stockList);
+            },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      stockList.name,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 4), // Adjust the width as needed
-              IconButton(
-                onPressed: () {
-                  onStockListTap(stockList);
-                },
-                icon: const Icon(Icons.arrow_forward_ios),
-              ),
-            ],
+                const SizedBox(width: 4),
+                IconButton(
+                  onPressed: () {
+                    onStockListTap(stockList);
+                  },
+                  icon: const Icon(Icons.arrow_forward_ios),
+                ),
+              ],
+            ),
           ),
         ),
       ],

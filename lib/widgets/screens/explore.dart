@@ -203,6 +203,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   : StockList(
                       stocks: filteredStocks,
                       onStockTap: _goToStockDetailPage,
+                      isDeleteEnabled: false,
                     ),
             ),
           ],

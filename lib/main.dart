@@ -34,7 +34,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const List<Widget> _pages = <Widget>[
+  static const List<Widget> _pages = <Widget>[  
     Inventory(),
     MyListsPage(),
     ExplorePage(),

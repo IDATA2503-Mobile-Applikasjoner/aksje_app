@@ -131,6 +131,7 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
                     : StockList(
                         stocks: stocks,
                         onStockTap: (stock) => _goToStockDetailPage(stock),
+                        isDeleteEnabled: true,
                       ),
               ),
             ],

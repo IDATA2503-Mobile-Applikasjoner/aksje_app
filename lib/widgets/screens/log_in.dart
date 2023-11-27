@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = false;
       });
-      buildFlushBar(context, 'Email or password is wrong', "Info", Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
+      buildFlushBar(context, 'Email or password is wrong', "Error", Color.fromARGB(255, 175, 25, 25),Color.fromARGB(255, 233, 0, 0));
     }
   }
 
