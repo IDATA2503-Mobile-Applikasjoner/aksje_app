@@ -114,6 +114,14 @@ class _MyAppState extends State<MyApp> {
             foregroundColor: Colors.black, // Text color for text buttons.
           ),
         ),
+        popupMenuTheme: PopupMenuThemeData(
+          color: Colors.white, // Background color for popup menus.
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                10), // Rounded corners for popup menu items.
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
 
       // Theme configuration for the dark theme.
@@ -189,6 +197,14 @@ class _MyAppState extends State<MyApp> {
             foregroundColor: Colors.white, // Text color for text buttons.
           ),
         ),
+        popupMenuTheme: PopupMenuThemeData(
+          color: Colors.black, // Background color for popup menus.
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                10), // Rounded corners for popup menu items.
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       // The initial screen of the application.
       home: const Splash(),

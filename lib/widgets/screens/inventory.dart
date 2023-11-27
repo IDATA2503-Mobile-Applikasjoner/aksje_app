@@ -112,17 +112,17 @@ class _InventoryState extends State<Inventory> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var pid = userProvider.user!.uid;
-      var baseURL = Uri.parse("${globals.baseUrl}/api/portfoliohistory/portfolios/values/$pid");
+      var baseURL = Uri.parse(
+          "${globals.baseUrl}/api/portfoliohistory/portfolios/values/$pid");
       var response = await http.get(baseURL);
       print(response.statusCode);
       //print(pid);
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
         return data;
       }
       return Future.error("Didn't find data");
-          
-    } catch(e) {
+    } catch (e) {
       return Future.error(e);
     }
   }
@@ -139,6 +139,10 @@ class _InventoryState extends State<Inventory> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inventory'),
+        actions: [
+          // Displays a pop-up menu with profile options.
+          buildPopUpMenuProfile(context),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
@@ -149,11 +153,10 @@ class _InventoryState extends State<Inventory> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Your development today'),
-                    buildPopUpMenuProfile(context),
+                    Text('Your development today'),
                   ],
                 ),
                 const SizedBox(height: 20.0),

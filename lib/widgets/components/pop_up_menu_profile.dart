@@ -7,7 +7,7 @@ import 'package:aksje_app/widgets/screens/log_in.dart';
 /// [context] is the BuildContext in which the popup menu will be displayed.
 Widget buildPopUpMenuProfile(BuildContext context) {
   return PopupMenuButton(
-    icon: const Icon(Icons.person, color: Colors.black),
+    icon: const Icon(Icons.person),
     itemBuilder: (BuildContext context) {
       return [
         const PopupMenuItem(
@@ -19,10 +19,8 @@ Widget buildPopUpMenuProfile(BuildContext context) {
     onSelected: (value) {
       logOut(context);
     },
-    color: Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
-      side: const BorderSide(color: Color.fromARGB(255, 0, 89, 255)),
     ),
   );
 }
