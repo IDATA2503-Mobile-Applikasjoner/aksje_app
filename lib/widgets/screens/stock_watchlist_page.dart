@@ -109,11 +109,11 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(stock.toJson()),
-        );
-        if(response.statusCode != 200) {
-           return Future.error("Faild to remove stock from list");
-        }
-    } catch(e) {
+      );
+      if (response.statusCode != 200) {
+        return Future.error("Faild to remove stock from list");
+      }
+    } catch (e) {
       return Future.error(e);
     }
   }
@@ -129,11 +129,10 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
         },
         body: name,
       );
-    } catch(e) {
+    } catch (e) {
       return Future.error(e);
     }
   }
-
 
   /// Navigates to the stock detail page with data from the server.
   ///
@@ -165,33 +164,57 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     });
   }
 
-  void _showNewNameOption(BuildContext context){
+  void _showNewNameOption(BuildContext context) {
     showModalBottomSheet(
-      context: context, 
+      context: context,
       builder: (BuildContext context) {
         return SafeArea(
-          child: Wrap(
-            children: [
-              Column(
-                children: [
-                  Text("Change list name"),
-                  TextFormField(
-                    controller: newNameController,
-                    decoration: const InputDecoration(
-                      labelText: "New Name",
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Wrap(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Change List Name",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      String name = newNameController.text;
-                      await _updateListName(name);
-                    }, 
-                    child: Text("Save"))
-                ],
-              )
-            ],
-          ));
-      }
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: newNameController,
+                      decoration: const InputDecoration(
+                        labelText: "New Name",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            String name = newNameController.text;
+                            await _updateListName(name);
+                            Navigator.pop(context); // Close the modal on save
+                          },
+                          child: const Text("Save"),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -213,8 +236,8 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
           ),
           actions: <Widget>[
             IconButton(
-              onPressed: () => _showNewNameOption(context), 
-              icon: const Icon(Icons.list))
+                onPressed: () => _showNewNameOption(context),
+                icon: const Icon(Icons.sort))
           ],
         ),
         body: RefreshIndicator(

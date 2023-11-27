@@ -109,6 +109,11 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.black, // Text color for text buttons.
+          ),
+        ),
       ),
 
       // Theme configuration for the dark theme.
@@ -177,6 +182,11 @@ class _MyAppState extends State<MyApp> {
               borderRadius: BorderRadius.circular(
                   8), // Rounded shape for elevated buttons.
             ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white, // Text color for text buttons.
           ),
         ),
       ),
