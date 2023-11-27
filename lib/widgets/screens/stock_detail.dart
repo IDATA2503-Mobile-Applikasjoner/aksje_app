@@ -12,6 +12,7 @@ import 'dart:core';
 import 'dart:async';
 import 'package:aksje_app/models/stock_purchase.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
+import '../../globals.dart' as globals;
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -142,7 +143,12 @@ class _StockDetailPageState extends State<StockDetailPage> {
     if (added = true) {
       String infoMassage =
           'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.';
-      buildFlushBar(context, infoMassage, "Info", const Color.fromARGB(255, 38, 104, 35),const Color.fromARGB(255, 45, 143, 0));
+      buildFlushBar(
+          context,
+          infoMassage,
+          "Info",
+          const Color.fromARGB(255, 38, 104, 35),
+          const Color.fromARGB(255, 45, 143, 0));
       //_showFloatingFlushbarByStock(context);
     }
   }
@@ -402,7 +408,12 @@ class _StockDetailPageState extends State<StockDetailPage> {
                           } else {
                             String errorMassage =
                                 "User already owns this stock";
-                            buildFlushBar(context, errorMassage, "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
+                            buildFlushBar(
+                                context,
+                                errorMassage,
+                                "Error",
+                                const Color.fromARGB(255, 175, 25, 25),
+                                const Color.fromARGB(255, 233, 0, 0));
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -423,10 +434,20 @@ class _StockDetailPageState extends State<StockDetailPage> {
                             await _removeStockPruch();
                             String infoMassage =
                                 'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory';
-                            buildFlushBar(context, infoMassage, "Info", const Color.fromARGB(255, 38, 104, 35), const Color.fromARGB(255, 45, 143, 0));
+                            buildFlushBar(
+                                context,
+                                infoMassage,
+                                "Info",
+                                const Color.fromARGB(255, 38, 104, 35),
+                                const Color.fromARGB(255, 45, 143, 0));
                           } else {
                             String errorMassage = 'You dont own this stock.';
-                            buildFlushBar(context, errorMassage, "Error",const Color.fromARGB(255, 175, 25, 25),const Color.fromARGB(255, 233, 0, 0));
+                            buildFlushBar(
+                                context,
+                                errorMassage,
+                                "Error",
+                                const Color.fromARGB(255, 175, 25, 25),
+                                const Color.fromARGB(255, 233, 0, 0));
                           }
                         },
                         style: ElevatedButton.styleFrom(
