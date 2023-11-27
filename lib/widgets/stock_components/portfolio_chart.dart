@@ -10,63 +10,35 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 /// It displays the portfolio value over time, with different colors indicating
 /// increases or decreases in value.
 ///
-/// [portfolioHistory] is a list of PortfolioHistory objects containing the historical data.
+/// [portfolioHistory]
 Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
   return Column(
     children: [
-      // SfCartesianChart is used to create a line chart.
       SfCartesianChart(
-        primaryXAxis: CategoryAxis(), // X-axis is categorized by dates.
-        trackballBehavior: TrackballBehavior(
-          enable: true,
-          tooltipAlignment: ChartAlignment.near,
-          tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+        primaryXAxis: CategoryAxis(
+          labelPlacement: LabelPlacement.onTicks,
+          majorGridLines: const MajorGridLines(width: 0),
         ),
-        zoomPanBehavior: ZoomPanBehavior(
-          enablePinching: true,
-          enablePanning: true,
-          enableDoubleTapZooming: true,
-          enableSelectionZooming: true,
-          enableMouseWheelZooming: true,
-        ),
+        primaryYAxis: NumericAxis(),
         series: <ChartSeries<PortfolioHistory, String>>[
-          LineSeries<PortfolioHistory, String>(
-            dataSource: portfolioHistory, // Data source for the chart.
-            xValueMapper: (PortfolioHistory history, _) =>
-                history.date, // Mapping the date for the X-axis.
-            yValueMapper: (PortfolioHistory history, _) =>
-                history.price, // Mapping the price for the Y-axis.
-            name: "Price", // Name of the series.
-            // The color of each point in the line chart is determined by the price change.
-            pointColorMapper: (PortfolioHistory history, _) {
-              int index = portfolioHistory.indexOf(history);
-              if (index == 0 ||
-                  portfolioHistory[index].price <
-                      portfolioHistory[index - 1].price) {
-                return Colors.red; // Red for price decrease.
-              } else {
-                return Colors.green; // Green for price increase.
-              }
-            },
+          AreaSeries<PortfolioHistory, String>(
+            dataSource: portfolioHistory,
+            xValueMapper: (PortfolioHistory history, _) => history.date,
+            yValueMapper: (PortfolioHistory history, _) => history.price,
+            name: "Price",
+            borderWidth: 2,
+            borderColor: Colors.blue,
+            gradient: const LinearGradient(
+              colors: [
+                Colors.blue,
+                Colors.transparent,
+              ],
+              stops: [0.0, 1.0],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
         ],
-      ),
-      // Expanded widget with a SfSparkLineChart to show the same data in a condensed form.
-      Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SfSparkLineChart.custom(
-            trackball: const SparkChartTrackball(
-                activationMode: SparkChartActivationMode.tap),
-            marker: const SparkChartMarker(
-                displayMode: SparkChartMarkerDisplayMode.all),
-            labelDisplayMode: SparkChartLabelDisplayMode.all,
-            xValueMapper: (int index) => portfolioHistory[index]
-                .date, // Mapping the date for the X-axis.
-            yValueMapper: (int index) => portfolioHistory[index]
-                .price, // Mapping the price for the Y-axis.
-          ),
-        ),
       ),
     ],
   );
