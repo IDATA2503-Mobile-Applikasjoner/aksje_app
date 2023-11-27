@@ -12,34 +12,43 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 ///
 /// [portfolioHistory] is a list of PortfolioHistory objects containing the historical data.
 Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
+  DateTime now = DateTime.now();
+  DateTime endTime = DateTime(now.year, now.month, now.day, now.hour);
+
+  // Check if the data covers the last 24 hours
+  DateTime earliestDataPoint = portfolioHistory.isNotEmpty
+      ? portfolioHistory.first.date
+      : DateTime.now().subtract(const Duration(hours: 24));
+  DateTime startTime = earliestDataPoint
+          .isBefore(DateTime.now().subtract(const Duration(hours: 24)))
+      ? earliestDataPoint
+      : DateTime(now.year, now.month, now.day, now.hour)
+          .subtract(const Duration(hours: 24));
+
   return Column(
     children: [
       // SfCartesianChart is used to create a line chart.
       SfCartesianChart(
-        primaryXAxis: CategoryAxis(
+        primaryXAxis: DateTimeCategoryAxis(
           labelPlacement: LabelPlacement.onTicks,
           majorGridLines: const MajorGridLines(width: 0),
-        ), // X-axis is categorized by dates.
+          visibleMinimum: startTime,
+          visibleMaximum: endTime,
+        ),
         primaryYAxis: NumericAxis(),
-        series: <ChartSeries<PortfolioHistory, String>>[
-          AreaSeries<PortfolioHistory, String>(
-            dataSource: portfolioHistory, // Data source for the chart.
-            xValueMapper: (PortfolioHistory history, _) =>
-                history.date, // Mapping the date for the X-axis.
-            yValueMapper: (PortfolioHistory history, _) =>
-                history.price, // Mapping the price for the Y-axis.
-            name: "Price", // Name of the series.
+        series: <ChartSeries<PortfolioHistory, DateTime>>[
+          AreaSeries<PortfolioHistory, DateTime>(
+            dataSource: portfolioHistory,
+            xValueMapper: (PortfolioHistory history, _) => history.date,
+            yValueMapper: (PortfolioHistory history, _) => history.price,
+            name: 'Price',
             borderWidth: 2,
             borderColor: Colors.blue,
             gradient: const LinearGradient(
-              // Define the gradient colors and stops.
-              colors: [
-                Colors.blue, // Blue at the line.
-                Colors.transparent, // Transparent at the bottom.
-              ],
+              colors: [Colors.blue, Colors.transparent],
               stops: [0.0, 1.0],
-              begin: Alignment.topCenter, // Start the gradient from the top.
-              end: Alignment.bottomCenter, // End the gradient at the bottom.
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
         ],
