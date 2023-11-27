@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:aksje_app/models/stock_history.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:candlesticks/candlesticks.dart';
 
 /// Builds a stock chart widget displaying a stock's historical data.
 ///
@@ -12,62 +11,20 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 ///
 /// [stockHistories] is a list of StockHistory objects containing the historical data of the stock.
 Widget buildStockChart(List<StockHistory> stockHistories) {
+  List<Candle> candleHistories = [];
+
+  for (var stockHistory in stockHistories) {
+    candleHistories.add(Candle(
+        open: stockHistory.open,
+        high: stockHistory.high,
+        low: stockHistory.low,
+        close: stockHistory.close,
+        date: stockHistory.date,
+        volume: 0));
+  }
   return Column(
     children: [
-      // SfCartesianChart is used to create a detailed line chart.
-      SfCartesianChart(
-        primaryXAxis: CategoryAxis(), // X-axis is categorized by dates.
-        trackballBehavior: TrackballBehavior(
-          enable: true,
-          tooltipAlignment: ChartAlignment.near,
-          tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
-        ),
-        zoomPanBehavior: ZoomPanBehavior(
-          enablePinching: true,
-          enablePanning: true,
-          enableDoubleTapZooming: true,
-          enableSelectionZooming: true,
-          enableMouseWheelZooming: true,
-        ),
-        series: <ChartSeries<StockHistory, String>>[
-          LineSeries<StockHistory, String>(
-            dataSource: stockHistories, // Data source for the chart.
-            xValueMapper: (StockHistory history, _) =>
-                history.date, // Mapping the date for the X-axis.
-            yValueMapper: (StockHistory history, _) =>
-                history.price, // Mapping the price for the Y-axis.
-            name: "Price", // Name of the series.
-            // The color of each point in the line chart is determined by the price change.
-            pointColorMapper: (StockHistory history, _) {
-              int index = stockHistories.indexOf(history);
-              if (index == 0 ||
-                  stockHistories[index].price <
-                      stockHistories[index - 1].price) {
-                return Colors.red; // Red for price decrease.
-              } else {
-                return Colors.green; // Green for price increase.
-              }
-            },
-          ),
-        ],
-      ),
-      // Expanded widget with a SfSparkLineChart to show the same data in a condensed form.
-      Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SfSparkLineChart.custom(
-            trackball: const SparkChartTrackball(
-                activationMode: SparkChartActivationMode.tap),
-            marker: const SparkChartMarker(
-                displayMode: SparkChartMarkerDisplayMode.all),
-            labelDisplayMode: SparkChartLabelDisplayMode.all,
-            xValueMapper: (int index) =>
-                stockHistories[index].date, // Mapping the date for the X-axis.
-            yValueMapper: (int index) => stockHistories[index]
-                .price, // Mapping the price for the Y-axis.
-          ),
-        ),
-      ),
+      Candlesticks(candles: candleHistories),
     ],
   );
 }
