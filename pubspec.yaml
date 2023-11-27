@@ -45,6 +45,7 @@ dependencies:
   google_fonts: ^6.1.0
   another_flushbar: ^1.12.30
   syncfusion_flutter_charts: ^23.1.44
+  candlesticks: ^2.1.0
 
 dev_dependencies:
   flutter_test:
