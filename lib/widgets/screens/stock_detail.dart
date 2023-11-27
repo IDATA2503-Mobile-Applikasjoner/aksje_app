@@ -290,21 +290,24 @@ class _StockDetailPageState extends State<StockDetailPage> {
   Future<void> _removeStockPurchase() async {
     try {
       UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+          Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       var baseURL = Uri.parse("${globals.baseUrl}/api/stockpurchease/$uid");
-      var responds = await http.delete(
-        baseURL,
+      var responds = await http.delete(baseURL,
           headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: {
-          "id": widget.stock.id,
-        }
-      );
-      if(responds.statusCode == 404) {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({
+            "id": widget.stock.id,
+          }));
+      if (responds.statusCode == 404) {
         var errorMassage = responds.body;
-        buildFlushBar(context, "You don't own this stock.", "warning", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
+        buildFlushBar(
+            context,
+            "You don't own this stock.",
+            "warning",
+            const Color.fromARGB(255, 175, 25, 25),
+            const Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
       return Future.error("Error removing stock purchase: $e");
