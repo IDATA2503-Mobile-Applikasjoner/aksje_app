@@ -6,25 +6,27 @@ import 'dart:convert';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
 import '../../globals.dart' as globals;
 
+/// SignUp is a StatefulWidget that facilitates user registration in the application.
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
   @override
-  _SingUpSate createState() => _SingUpSate();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _SingUpSate extends State<SignUp> {
+class _SignUpState extends State<SignUp> {
+  // Text editing controllers for email, password, and confirm password fields.
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  //Checks if the password and confirmPassword maches.
-  bool checkPassowrd(String password, String confirmPassword) {
+  /// Checks if the password and confirm password match.
+  bool checkPassword(String password, String confirmPassword) {
     return password == confirmPassword;
   }
 
-  //Creates a new user
+  /// Creates a new user account with the provided email and password.
   Future<void> createUser(
       BuildContext context, String email, String password) async {
     var url = Uri.parse('${globals.baseUrl}/api/user');
@@ -42,20 +44,25 @@ class _SingUpSate extends State<SignUp> {
         navToLoginSuccessScreen();
       } else if (response.statusCode == 400) {
         var errorMessage = response.body;
-        buildFlushBar(context, errorMessage, "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
+        buildFlushBar(
+            context,
+            errorMessage,
+            "Error",
+            const Color.fromARGB(255, 175, 25, 25),
+            const Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
       return Future.error(e);
     }
   }
 
-  //Navigates to success spage
+  /// Navigates to the NewUserPage on successful sign up.
   void navToLoginSuccessScreen() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const NewUserPage()));
   }
 
-  //Returns to login page
+  /// Navigates back to the login page.
   void cancel() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
@@ -95,10 +102,15 @@ class _SingUpSate extends State<SignUp> {
                 String email = emailController.text;
                 String password = passwordController.text;
                 String confirmPassword = confirmPasswordController.text;
-                if (checkPassowrd(password, confirmPassword)) {
+                if (checkPassword(password, confirmPassword)) {
                   createUser(context, email, password);
                 } else {
-                  buildFlushBar(context, "The passwords didn't match", "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
+                  buildFlushBar(
+                      context,
+                      "The passwords didn't match",
+                      "Error",
+                      const Color.fromARGB(255, 175, 25, 25),
+                      const Color.fromARGB(255, 233, 0, 0));
                 }
               },
               child: const Text('Sign Up'),

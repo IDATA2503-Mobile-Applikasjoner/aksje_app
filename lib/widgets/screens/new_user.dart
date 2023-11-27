@@ -129,7 +129,6 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                   },
                 ),
               ),
-
               // Current page indicator
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

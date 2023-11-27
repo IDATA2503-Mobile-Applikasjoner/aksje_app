@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:aksje_app/widgets/screens/stock_watchlist_page.dart';
 import '../../globals.dart' as globals;
 
-//Represent my list page.
-//User can see what list he has.
+/// Represents the page where users can view their lists of stocks.
+/// Users can navigate to add new lists or view details of existing lists.
 class MyListsPage extends StatefulWidget {
   const MyListsPage({Key? key}) : super(key: key);
 
@@ -20,7 +20,9 @@ class MyListsPage extends StatefulWidget {
 }
 
 class _MyListsPageState extends State<MyListsPage> {
+  // List of user's stock lists.
   List<StockListModel> lists = [];
+  // Loading state indicator.
   bool isLoading = true;
 
   @override
@@ -31,10 +33,11 @@ class _MyListsPageState extends State<MyListsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // Fetches data from the server.
     _fetchDataFromServer();
   }
 
-  //Gets stock list data from the server and sets the lists to that data.
+  /// Fetches stock list data from the server and updates the state.
   Future<void> _fetchDataFromServer() async {
     try {
       UserProvider userProvider =
@@ -61,7 +64,7 @@ class _MyListsPageState extends State<MyListsPage> {
     }
   }
 
-  //Navigates to add list page
+  /// Navigates to the AddListPage to create a new list.
   void _navToAddListPage() {
     Navigator.pushReplacement(
         context,
@@ -70,7 +73,7 @@ class _MyListsPageState extends State<MyListsPage> {
         ));
   }
 
-  //Get list from database and navigates to that list.
+  /// Fetches list data from the server and navigates to that list's page.
   Future<void> _goTiListPageWithDataFromServer(
       StockListModel stockListModel) async {
     try {
@@ -88,7 +91,7 @@ class _MyListsPageState extends State<MyListsPage> {
     }
   }
 
-  //Navigates to list page.
+  /// Navigates to the StockWatchlistPage with the selected list's data.
   void _navToListPage(StockListModel stockListModel) {
     Navigator.pushReplacement(
         context,

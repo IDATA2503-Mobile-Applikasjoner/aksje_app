@@ -14,9 +14,14 @@ import 'package:aksje_app/models/stock_purchase.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
 import '../../globals.dart' as globals;
 
+/// A detailed page displaying a specific stock's information.
+///
+/// This page shows detailed information about a given stock, including its history and options
+/// to add it to a user's list or make a purchase. It regularly updates the stock data from the server.
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
 
+  /// Constructs a [StockDetailPage] widget with the required [stock] parameter.
   const StockDetailPage({Key? key, required this.stock}) : super(key: key);
 
   @override
@@ -31,7 +36,9 @@ class _StockDetailPageState extends State<StockDetailPage> {
 
   @override
   void initState() {
+    super.initState();
     _setSTockHistriesWithDataFromServer();
+    // Sets a timer to periodically update stock data from the server.
     timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (mounted) {
         Stock newStock = await _getStockDataFromServer();
@@ -43,16 +50,18 @@ class _StockDetailPageState extends State<StockDetailPage> {
         });
       }
     });
-    super.initState();
   }
 
   @override
   void dispose() {
+    // Cancels the timer when the widget is disposed to prevent memory leaks.
     timer.cancel();
     super.dispose();
   }
 
-  // Gets the stock lists that the user have from the database.
+  /// Fetches the list of stocks that the user has from the server.
+  ///
+  /// Returns a list of [StockListModel] representing the user's stock lists.
   Future<List<StockListModel>> _fetcListDataFromServer() async {
     try {
       UserProvider userProvider =
@@ -70,11 +79,13 @@ class _StockDetailPageState extends State<StockDetailPage> {
       return Future.error(
           "Failed to fetch stockList data. Status code: ${response.statusCode}");
     } catch (e) {
-      return Future.error("Error geting stockLists");
+      return Future.error("Error getting stockLists");
     }
   }
 
-  // Shows all the list that the user have.
+  /// Displays options for the user to add a stock to their list.
+  ///
+  /// Fetches the user's stock lists and shows a dialog for adding the stock to a list.
   void _showListOptions() async {
     setState(() async {
       stockLists = await _fetcListDataFromServer();
@@ -82,7 +93,9 @@ class _StockDetailPageState extends State<StockDetailPage> {
     });
   }
 
-  // Add a stock to a list then saves it in the database.
+  /// Adds a stock to a list on the server.
+  ///
+  /// Takes the list ID [lid] as a parameter and sends a request to the server to add the stock to the specified list.
   Future<void> _addStockToListInServer(var lid) async {
     try {
       var baseURL = Uri.parse("${globals.baseUrl}/api/list/addStock/$lid");
@@ -96,10 +109,10 @@ class _StockDetailPageState extends State<StockDetailPage> {
       );
       if (response.statusCode != 200) {
         return Future.error(
-            "Faild to add stock to a list. Status code: ${response.statusCode}");
+            "Failed to add stock to a list. Status code: ${response.statusCode}");
       }
     } catch (e) {
-      return Future.error("Fail to add stock to a list.");
+      return Future.error("Failed to add stock to a list.");
     }
   }
 

@@ -11,7 +11,7 @@ import 'package:aksje_app/widgets/components/login_button.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
 import '../../globals.dart' as globals;
 
-//Represent the login page.
+/// Represents the login page where users can enter their credentials.
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoggedIn = false;
   bool isLoading = false;
 
-  //Sends authetication request to the server
+  /// Sends authentication request to the server.
   Future<void> login(
       String email, String password, BuildContext context) async {
     setState(() {
@@ -56,11 +56,16 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = false;
       });
-      buildFlushBar(context, 'Email or password is wrong', "Error", const Color.fromARGB(255, 175, 25, 25),const Color.fromARGB(255, 233, 0, 0));
+      buildFlushBar(
+          context,
+          'Email or password is wrong',
+          "Error",
+          const Color.fromARGB(255, 175, 25, 25),
+          const Color.fromARGB(255, 233, 0, 0));
     }
   }
 
-  //Gets the authenticated user from the server.
+  /// Gets the authenticated user's details from the server.
   Future<void> getLoginUser() async {
     String? token = await getToken();
     if (token != null) {
@@ -89,23 +94,23 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  //Store the JWT toke in the TokeManager
+  /// Stores the JWT token in the TokenManager.
   void storeToken(String token) async {
     TokenManager.storeToken(token);
   }
 
-  //Gets the JWT toke from TokeManager
+  /// Retrieves the JWT token from TokenManager.
   Future<String?> getToken() async {
     String? token = await TokenManager.getToken();
     return token;
   }
 
-  //Removes JWT token from Toke Manager
+  /// Removes JWT token from TokenManager.
   void removeToken() async {
     TokenManager.removeToken();
   }
 
-  //Navigates to sign up page.
+  /// Navigates to the sign-up page.
   void navSignUpPage() {
     Navigator.pushReplacement(
       context,

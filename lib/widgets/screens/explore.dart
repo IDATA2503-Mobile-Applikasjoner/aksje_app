@@ -7,6 +7,8 @@ import 'package:aksje_app/widgets/stock_components/stock_list.dart';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
 import '../../globals.dart' as globals;
 
+/// ExplorePage is a StatefulWidget that displays a list of stocks,
+/// allowing users to view, search, sort, and navigate to details of individual stocks.
 class ExplorePage extends StatefulWidget {
   const ExplorePage({Key? key}) : super(key: key);
 
@@ -15,21 +17,28 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  // List of all stocks.
   List<Stock> stocks = [];
+
+  // Filtered list of stocks based on user search.
   List<Stock> filteredStocks = [];
+
+  // Loading state indicator.
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    // Fetches stock data from server on initialization.
     _fetchStocksDataFromServer();
 
+    // Periodically updates stock data every 30 seconds.
     Timer.periodic(const Duration(seconds: 30), (timer) {
       _fetchStocksDataFromServer();
     });
   }
 
-  //Gets the stock data form the server and sets the stocks to that data.
+  /// Fetches stock data from the server and updates the state.
   Future<void> _fetchStocksDataFromServer() async {
     setState(() {
       isLoading = true;
@@ -51,7 +60,7 @@ class _ExplorePageState extends State<ExplorePage> {
     if (mounted) setState(() {});
   }
 
-  //Get the stocks from the database and uses that stock to call the _naviagteToStockDetailPage
+  /// Navigates to the StockDetailPage for the given stock.
   Future<void> _goToStockDetailPage(Stock stock) async {
     try {
       var id = stock.id;
@@ -68,7 +77,7 @@ class _ExplorePageState extends State<ExplorePage> {
     }
   }
 
-  //Naviagest to the stock detail page, based on the stock that user clickt on.
+  /// Navigates to the StockDetailPage.
   void _navToStockDetailPage(Stock stock) {
     Navigator.pushReplacement(
       context,
@@ -78,7 +87,7 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  //Filter stock by what you are searching for.
+  /// Filters the list of stocks based on the search query.
   void _filterStocks(String query) {
     setState(() {
       filteredStocks = stocks
@@ -88,21 +97,21 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
-  //Sorts the stocks by higest price
+  /// Sorts the stocks by highest price.
   void _sortStocksByHighestPrice() {
     setState(() {
       filteredStocks.sort((a, b) => b.currentPrice.compareTo(a.currentPrice));
     });
   }
 
-  //Sortst the stock by lowest price
+  /// Sorts the stocks by lowest price.
   void _sortStocksByLowestPrice() {
     setState(() {
       filteredStocks.sort((a, b) => a.currentPrice.compareTo(b.currentPrice));
     });
   }
 
-  //Sorts the stock by biggest earner
+  /// Sorts the stocks by the biggest earner (percent change intraday).
   void _sortStocksByBiggestEarner() {
     setState(() {
       filteredStocks.sort(
@@ -110,7 +119,7 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
-  //Sorts the stock by the biggest loser
+  /// Sorts the stocks by the biggest loser (percent change intraday).
   void _sortStocksByBiggestLoser() {
     setState(() {
       filteredStocks.sort(
@@ -118,7 +127,7 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
-  //Shows the sorting options lists
+  /// Shows sorting options in a modal bottom sheet.
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -165,7 +174,7 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  //Refreshces the stocks with new data on the page.
+  /// Refreshes the stocks with new data.
   Future<void> _onRefresh() async {
     _fetchStocksDataFromServer();
   }

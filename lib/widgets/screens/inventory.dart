@@ -12,7 +12,8 @@ import 'package:aksje_app/models/portfolio_history.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart_inventory.dart';
 import '../../globals.dart' as globals;
 
-//The Inventory page
+/// Inventory is a StatefulWidget that displays the user's stock inventory.
+/// It includes functionality to view stock details and portfolio history.
 class Inventory extends StatefulWidget {
   const Inventory({Key? key}) : super(key: key);
 
@@ -21,7 +22,10 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
+  // List of stocks in the user's inventory.
   List<Stock> stocks = [];
+
+  // Portfolio history data.
   late List<PortfolioHistory> portfolioHistory = [];
 
   @override
@@ -32,18 +36,20 @@ class _InventoryState extends State<Inventory> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _fecthStockDataFromServe();
-    _setSTockHistriesWithDataFromServer();
+    // Fetch stock data and portfolio history from the server.
+    _fetchStockDataFromServer();
+    _setStockHistoriesWithDataFromServer();
 
+    // Periodically updates data every 30 seconds.
     Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
-        _fecthStockDataFromServe();
-        _setSTockHistriesWithDataFromServer();
+        _fetchStockDataFromServer();
+        _setStockHistoriesWithDataFromServer();
       });
     });
   }
 
-  //Naviagte to stock detail page
+  /// Navigates to the StockDetailPage for a given stock.
   void _goToStockDetailPage(Stock stock) {
     Navigator.pushReplacement(
       context,
@@ -53,8 +59,8 @@ class _InventoryState extends State<Inventory> {
     );
   }
 
-  //Gets stock data from server and set stocks to that data.
-  Future<void> _fecthStockDataFromServe() async {
+  /// Fetches stock data from the server and updates the stocks list.
+  Future<void> _fetchStockDataFromServer() async {
     try {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
@@ -75,7 +81,8 @@ class _InventoryState extends State<Inventory> {
     }
   }
 
-  Future<List<PortfolioHistory>> _setSTockHistriesWithDataFromServer() async {
+  /// Fetches portfolio history data from the server and updates the portfolioHistory list.
+  Future<List<PortfolioHistory>> _setStockHistoriesWithDataFromServer() async {
     try {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
@@ -95,14 +102,14 @@ class _InventoryState extends State<Inventory> {
       }
       return Future.error("Didn't get data");
     } catch (e) {
-      return Future.error("Didnt get data");
+      return Future.error("Didn't get data");
     }
   }
 
-  //Refreshes the page
+  /// Refreshes the page by fetching the latest stock data.
   Future<void> _onRefresh() async {
     setState(() {
-      _fecthStockDataFromServe();
+      _fetchStockDataFromServer();
     });
   }
 
@@ -115,7 +122,7 @@ class _InventoryState extends State<Inventory> {
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: SingleChildScrollView(
-          // Allows vertical scrolling
+          // Enables vertical scrolling.
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -129,6 +136,7 @@ class _InventoryState extends State<Inventory> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
+                // Displays a chart representing the portfolio history.
                 SizedBox(
                   height: 300,
                   child: buildStockChartInventory(portfolioHistory),
@@ -136,6 +144,7 @@ class _InventoryState extends State<Inventory> {
                 const SizedBox(height: 20.0),
                 const Text('Your stocks'),
                 const SizedBox(height: 10.0),
+                // Displays a horizontally scrollable list of stocks.
                 SizedBox(
                   height: 200,
                   child: ListView.builder(
