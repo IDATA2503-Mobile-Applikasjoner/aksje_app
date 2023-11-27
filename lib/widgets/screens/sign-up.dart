@@ -83,6 +83,11 @@ class _SignUpState extends State<SignUp> {
             TextFormField(
               controller: emailController,
               decoration: const InputDecoration(labelText: "Email"),
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
+              ),
             ),
             const SizedBox(height: 20),
             TextFormField(

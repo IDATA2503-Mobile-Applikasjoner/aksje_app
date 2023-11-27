@@ -60,6 +60,19 @@ class _MyAppState extends State<MyApp> {
           bodyMedium: const TextStyle(fontSize: 16, color: Colors.black),
           bodySmall: const TextStyle(fontSize: 12, color: Colors.black),
         ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.black),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
+          ),
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.black,
+        ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white, // AppBar background color.
           elevation: 0, // Removes shadow from the AppBar.
@@ -109,7 +122,21 @@ class _MyAppState extends State<MyApp> {
           bodyLarge: const TextStyle(fontSize: 20, color: Colors.white),
           bodyMedium: const TextStyle(fontSize: 16, color: Colors.white),
           bodySmall: const TextStyle(fontSize: 12, color: Colors.white),
+          titleMedium: const TextStyle(color: Colors.white),
         ),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+        ),
+
         appBarTheme: AppBarTheme(
           backgroundColor: const Color.fromARGB(255, 45, 45, 45),
           elevation: 0,
