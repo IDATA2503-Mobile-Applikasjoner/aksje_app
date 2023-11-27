@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 class StockList extends StatelessWidget {
   final List<Stock> stocks;
   final Function(Stock) onStockTap;
+  final Function(Stock)? onRemoveStock;
   final bool isDeleteEnabled;
 
   /// Constructs a StockList widget.
@@ -21,6 +22,7 @@ class StockList extends StatelessWidget {
     required this.stocks,
     required this.onStockTap,
     required this.isDeleteEnabled,
+    this.onRemoveStock,
   }) : super(key: key);
 
   @override
@@ -45,7 +47,9 @@ class StockList extends StatelessWidget {
                 ),
                 onDismissed: (direction) {
                   // Remove the stock from the list when swiped away.
-                  stocks.removeAt(index);
+                  if (onRemoveStock != null) {
+                    onRemoveStock!(stocks[index]);
+                  }
                 },
                 child: StockItem(stock: stocks[index]),
               )

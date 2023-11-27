@@ -87,6 +87,7 @@ class _InventoryState extends State<Inventory> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var pid = userProvider.user!.uid;
+      print(pid);
       var baseURL =
           Uri.parse("${globals.baseUrl}/api/portfoliohistory/portfolios/$pid");
       var response = await http.get(baseURL);
@@ -103,6 +104,26 @@ class _InventoryState extends State<Inventory> {
       return Future.error("Didn't get data");
     } catch (e) {
       return Future.error("Didn't get data");
+    }
+  }
+
+  Future<Map<String, dynamic>> _futureYourDevelopmentDataFromServer() async {
+    try {
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      var pid = userProvider.user!.uid;
+      var baseURL = Uri.parse("${globals.baseUrl}/api/portfoliohistory/portfolios/values/$pid");
+      var response = await http.get(baseURL);
+      print(response.statusCode);
+      //print(pid);
+      if(response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data;
+      }
+      return Future.error("Didn't find data");
+          
+    } catch(e) {
+      return Future.error(e);
     }
   }
 

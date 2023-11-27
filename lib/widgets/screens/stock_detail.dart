@@ -286,15 +286,24 @@ class _StockDetailPageState extends State<StockDetailPage> {
   /// Retrieves the details of a specific stock purchase and sends a DELETE request
   /// to remove it from the server using its specific ID.
   /// Throws an error if the deletion is not successful or if the request fails.
-  Future<void> _removeStockPruch() async {
+  Future<void> _removeStockPurchase() async {
     try {
-      StockPurchase stockPurchease = await _getPrucheasStockFromServer();
-      var spid = stockPurchease.spid;
-      var baseURL = Uri.parse("${globals.baseUrl}/api/stockpurchease/$spid");
-      var response = await http.delete(baseURL);
-
-      if (response.statusCode != 200) {
-        return Future.error("Error removing stock purchase");
+      UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+      var uid = userProvider.user!.uid;
+      var baseURL = Uri.parse("${globals.baseUrl}/api/stockpurchease/$uid");
+      var responds = await http.delete(
+        baseURL,
+          headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: {
+          "id": widget.stock.id,
+        }
+      );
+      if(responds.statusCode == 404) {
+        var errorMassage = responds.body;
+        buildFlushBar(context, "You don't own this stock.", "warning", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
       return Future.error("Error removing stock purchase: $e");
@@ -476,25 +485,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          if (await _checkIfUserOwnStock()) {
-                            await _removeStockPruch();
-                            String infoMassage =
-                                'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory';
-                            buildFlushBar(
-                                context,
-                                infoMassage,
-                                "Info",
-                                const Color.fromARGB(255, 38, 104, 35),
-                                const Color.fromARGB(255, 45, 143, 0));
-                          } else {
-                            String errorMassage = 'You dont own this stock.';
-                            buildFlushBar(
-                                context,
-                                errorMassage,
-                                "Error",
-                                const Color.fromARGB(255, 175, 25, 25),
-                                const Color.fromARGB(255, 233, 0, 0));
-                          }
+                          await _removeStockPurchase();
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

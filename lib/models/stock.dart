@@ -44,4 +44,15 @@ class Stock {
       percentChangeIntraday: json['percentChangeIntraday'] as double,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'symbol': symbol,
+      'name': name,
+      'currentPrice': currentPrice,
+      'openingPrice': openingPrice,
+      'percentChangeIntraday': percentChangeIntraday,
+    };
+  }
 }

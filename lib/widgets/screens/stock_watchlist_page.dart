@@ -25,6 +25,7 @@ class StockWatchlistPage extends StatefulWidget {
 class _StockWatchlistPageState extends State<StockWatchlistPage> {
   List<Stock> stocks = [];
   bool isLoading = true;
+  final TextEditingController newNameController = TextEditingController();
 
   @override
   void initState() {
@@ -94,6 +95,46 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     }
   }
 
+  ///Removes a specific stock data in a list from the server
+  ///
+  ///Sends a Delete request to remove data from a list for a specific stock based on List id and body of a stock.
+  ///Returns error if the stock wassent removed.
+  Future<void> _removeStockFromList(Stock stock) async {
+    try {
+      var lid = widget.stockList.lid;
+      var baseURL = Uri.parse("${globals.baseUrl}/api/list/removestock/$lid");
+      var response = await http.delete(
+        baseURL,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(stock.toJson()),
+        );
+        if(response.statusCode != 200) {
+           return Future.error("Faild to remove stock from list");
+        }
+    } catch(e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<void> _updateListName(String name) async {
+    try {
+      var lid = widget.stockList.lid;
+      var baseURL = Uri.parse("${globals.baseUrl}/api/list/listname/$lid");
+      var response = await http.put(
+        baseURL,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: name,
+      );
+    } catch(e) {
+      return Future.error(e);
+    }
+  }
+
+
   /// Navigates to the stock detail page with data from the server.
   ///
   /// First fetches the latest data for the selected stock using [_getStockDataFromnServer],
@@ -124,6 +165,36 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     });
   }
 
+  void _showNewNameOption(BuildContext context){
+    showModalBottomSheet(
+      context: context, 
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              Column(
+                children: [
+                  Text("Change list name"),
+                  TextFormField(
+                    controller: newNameController,
+                    decoration: const InputDecoration(
+                      labelText: "New Name",
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      String name = newNameController.text;
+                      await _updateListName(name);
+                    }, 
+                    child: Text("Save"))
+                ],
+              )
+            ],
+          ));
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +211,11 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
             },
             icon: const Icon(Icons.arrow_back_ios),
           ),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () => _showNewNameOption(context), 
+              icon: const Icon(Icons.list))
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: _onRefresh,
@@ -152,6 +228,7 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
                         stocks: stocks,
                         onStockTap: (stock) => _goToStockDetailPage(stock),
                         isDeleteEnabled: true,
+                        onRemoveStock: (stock) => _removeStockFromList(stock),
                       ),
               ),
             ],
