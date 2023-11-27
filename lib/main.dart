@@ -53,6 +53,8 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData().copyWith(
         useMaterial3: false, // Specifies not to use Material 3 design.
         colorScheme: kColorScheme, // Custom color scheme for light theme.
+        scaffoldBackgroundColor: const Color(
+            0xfff5f5f5), // Background color for the scaffold widget.
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme, // Applies Roboto font theme.
         ).copyWith(
