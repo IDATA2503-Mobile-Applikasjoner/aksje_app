@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:aksje_app/models/stock_history.dart';
+import 'package:aksje_app/models/portfolio_history.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-/// Builds a stock chart widget displaying a stock's historical data.
+/// Builds a stock chart widget displaying a user's portfolio history.
 ///
-/// This function creates a visual representation of the stock's price history
+/// This function creates a visual representation of the portfolio history
 /// using a line chart and a sparkline chart from the Syncfusion Flutter Charts package.
-/// It shows the price movement over time, with different colors indicating
-/// increases or decreases in price.
+/// It displays the portfolio value over time, with different colors indicating
+/// increases or decreases in value.
 ///
-/// [stockHistories] is a list of StockHistory objects containing the historical data of the stock.
-Widget buildStockChart(List<StockHistory> stockHistories) {
+/// [portfolioHistory] is a list of PortfolioHistory objects containing the historical data.
+Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
   return Column(
     children: [
-      // SfCartesianChart is used to create a detailed line chart.
+      // SfCartesianChart is used to create a line chart.
       SfCartesianChart(
         primaryXAxis: CategoryAxis(), // X-axis is categorized by dates.
         trackballBehavior: TrackballBehavior(
@@ -29,20 +29,20 @@ Widget buildStockChart(List<StockHistory> stockHistories) {
           enableSelectionZooming: true,
           enableMouseWheelZooming: true,
         ),
-        series: <ChartSeries<StockHistory, String>>[
-          LineSeries<StockHistory, String>(
-            dataSource: stockHistories, // Data source for the chart.
-            xValueMapper: (StockHistory history, _) =>
+        series: <ChartSeries<PortfolioHistory, String>>[
+          LineSeries<PortfolioHistory, String>(
+            dataSource: portfolioHistory, // Data source for the chart.
+            xValueMapper: (PortfolioHistory history, _) =>
                 history.date, // Mapping the date for the X-axis.
-            yValueMapper: (StockHistory history, _) =>
+            yValueMapper: (PortfolioHistory history, _) =>
                 history.price, // Mapping the price for the Y-axis.
             name: "Price", // Name of the series.
             // The color of each point in the line chart is determined by the price change.
-            pointColorMapper: (StockHistory history, _) {
-              int index = stockHistories.indexOf(history);
+            pointColorMapper: (PortfolioHistory history, _) {
+              int index = portfolioHistory.indexOf(history);
               if (index == 0 ||
-                  stockHistories[index].price <
-                      stockHistories[index - 1].price) {
+                  portfolioHistory[index].price <
+                      portfolioHistory[index - 1].price) {
                 return Colors.red; // Red for price decrease.
               } else {
                 return Colors.green; // Green for price increase.
@@ -61,9 +61,9 @@ Widget buildStockChart(List<StockHistory> stockHistories) {
             marker: const SparkChartMarker(
                 displayMode: SparkChartMarkerDisplayMode.all),
             labelDisplayMode: SparkChartLabelDisplayMode.all,
-            xValueMapper: (int index) =>
-                stockHistories[index].date, // Mapping the date for the X-axis.
-            yValueMapper: (int index) => stockHistories[index]
+            xValueMapper: (int index) => portfolioHistory[index]
+                .date, // Mapping the date for the X-axis.
+            yValueMapper: (int index) => portfolioHistory[index]
                 .price, // Mapping the price for the Y-axis.
           ),
         ),

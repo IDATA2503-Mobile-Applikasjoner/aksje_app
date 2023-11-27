@@ -116,7 +116,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
     }
   }
 
-  // Creates a stock pruchase then save it in the database.
+  /// Adds a stock purchase to the server and saves it in the database.
+  ///
+  /// It creates a POST request with the current stock data and user's portfolio
+  /// information and sends it to the server. If the server responds with a status
+  /// code of 201, the function returns true, indicating the stock was successfully added.
   Future<bool> _addStockPrchaseToServer() async {
     bool added = false;
     try {
@@ -141,33 +145,36 @@ class _StockDetailPageState extends State<StockDetailPage> {
       );
       if (response.statusCode == 201) {
         added = true;
-        return added;
       }
       return added;
     } catch (e) {
-      return Future.error("Fail to added ");
+      return Future.error("Failed to add stock: $e");
     }
   }
 
-  // checks if the stock is beeing added to the server and shows a Flushbar
-  // informing the user that the stock is beeing bought
+  /// Initiates the stock purchase process and displays a notification to the user.
+  ///
+  /// Calls [_addStockPrchaseToServer] to add the stock purchase to the server.
+  /// If the stock is successfully added, it displays a message using Flushbar to
+  /// inform the user that the stock has been purchased.
   void _buyStock() async {
     bool added = await _addStockPrchaseToServer();
-    if (added = true) {
-      String infoMassage =
-          'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.';
+    if (added) {
+      String infoMessage =
+          'This is not a real stock app, so no payment function is added. The stock has been added as a purchase, you can see the stock in your stocks at Inventory.';
       buildFlushBar(
           context,
-          infoMassage,
+          infoMessage,
           "Info",
           const Color.fromARGB(255, 38, 104, 35),
           const Color.fromARGB(255, 45, 143, 0));
-      //_showFloatingFlushbarByStock(context);
     }
   }
 
-  // Gets the stock data from the database, from the stock you are in now.
-  // Used to update the stock price for the user.
+  /// Retrieves the current stock data from the server.
+  ///
+  /// Sends a GET request to the server to fetch the latest data for the current stock.
+  /// Returns a `Stock` object with the updated data if successful, otherwise throws an error.
   Future<Stock> _getStockDataFromServer() async {
     try {
       var id = widget.stock.id;
@@ -186,7 +193,10 @@ class _StockDetailPageState extends State<StockDetailPage> {
     }
   }
 
-  // Gets the Stock form the pruchsase stocks from the database based on the user.
+  /// Fetches purchased stocks from the server for the current user.
+  ///
+  /// Sends a GET request to retrieve all stocks purchased by the user.
+  /// Returns a list of `Stock` objects if successful, otherwise throws an error.
   Future<List<Stock>> _getPrucheasStockStocksFromServer() async {
     try {
       UserProvider userProvider =
@@ -201,14 +211,17 @@ class _StockDetailPageState extends State<StockDetailPage> {
             responseData.map((data) => Stock.fromJson(data)).toList();
         return stocks;
       }
-      return Future.error("error geting stocks");
+      return Future.error("Error getting stocks");
     } catch (e) {
-      return Future.error("error geting stocks");
+      return Future.error("Error getting stocks: $e");
     }
   }
 
-  // Checks if the user allredy owns the stock
-  //Returns true if the user owns it, false if not.
+  /// Checks if the user already owns the specified stock.
+  ///
+  /// Retrieves the list of stocks purchased by the user and the current stock's data.
+  /// Compares the IDs of each purchased stock with the current stock's ID.
+  /// Returns `true` if a match is found (the user owns the stock), otherwise `false`.
   Future<bool> _checkIfUserOwnStock() async {
     var stocks = await _getPrucheasStockStocksFromServer();
     var stock = await _getStockDataFromServer();
@@ -220,7 +233,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
     return false;
   }
 
-  // Gets all stock purcheas from the database.
+  /// Retrieves a specific stock purchase from the server.
+  ///
+  /// Sends a GET request to fetch details of a particular stock purchase using its ID.
+  /// If successful, returns a `StockPurchase` object with the retrieved data.
+  /// Throws an error if the request fails or if the server response is not successful.
   Future<StockPurchase> _getPrucheasStockFromServer() async {
     try {
       var id = stock.id;
@@ -233,12 +250,17 @@ class _StockDetailPageState extends State<StockDetailPage> {
         var stockPurchease = StockPurchase.fromJson(responseData);
         return stockPurchease;
       }
-      return Future.error("error geting stockPurchease");
+      return Future.error("Error getting stock purchase");
     } catch (e) {
-      return Future.error("error geting stockPurchease");
+      return Future.error("Error getting stock purchase: $e");
     }
   }
 
+  /// Fetches and sets the stock history data from the server.
+  ///
+  /// Sends a GET request to retrieve the history of a specific stock using its ID.
+  /// Updates the `stockHistries` state with the new data if the request is successful.
+  /// Returns a list of `StockHistory` objects or throws an error if the request fails.
   Future<List<StockHistory>> _setSTockHistriesWithDataFromServer() async {
     try {
       var id = stock.id;
@@ -253,13 +275,17 @@ class _StockDetailPageState extends State<StockDetailPage> {
         });
         return newStockHistories;
       }
-      return Future.error("Didn't get data");
+      return Future.error("Failed to retrieve stock history data");
     } catch (e) {
-      return Future.error("Didnt get data");
+      return Future.error("Failed to retrieve stock history data: $e");
     }
   }
 
-  // Removes a stock purcheas from the database.
+  /// Removes a stock purchase from the database.
+  ///
+  /// Retrieves the details of a specific stock purchase and sends a DELETE request
+  /// to remove it from the server using its specific ID.
+  /// Throws an error if the deletion is not successful or if the request fails.
   Future<void> _removeStockPruch() async {
     try {
       StockPurchase stockPurchease = await _getPrucheasStockFromServer();
@@ -268,14 +294,18 @@ class _StockDetailPageState extends State<StockDetailPage> {
       var response = await http.delete(baseURL);
 
       if (response.statusCode != 200) {
-        return Future.error("error removeing stocks prucheas");
+        return Future.error("Error removing stock purchase");
       }
     } catch (e) {
-      return Future.error("error removeing stocks prucheas");
+      return Future.error("Error removing stock purchase: $e");
     }
   }
 
-  // All the list you can add the stock to.
+  /// Displays a dialog allowing the user to add the stock to one of their lists.
+  ///
+  /// Opens an AlertDialog displaying a list of available stock lists.
+  /// When a list is selected, [_addStockToListInServer] is called with the selected list's ID,
+  /// and the dialog is closed.
   void _showAddToListDialog() {
     showDialog(
       context: context,
@@ -300,7 +330,10 @@ class _StockDetailPageState extends State<StockDetailPage> {
     );
   }
 
-  // Refreshes the data on the page.
+  /// Refreshes the stock data displayed on the page.
+  ///
+  /// Calls [_getStockDataFromServer] to fetch the latest stock data and updates the UI.
+  /// If the data retrieval fails, an error is returned.
   Future<void> _onRefresh() async {
     try {
       Stock newStock = await _getStockDataFromServer();
@@ -375,7 +408,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                   const SizedBox(height: 20),
                   Row(
                     mainAxisSize: MainAxisSize
-                        .min, // Ensures the row takes the minimum space needed
+                        .min,
                     children: [
                       Text(
                         '${stock.currentPrice.toString()} NOK ',
@@ -401,7 +434,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                         color: stock.percentChangeIntraday >= 0
                             ? Colors.green
                             : Colors.red,
-                        size: 16, // Adjust the icon size as needed
+                        size: 16,
                       ),
                     ],
                   ),

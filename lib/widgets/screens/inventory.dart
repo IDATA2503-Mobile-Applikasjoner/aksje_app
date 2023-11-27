@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:aksje_app/widgets/components/pop_up_menu_profile.dart';
 import 'dart:async';
 import 'package:aksje_app/models/portfolio_history.dart';
-import 'package:aksje_app/widgets/stock_components/stock_chart_inventory.dart';
+import 'package:aksje_app/widgets/stock_components/portfolio_chart.dart';
 import '../../globals.dart' as globals;
 
 /// Inventory is a StatefulWidget that displays the user's stock inventory.
@@ -139,7 +139,7 @@ class _InventoryState extends State<Inventory> {
                 // Displays a chart representing the portfolio history.
                 SizedBox(
                   height: 300,
-                  child: buildStockChartInventory(portfolioHistory),
+                  child: buildPortfolioChart(portfolioHistory),
                 ),
                 const SizedBox(height: 20.0),
                 const Text('Your stocks'),

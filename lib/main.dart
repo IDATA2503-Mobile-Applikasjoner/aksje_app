@@ -7,6 +7,7 @@ import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Define the color schemes for light and dark modes.
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 255, 255, 255),
 );
@@ -17,6 +18,7 @@ var kDarkColorScheme = ColorScheme.fromSeed(
 );
 
 void main() {
+  // The entry point of the application.
   runApp(
     ChangeNotifierProvider(
       create: (context) => UserProvider(),
@@ -26,6 +28,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  // Main widget for the application.
   const MyApp({super.key});
 
   @override
@@ -33,6 +36,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // Static list of pages for navigation in the app.
   static const List<Widget> _pages = <Widget>[
     Inventory(),
     MyListsPage(),
@@ -41,52 +45,64 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // Builds the main application widget with MaterialApp.
     return MaterialApp(
-      title: 'Investmate',
+      title: 'Investmate', // The title of the application.
+
+      // Theme configuration for the light theme.
       theme: ThemeData().copyWith(
-        useMaterial3: false,
-        colorScheme: kColorScheme,
+        useMaterial3: false, // Specifies not to use Material 3 design.
+        colorScheme: kColorScheme, // Custom color scheme for light theme.
         textTheme: GoogleFonts.robotoTextTheme(
-          Theme.of(context).textTheme,
+          Theme.of(context).textTheme, // Applies Roboto font theme.
         ).copyWith(
           bodyLarge: const TextStyle(fontSize: 20, color: Colors.black),
           bodyMedium: const TextStyle(fontSize: 16, color: Colors.black),
           bodySmall: const TextStyle(fontSize: 12, color: Colors.black),
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
+          backgroundColor: Colors.white, // AppBar background color.
+          elevation: 0, // Removes shadow from the AppBar.
           iconTheme: IconThemeData(color: kColorScheme.onBackground),
           titleTextStyle: GoogleFonts.roboto(
-            color: kColorScheme.onBackground,
+            color: kColorScheme.onBackground, // AppBar title text color.
             fontSize: 30,
           ),
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: kColorScheme.surface,
-          selectedItemColor: kColorScheme.onSurface,
-          unselectedItemColor: kColorScheme.onSurface.withOpacity(0.5),
+          backgroundColor: kColorScheme
+              .surface, // Background color of the bottom navigation bar.
+          selectedItemColor: kColorScheme
+              .onSurface, // Color for selected items in the bottom navigation bar.
+          unselectedItemColor: kColorScheme.onSurface
+              .withOpacity(0.5), // Color for unselected items.
         ),
         cardTheme: CardTheme(
-          color: kColorScheme.surface,
-          elevation: 1,
+          color: kColorScheme.surface, // Background color for cards.
+          elevation: 1, // Elevation for card shadows.
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius:
+                BorderRadius.circular(8), // Rounded corners for cards.
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 79, 117, 205),
-            foregroundColor: kColorScheme.onPrimary,
+            foregroundColor: kColorScheme
+                .onPrimary, // Text and icon color for elevated buttons.
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(
+                  8), // Rounded shape for elevated buttons.
             ),
           ),
         ),
       ),
+
+      // Theme configuration for the dark theme.
       darkTheme: ThemeData.dark().copyWith(
-        useMaterial3: false,
-        colorScheme: kDarkColorScheme,
+        useMaterial3:
+            false, // Specifies not to use Material 3 design for dark theme.
+        colorScheme: kDarkColorScheme, // Custom color scheme for dark theme.
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
         ).copyWith(
@@ -102,30 +118,42 @@ class _MyAppState extends State<MyApp> {
             color: kDarkColorScheme.onBackground,
             fontSize: 30,
           ),
-        ),
+        ), // Bottom navigation bar theme configuration for the dark theme.
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: kDarkColorScheme.surface,
-          selectedItemColor: kDarkColorScheme.onSurface,
-          unselectedItemColor: kDarkColorScheme.onSurface.withOpacity(0.5),
+          backgroundColor: kDarkColorScheme
+              .surface, // Background color of the bottom navigation bar.
+          selectedItemColor: kDarkColorScheme
+              .onSurface, // Color for selected items in the bottom navigation bar.
+          unselectedItemColor: kDarkColorScheme.onSurface.withOpacity(
+              0.5), // Color for unselected items, with reduced opacity.
         ),
+
+// Card theme configuration for the dark theme.
         cardTheme: CardTheme(
-          color: kDarkColorScheme.surface,
-          elevation: 1,
+          color: kDarkColorScheme.surface, // Background color for cards.
+          elevation:
+              1, // Elevation for card shadows, giving a subtle 3D effect.
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius:
+                BorderRadius.circular(8), // Rounded corners for cards.
           ),
         ),
+
+// Elevated button theme configuration for the dark theme.
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 79, 117,
-                205), // Adjust this color for dark theme if needed
-            foregroundColor: Colors.white,
+            backgroundColor: const Color.fromARGB(
+                255, 79, 117, 205), // Background color for elevated buttons.
+            foregroundColor:
+                Colors.white, // Text and icon color for elevated buttons.
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(
+                  8), // Rounded shape for elevated buttons.
             ),
           ),
         ),
       ),
+      // The initial screen of the application.
       home: const Splash(),
     );
   }

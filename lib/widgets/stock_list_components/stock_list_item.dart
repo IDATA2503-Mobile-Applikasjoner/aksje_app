@@ -1,13 +1,24 @@
 import 'package:aksje_app/models/stock_list_model.dart';
 import 'package:flutter/material.dart';
 
+/// A widget that represents an individual stock list item.
+///
+/// This stateless widget displays the name of a stock list and provides a tap
+/// action that can trigger navigation or other functions. It also includes a
+/// forward arrow icon indicating that tapping the item leads to another view.
 class StockListItem extends StatelessWidget {
   final StockListModel stockList;
   final Function(StockListModel) onStockListTap;
 
-  const StockListItem({Key? key, required this.stockList, required this.onStockListTap}) : super(key: key);
+  /// Constructs a StockListItem widget.
+  ///
+  /// [stockList] is a StockListModel object containing the data of the stock list.
+  /// [onStockListTap] is a function that will be called when the item is tapped.
+  const StockListItem(
+      {Key? key, required this.stockList, required this.onStockListTap})
+      : super(key: key);
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -34,6 +45,7 @@ class StockListItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 4),
+                // IconButton for additional tap action or navigation.
                 IconButton(
                   onPressed: () {
                     onStockListTap(stockList);

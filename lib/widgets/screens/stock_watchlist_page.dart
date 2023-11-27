@@ -9,10 +9,13 @@ import 'package:aksje_app/widgets/screens/stock_detail.dart';
 import 'dart:async';
 import '../../globals.dart' as globals;
 
-//The A list page
-//Contis the list and what stock the user have in that list.
+/// This page displays a watchlist of stocks.
+///
+/// It shows the stocks that the user has added to a particular list. It also
+/// provides functionality to refresh the data and navigate to the detail page of each stock.
 class StockWatchlistPage extends StatefulWidget {
   final StockListModel stockList;
+
   const StockWatchlistPage({super.key, required this.stockList});
 
   @override
@@ -28,6 +31,7 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     super.initState();
     _setStocksData();
 
+    // Sets up a timer to refresh stock data every 30 seconds.
     Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
         _setStocksData();
@@ -35,7 +39,10 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     });
   }
 
-  // Gets the stocks data from the server
+  /// Fetches stock data from the server for the current list.
+  ///
+  /// Sends a GET request to retrieve stocks data based on the list ID.
+  /// Returns a list of Stock objects on successful retrieval.
   Future<List<Stock>> _fetchStocksDataFromServer() async {
     try {
       var lid = widget.stockList.lid;
@@ -55,7 +62,9 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     }
   }
 
-  //Sets the stock data to the stocks list
+  /// Sets the state with the latest stock data.
+  ///
+  /// Calls [_fetchStocksDataFromServer] and updates the `stocks` list and `isLoading` state.
   void _setStocksData() async {
     List<Stock> newStocks = await _fetchStocksDataFromServer();
     setState(() {
@@ -64,7 +73,10 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     });
   }
 
-  //Get the stock data form the server
+  /// Fetches specific stock data from the server.
+  ///
+  /// Sends a GET request to retrieve data for a specific stock based on its ID.
+  /// Returns a Stock object on successful retrieval.
   Future<Stock> _getStockDataFromnServer(Stock stock) async {
     try {
       var id = stock.id;
@@ -82,13 +94,18 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     }
   }
 
-  //Gose to stock detail page based on the data of the stock from the database.
+  /// Navigates to the stock detail page with data from the server.
+  ///
+  /// First fetches the latest data for the selected stock using [_getStockDataFromnServer],
+  /// then navigates to the StockDetailPage with the fetched stock data.
   void _goToStockDetailPage(Stock stock) async {
     Stock serverStock = await _getStockDataFromnServer(stock);
     _navToStockDetailPage(serverStock);
   }
 
-  //Naviagtest to stock detail page.
+  /// Navigates to the stock detail page.
+  ///
+  /// Pushes the StockDetailPage onto the navigation stack with the given stock.
   void _navToStockDetailPage(Stock stock) {
     Navigator.pushReplacement(
       context,
@@ -98,7 +115,9 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     );
   }
 
-  //Refreshes the page with new data.
+  /// Refreshes the page with new stock data.
+  ///
+  /// Calls [_setStocksData] to update the list of stocks displayed on the page.
   Future<void> _onRefresh() async {
     setState(() {
       _setStocksData();
