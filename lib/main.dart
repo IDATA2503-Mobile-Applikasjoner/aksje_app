@@ -7,6 +7,7 @@ import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
 import 'package:aksje_app/widgets/screens/new_user.dart';
+import 'globals.dart' as globals;
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 255, 255, 255),
@@ -34,7 +35,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const List<Widget> _pages = <Widget>[  
+  static const List<Widget> _pages = <Widget>[
     Inventory(),
     MyListsPage(),
     ExplorePage(),

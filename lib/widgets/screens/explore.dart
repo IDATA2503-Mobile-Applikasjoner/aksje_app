@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:aksje_app/models/stock.dart';
 import 'package:aksje_app/widgets/stock_components/stock_list.dart';
 import 'package:aksje_app/widgets/screens/stock_detail.dart';
+import '../../globals.dart' as globals;
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _ExplorePageState extends State<ExplorePage> {
       isLoading = true;
     });
     try {
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stocks");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/stocks");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -54,7 +55,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Future<void> _goToStockDetailPage(Stock stock) async {
     try {
       var id = stock.id;
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stocks/$id");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/stocks/$id");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {

@@ -10,6 +10,7 @@ import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
+import '../../globals.dart' as globals;
 
 //Represent the login page.
 class LoginPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    var url = Uri.parse('http://10.212.25.216:8080/api/user/authenticate');
+    var url = Uri.parse('${globals.baseUrl}/api/user/authenticate');
     var response = await http.post(
       url,
       headers: <String, String>{
@@ -56,7 +57,8 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = false;
       });
-      buildFlushBar(context, 'Email or password is wrong', "Error", Color.fromARGB(255, 175, 25, 25),Color.fromARGB(255, 233, 0, 0));
+      buildFlushBar(context, 'Email or password is wrong', "Error",
+          Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
     }
   }
 
@@ -64,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> getLoginUser() async {
     String? token = await getToken();
     if (token != null) {
-      var url = Uri.parse('http://10.212.25.216:8080/api/user/sessionuser');
+      var url = Uri.parse('${globals.baseUrl}/api/user/sessionuser');
       var response = await http.get(
         url,
         headers: <String, String>{

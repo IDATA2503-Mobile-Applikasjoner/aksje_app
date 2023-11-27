@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
+import '../../globals.dart' as globals;
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _SingUpSate extends State<SignUp> {
   //Creates a new user
   Future<void> createUser(
       BuildContext context, String email, String password) async {
-    var url = Uri.parse('http://10.212.25.216:8080/api/user');
+    var url = Uri.parse('${globals.baseUrl}/api/user');
     var body = jsonEncode({'email': email, 'password': password});
 
     try {
@@ -42,7 +43,8 @@ class _SingUpSate extends State<SignUp> {
         navToLoginSuccessScreen();
       } else if (response.statusCode == 400) {
         var errorMessage = response.body;
-        buildFlushBar(context, errorMessage, "Error", Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
+        buildFlushBar(context, errorMessage, "Error",
+            Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
       return Future.error(e);
@@ -98,7 +100,12 @@ class _SingUpSate extends State<SignUp> {
                 if (checkPassowrd(password, confirmPassword)) {
                   createUser(context, email, password);
                 } else {
-                  buildFlushBar(context, "The passwords didn't match", "Error", Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
+                  buildFlushBar(
+                      context,
+                      "The passwords didn't match",
+                      "Error",
+                      Color.fromARGB(255, 175, 25, 25),
+                      Color.fromARGB(255, 233, 0, 0));
                 }
               },
               child: const Text('Sign Up'),

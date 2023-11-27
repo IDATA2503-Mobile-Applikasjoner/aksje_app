@@ -12,23 +12,17 @@ class Splash extends StatefulWidget {
 }
 
 class _Splash extends State<Splash> {
-
-
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     Timer(
-      const Duration(seconds: 3),
-        () =>
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => const LoginPage()
-          )
-        )
-      );
+        const Duration(seconds: 3),
+        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => const LoginPage())));
     var image = Image.asset('lib/images/InvestmentBro.png', height: 300);
     return MaterialApp(
       home: Scaffold(
@@ -37,7 +31,7 @@ class _Splash extends State<Splash> {
           child: Center(
             child: image,
           ),
-        ), 
+        ),
       ),
     );
   }

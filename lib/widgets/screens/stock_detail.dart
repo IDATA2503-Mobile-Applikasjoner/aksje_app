@@ -14,6 +14,7 @@ import 'dart:async';
 import 'package:aksje_app/models/stock_purchase.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart.dart';
+import '../../globals.dart' as globals;
 
 class StockDetailPage extends StatefulWidget {
   final Stock stock;
@@ -59,7 +60,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/list/listsbyuid/$uid");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/list/listsbyuid/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -86,7 +87,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
   // Add a stock to a list then saves it in the database.
   Future<void> _addStockToListInServer(var lid) async {
     try {
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/list/addStock/$lid");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/list/addStock/$lid");
       var body = jsonEncode({"id": widget.stock.id});
       var response = await http.post(
         baseURL,
@@ -112,7 +113,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
       DateTime date = DateTime.now();
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stockpurchease");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/stockpurchease");
       var body = jsonEncode({
         "date": date.toIso8601String(),
         "price": widget.stock.currentPrice,
@@ -144,7 +145,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
     if (added = true) {
       String infoMassage =
           'This is not an real stock app, so no payment function is added. The stock has been added as a pruch, you can see the stock in your stocks at Inventory.';
-      buildFlushBar(context, infoMassage, "Info", Color.fromARGB(255, 38, 104, 35),Color.fromARGB(255, 45, 143, 0));
+      buildFlushBar(context, infoMassage, "Info",
+          Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
       //_showFloatingFlushbarByStock(context);
     }
   }
@@ -154,7 +156,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
   Future<Stock> _getStockDataFromServer() async {
     try {
       var id = widget.stock.id;
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stocks/$id");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/stocks/$id");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -175,7 +177,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/portfolio/stocks/$uid");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/portfolio/stocks/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -207,8 +209,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
   Future<StockPurchase> _getPrucheasStockFromServer() async {
     try {
       var id = stock.id;
-      var baseURL = Uri.parse(
-          "http://10.212.25.216:8080/api/stockpurchease/$id/stockpurchease");
+      var baseURL =
+          Uri.parse("${globals.baseUrl}/api/stockpurchease/$id/stockpurchease");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -225,8 +227,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
   Future<List<StockHistory>> _setSTockHistriesWithDataFromServer() async {
     try {
       var id = stock.id;
-      var baseURL =
-          Uri.parse("http://10.212.25.216:8080/api/stockhistory/stocks/$id");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/stockhistory/stocks/$id");
       var response = await http.get(baseURL);
       if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
@@ -248,7 +249,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
     try {
       StockPurchase stockPurchease = await _getPrucheasStockFromServer();
       var spid = stockPurchease.spid;
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/stockpurchease/$spid");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/stockpurchease/$spid");
       var response = await http.delete(baseURL);
 
       if (response.statusCode != 200) {
@@ -258,8 +259,6 @@ class _StockDetailPageState extends State<StockDetailPage> {
       return Future.error("error removeing stocks prucheas");
     }
   }
-
-  
 
   // All the list you can add the stock to.
   void _showAddToListDialog() {
@@ -407,7 +406,12 @@ class _StockDetailPageState extends State<StockDetailPage> {
                           } else {
                             String errorMassage =
                                 "User already owns this stock";
-                            buildFlushBar(context, errorMassage, "Error", Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
+                            buildFlushBar(
+                                context,
+                                errorMassage,
+                                "Error",
+                                Color.fromARGB(255, 175, 25, 25),
+                                Color.fromARGB(255, 233, 0, 0));
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -428,10 +432,20 @@ class _StockDetailPageState extends State<StockDetailPage> {
                             await _removeStockPruch();
                             String infoMassage =
                                 'This is not an real stock app, so no payment function is added. The stock was removed from pruch. You can se the stock is no loger in Your stocks in Inventory';
-                            buildFlushBar(context, infoMassage, "Info", Color.fromARGB(255, 38, 104, 35), Color.fromARGB(255, 45, 143, 0));
+                            buildFlushBar(
+                                context,
+                                infoMassage,
+                                "Info",
+                                Color.fromARGB(255, 38, 104, 35),
+                                Color.fromARGB(255, 45, 143, 0));
                           } else {
                             String errorMassage = 'You dont own this stock.';
-                            buildFlushBar(context, errorMassage, "Error",Color.fromARGB(255, 175, 25, 25),Color.fromARGB(255, 233, 0, 0));
+                            buildFlushBar(
+                                context,
+                                errorMassage,
+                                "Error",
+                                Color.fromARGB(255, 175, 25, 25),
+                                Color.fromARGB(255, 233, 0, 0));
                           }
                         },
                         style: ElevatedButton.styleFrom(

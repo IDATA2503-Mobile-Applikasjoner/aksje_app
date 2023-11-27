@@ -10,6 +10,7 @@ import 'package:aksje_app/widgets/components/pop_up_menu_profile.dart';
 import 'dart:async';
 import 'package:aksje_app/models/portfolio_history.dart';
 import 'package:aksje_app/widgets/stock_components/stock_chart_inventory.dart';
+import '../../globals.dart' as globals;
 
 //The Inventory page
 class Inventory extends StatefulWidget {
@@ -58,7 +59,7 @@ class _InventoryState extends State<Inventory> {
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/portfolio/stocks/$uid");
+      var baseURL = Uri.parse("${globals.baseUrl}/api/portfolio/stocks/$uid");
       var response = await http.get(baseURL);
 
       if (response.statusCode == 200) {
@@ -74,22 +75,26 @@ class _InventoryState extends State<Inventory> {
     }
   }
 
-    Future<List<PortfolioHistory>> _setSTockHistriesWithDataFromServer() async {
+  Future<List<PortfolioHistory>> _setSTockHistriesWithDataFromServer() async {
     try {
-      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
       var pid = userProvider.user!.uid;
-      var baseURL = Uri.parse("http://10.212.25.216:8080/api/portfoliohistory/portfolios/$pid");
+      var baseURL =
+          Uri.parse("${globals.baseUrl}/api/portfoliohistory/portfolios/$pid");
       var response = await http.get(baseURL);
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
-        List<PortfolioHistory> newPortfolioHistory = responseData.map((data) => PortfolioHistory.fromJson(data)).toList();
+        List<PortfolioHistory> newPortfolioHistory = responseData
+            .map((data) => PortfolioHistory.fromJson(data))
+            .toList();
         setState(() {
           portfolioHistory = newPortfolioHistory;
         });
         return newPortfolioHistory;
       }
       return Future.error("Didn't get data");
-    }catch(e) {
+    } catch (e) {
       return Future.error("Didnt get data");
     }
   }
