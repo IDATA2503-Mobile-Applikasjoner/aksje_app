@@ -5,9 +5,7 @@ import 'package:aksje_app/widgets/screens/my_lists.dart';
 import 'package:aksje_app/widgets/screens/explore.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
-import 'package:aksje_app/widgets/screens/new_user.dart';
-import 'globals.dart' as globals;
+import 'package:google_fonts/google_fonts.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 255, 255, 255),
@@ -46,17 +44,17 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Investmate',
       theme: ThemeData().copyWith(
-        useMaterial3: true,
+        useMaterial3: false,
         colorScheme: kColorScheme,
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
         ).copyWith(
-          bodyLarge: const TextStyle(fontSize: 20, color: Colors.black),
-          bodyMedium: const TextStyle(fontSize: 16, color: Colors.black),
-          bodySmall: const TextStyle(fontSize: 12, color: Colors.black),
+          bodyLarge: const TextStyle(fontSize: 20, color: Color(0x00f5f5f5)),
+          bodyMedium: const TextStyle(fontSize: 16, color: Color(0x00f5f5f5)),
+          bodySmall: const TextStyle(fontSize: 12, color: Color(0x00f5f5f5)),
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: IconThemeData(color: kColorScheme.onBackground),
           titleTextStyle: GoogleFonts.roboto(
@@ -87,7 +85,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       darkTheme: ThemeData.dark().copyWith(
-        useMaterial3: true,
+        useMaterial3: false,
         colorScheme: kDarkColorScheme,
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
@@ -97,7 +95,7 @@ class _MyAppState extends State<MyApp> {
           bodySmall: const TextStyle(fontSize: 12, color: Colors.white),
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.transparent,
+          backgroundColor: const Color.fromARGB(255, 45, 45, 45),
           elevation: 0,
           iconTheme: IconThemeData(color: kDarkColorScheme.onBackground),
           titleTextStyle: GoogleFonts.roboto(

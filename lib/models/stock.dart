@@ -1,4 +1,3 @@
-import 'package:aksje_app/models/stock_history.dart';
 
 /// Represents details of a stock.
 class Stock {

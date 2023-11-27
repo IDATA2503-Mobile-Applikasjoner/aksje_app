@@ -16,7 +16,7 @@ class StockCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     const padding = 16.0; // Padding on both sides
     const spacing = 8.0; // Spacing between cards
-    final cardWidth = (screenWidth - padding * 2 - spacing * 2) / 3;
+    final cardWidth = (screenWidth - padding * 2 - spacing * 2) / 2.5;
 
     return SizedBox(
       width: cardWidth,

@@ -3,7 +3,6 @@ import 'package:aksje_app/widgets/screens/new_user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
 import '../../globals.dart' as globals;
 
@@ -43,8 +42,7 @@ class _SingUpSate extends State<SignUp> {
         navToLoginSuccessScreen();
       } else if (response.statusCode == 400) {
         var errorMessage = response.body;
-        buildFlushBar(context, errorMessage, "Error",
-            Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
+        buildFlushBar(context, errorMessage, "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
       return Future.error(e);
@@ -100,12 +98,7 @@ class _SingUpSate extends State<SignUp> {
                 if (checkPassowrd(password, confirmPassword)) {
                   createUser(context, email, password);
                 } else {
-                  buildFlushBar(
-                      context,
-                      "The passwords didn't match",
-                      "Error",
-                      Color.fromARGB(255, 175, 25, 25),
-                      Color.fromARGB(255, 233, 0, 0));
+                  buildFlushBar(context, "The passwords didn't match", "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
                 }
               },
               child: const Text('Sign Up'),

@@ -8,7 +8,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:aksje_app/providers/user_provider.dart';
 import 'package:aksje_app/widgets/components/login_button.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:aksje_app/widgets/components/flush_bar.dart';
 import '../../globals.dart' as globals;
 
@@ -57,8 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = false;
       });
-      buildFlushBar(context, 'Email or password is wrong', "Error",
-          Color.fromARGB(255, 175, 25, 25), Color.fromARGB(255, 233, 0, 0));
+      buildFlushBar(context, 'Email or password is wrong', "Error", const Color.fromARGB(255, 175, 25, 25),const Color.fromARGB(255, 233, 0, 0));
     }
   }
 

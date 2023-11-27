@@ -35,10 +35,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
-        leading: Container(),
-      ),
       body: Center(
         child: _pages.elementAt(_selectedIndex),
       ),

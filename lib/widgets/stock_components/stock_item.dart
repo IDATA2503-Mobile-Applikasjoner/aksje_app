@@ -14,10 +14,11 @@ class StockItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              stock.name,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text(stock.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                )),
             const SizedBox(height: 4),
             Row(
               children: [
@@ -25,9 +26,23 @@ class StockItem extends StatelessWidget {
                 const Spacer(),
                 Row(
                   children: [
-                    const Icon(Icons.trending_up),  // You can replace this with an appropriate icon or widget
+                    Icon(
+                      stock.percentChangeIntraday >= 0
+                          ? Icons.trending_up
+                          : Icons.trending_down,
+                      color: stock.percentChangeIntraday >= 0
+                          ? Colors.green
+                          : Colors.red,
+                    ),
                     const SizedBox(width: 8),
-                    Text('${stock.percentChangeIntraday}%'),
+                    Text(
+                      '${stock.percentChangeIntraday.toStringAsFixed(2)}%',
+                      style: TextStyle(
+                        color: stock.percentChangeIntraday >= 0
+                            ? Colors.green
+                            : Colors.red,
+                      ),
+                    ),
                   ],
                 ),
               ],

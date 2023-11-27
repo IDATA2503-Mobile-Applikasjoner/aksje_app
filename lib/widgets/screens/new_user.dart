@@ -103,7 +103,7 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                                 child: Text(item.title,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .headline6
+                                        .titleLarge
                                         ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: item.textColor,
@@ -118,7 +118,7 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText2
+                                        .bodyMedium
                                         ?.copyWith(
                                           color: item.textColor,
                                         )),
