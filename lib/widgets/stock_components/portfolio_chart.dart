@@ -3,31 +3,28 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:aksje_app/models/portfolio_history.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-/// Builds a stock chart widget displaying a user's portfolio history.
-///
-/// This function creates a visual representation of the portfolio history
-/// using a line chart and a sparkline chart from the Syncfusion Flutter Charts package.
-/// It displays the portfolio value over time, with different colors indicating
-/// increases or decreases in value.
-///
-/// [portfolioHistory] is a list of PortfolioHistory objects containing the historical data.
-Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
-  DateTime now = DateTime.now();
-  DateTime endTime = DateTime(now.year, now.month, now.day, now.hour);
+// Utility function to convert DateTime to GMT+1
+DateTime toGMT1(DateTime dateTime) {
+  return dateTime.add(const Duration(hours: 1));
+}
 
-  // Check if the data covers the last 24 hours
+Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
+  DateTime nowGMT1 = toGMT1(DateTime.now());
+  DateTime endTime =
+      DateTime(nowGMT1.year, nowGMT1.month, nowGMT1.day, nowGMT1.hour);
+
+  // Check if the data covers the last 24 hours in GMT+1
   DateTime earliestDataPoint = portfolioHistory.isNotEmpty
-      ? portfolioHistory.first.date
-      : DateTime.now().subtract(const Duration(hours: 24));
+      ? toGMT1(portfolioHistory.first.date)
+      : toGMT1(DateTime.now()).subtract(const Duration(hours: 24));
   DateTime startTime = earliestDataPoint
-          .isBefore(DateTime.now().subtract(const Duration(hours: 24)))
+          .isBefore(toGMT1(DateTime.now()).subtract(const Duration(hours: 24)))
       ? earliestDataPoint
-      : DateTime(now.year, now.month, now.day, now.hour)
+      : DateTime(nowGMT1.year, nowGMT1.month, nowGMT1.day, nowGMT1.hour)
           .subtract(const Duration(hours: 24));
 
   return Column(
     children: [
-      // SfCartesianChart is used to create a line chart.
       SfCartesianChart(
         primaryXAxis: DateTimeCategoryAxis(
           labelPlacement: LabelPlacement.onTicks,
@@ -39,7 +36,7 @@ Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
         series: <ChartSeries<PortfolioHistory, DateTime>>[
           AreaSeries<PortfolioHistory, DateTime>(
             dataSource: portfolioHistory,
-            xValueMapper: (PortfolioHistory history, _) => history.date,
+            xValueMapper: (PortfolioHistory history, _) => toGMT1(history.date),
             yValueMapper: (PortfolioHistory history, _) => history.price,
             name: 'Price',
             borderWidth: 2,
