@@ -1,15 +1,16 @@
 class PortfolioHistory {
   final int phid;
-  final String date;
+  final DateTime date;
   final double price;
 
-  PortfolioHistory({required this.phid, required this.date, required this.price});
+  PortfolioHistory(
+      {required this.phid, required this.date, required this.price});
 
   // Factory constructor to create a StockHistory instance from JSON
   factory PortfolioHistory.fromJson(Map<String, dynamic> json) {
     return PortfolioHistory(
       phid: json['phid'] as int,
-      date: json['date'] as String,
+      date: DateTime.parse(json['date']),
       price: json['price'] as double,
     );
   }

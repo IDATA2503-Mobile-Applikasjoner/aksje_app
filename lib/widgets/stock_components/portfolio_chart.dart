@@ -12,61 +12,46 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 ///
 /// [portfolioHistory] is a list of PortfolioHistory objects containing the historical data.
 Widget buildPortfolioChart(List<PortfolioHistory> portfolioHistory) {
+  DateTime now = DateTime.now();
+  DateTime endTime = DateTime(now.year, now.month, now.day, now.hour);
+
+  // Check if the data covers the last 24 hours
+  DateTime earliestDataPoint = portfolioHistory.isNotEmpty
+      ? portfolioHistory.first.date
+      : DateTime.now().subtract(const Duration(hours: 24));
+  DateTime startTime = earliestDataPoint
+          .isBefore(DateTime.now().subtract(const Duration(hours: 24)))
+      ? earliestDataPoint
+      : DateTime(now.year, now.month, now.day, now.hour)
+          .subtract(const Duration(hours: 24));
+
   return Column(
     children: [
       // SfCartesianChart is used to create a line chart.
       SfCartesianChart(
-        primaryXAxis: CategoryAxis(), // X-axis is categorized by dates.
-        trackballBehavior: TrackballBehavior(
-          enable: true,
-          tooltipAlignment: ChartAlignment.near,
-          tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+        primaryXAxis: DateTimeCategoryAxis(
+          labelPlacement: LabelPlacement.onTicks,
+          majorGridLines: const MajorGridLines(width: 0),
+          visibleMinimum: startTime,
+          visibleMaximum: endTime,
         ),
-        zoomPanBehavior: ZoomPanBehavior(
-          enablePinching: true,
-          enablePanning: true,
-          enableDoubleTapZooming: true,
-          enableSelectionZooming: true,
-          enableMouseWheelZooming: true,
-        ),
-        series: <ChartSeries<PortfolioHistory, String>>[
-          LineSeries<PortfolioHistory, String>(
-            dataSource: portfolioHistory, // Data source for the chart.
-            xValueMapper: (PortfolioHistory history, _) =>
-                history.date, // Mapping the date for the X-axis.
-            yValueMapper: (PortfolioHistory history, _) =>
-                history.price, // Mapping the price for the Y-axis.
-            name: "Price", // Name of the series.
-            // The color of each point in the line chart is determined by the price change.
-            pointColorMapper: (PortfolioHistory history, _) {
-              int index = portfolioHistory.indexOf(history);
-              if (index == 0 ||
-                  portfolioHistory[index].price <
-                      portfolioHistory[index - 1].price) {
-                return Colors.red; // Red for price decrease.
-              } else {
-                return Colors.green; // Green for price increase.
-              }
-            },
+        primaryYAxis: NumericAxis(),
+        series: <ChartSeries<PortfolioHistory, DateTime>>[
+          AreaSeries<PortfolioHistory, DateTime>(
+            dataSource: portfolioHistory,
+            xValueMapper: (PortfolioHistory history, _) => history.date,
+            yValueMapper: (PortfolioHistory history, _) => history.price,
+            name: 'Price',
+            borderWidth: 2,
+            borderColor: Colors.blue,
+            gradient: const LinearGradient(
+              colors: [Colors.blue, Colors.transparent],
+              stops: [0.0, 1.0],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
         ],
-      ),
-      // Expanded widget with a SfSparkLineChart to show the same data in a condensed form.
-      Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SfSparkLineChart.custom(
-            trackball: const SparkChartTrackball(
-                activationMode: SparkChartActivationMode.tap),
-            marker: const SparkChartMarker(
-                displayMode: SparkChartMarkerDisplayMode.all),
-            labelDisplayMode: SparkChartLabelDisplayMode.all,
-            xValueMapper: (int index) => portfolioHistory[index]
-                .date, // Mapping the date for the X-axis.
-            yValueMapper: (int index) => portfolioHistory[index]
-                .price, // Mapping the price for the Y-axis.
-          ),
-        ),
       ),
     ],
   );

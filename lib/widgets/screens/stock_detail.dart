@@ -37,13 +37,13 @@ class _StockDetailPageState extends State<StockDetailPage> {
   @override
   void initState() {
     super.initState();
-    _setSTockHistriesWithDataFromServer();
+    _setStockHistoriesWithDataFromServer();
     // Sets a timer to periodically update stock data from the server.
     timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (mounted) {
         Stock newStock = await _getStockDataFromServer();
         List<StockHistory> newStockHistories =
-            await _setSTockHistriesWithDataFromServer();
+            await _setStockHistoriesWithDataFromServer();
         setState(() {
           stock = newStock;
           stockHistries = newStockHistories;
@@ -261,10 +261,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
   /// Sends a GET request to retrieve the history of a specific stock using its ID.
   /// Updates the `stockHistries` state with the new data if the request is successful.
   /// Returns a list of `StockHistory` objects or throws an error if the request fails.
-  Future<List<StockHistory>> _setSTockHistriesWithDataFromServer() async {
+  Future<List<StockHistory>> _setStockHistoriesWithDataFromServer() async {
     try {
       var id = stock.id;
-      var baseURL = Uri.parse("${globals.baseUrl}/api/stockhistory/stocks/$id");
+      var baseURL = Uri.parse(
+          "${globals.baseUrl}/api/stockhistory/stocks/candleStick/$id");
       var response = await http.get(baseURL);
       if (response.statusCode == 200) {
         List responseData = jsonDecode(response.body);
@@ -416,8 +417,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                   ),
                   const SizedBox(height: 20),
                   Row(
-                    mainAxisSize: MainAxisSize
-                        .min,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         '${stock.currentPrice.toString()} NOK ',
@@ -450,7 +450,8 @@ class _StockDetailPageState extends State<StockDetailPage> {
                   const SizedBox(height: 10),
                   SizedBox(
                     height: 300,
-                    child: buildStockChart(stockHistries),
+                    child: //const Text("halla"),
+                        buildStockChart(stockHistries),
                   ),
                   const SizedBox(height: 60),
                   Row(
