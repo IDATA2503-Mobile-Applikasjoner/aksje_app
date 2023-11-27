@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     // Defines the image to be displayed on the splash screen.
-    var image = Image.asset('lib/images/InvestmentBro.png', height: 300);
+    var image = Image.asset('lib/images/Investmate.png', height: 300);
 
     return MaterialApp(
       home: Scaffold(
