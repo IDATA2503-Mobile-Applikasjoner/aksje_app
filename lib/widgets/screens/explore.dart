@@ -91,8 +91,9 @@ class _ExplorePageState extends State<ExplorePage> {
   void _filterStocks(String query) {
     setState(() {
       filteredStocks = stocks
-          .where(
-              (stock) => stock.name.toLowerCase().contains(query.toLowerCase()))
+          .where((stock) =>
+              stock.name.toLowerCase().contains(query.toLowerCase()) ||
+              stock.symbol.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
