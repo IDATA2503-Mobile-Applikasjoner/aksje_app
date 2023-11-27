@@ -51,12 +51,27 @@ class _AddListPageState extends State<AddListPage> {
     try {
       bool added = await _addListToServer(context, name);
       if (added) {
-        buildFlushBar(context, "List was created", "Info", const Color.fromARGB(255, 38, 104, 35), const Color.fromARGB(255, 45, 143, 0));
+        buildFlushBar(
+            context,
+            "List was created",
+            "Info",
+            const Color.fromARGB(255, 38, 104, 35),
+            const Color.fromARGB(255, 45, 143, 0));
       } else {
-        buildFlushBar(context, "Could not create list", "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
+        buildFlushBar(
+            context,
+            "Could not create list",
+            "Error",
+            const Color.fromARGB(255, 175, 25, 25),
+            const Color.fromARGB(255, 233, 0, 0));
       }
     } catch (e) {
-      buildFlushBar(context, "Error: ${e.toString()}", "Error",const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
+      buildFlushBar(
+          context,
+          "Error: ${e.toString()}",
+          "Error",
+          const Color.fromARGB(255, 175, 25, 25),
+          const Color.fromARGB(255, 233, 0, 0));
     }
   }
 
@@ -96,7 +111,12 @@ class _AddListPageState extends State<AddListPage> {
               onPressed: () {
                 String name = nameController.text;
                 if (!_checkIfNameIsValid(name)) {
-                  buildFlushBar(context, "List with name $name already exists", "Error", const Color.fromARGB(255, 175, 25, 25), const Color.fromARGB(255, 233, 0, 0));
+                  buildFlushBar(
+                      context,
+                      "List with name $name already exists",
+                      "Error",
+                      const Color.fromARGB(255, 175, 25, 25),
+                      const Color.fromARGB(255, 233, 0, 0));
                 } else {
                   _createList(context, name);
                 }
