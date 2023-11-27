@@ -49,9 +49,9 @@ class _MyAppState extends State<MyApp> {
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
         ).copyWith(
-          bodyLarge: const TextStyle(fontSize: 20, color: Color(0x00f5f5f5)),
-          bodyMedium: const TextStyle(fontSize: 16, color: Color(0x00f5f5f5)),
-          bodySmall: const TextStyle(fontSize: 12, color: Color(0x00f5f5f5)),
+          bodyLarge: const TextStyle(fontSize: 20, color: Colors.black),
+          bodyMedium: const TextStyle(fontSize: 16, color: Colors.black),
+          bodySmall: const TextStyle(fontSize: 12, color: Colors.black),
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
