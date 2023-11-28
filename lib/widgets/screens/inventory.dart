@@ -199,10 +199,8 @@ class _InventoryState extends State<Inventory> {
   Future<void> _setDevelopmentText() async {
     try {
       // Fetch development data from the server
+      await Future.delayed(Duration(seconds: 1));
       Map<String, dynamic> data = await _futureYourDevelopmentDataFromServer();
-
-      // Print the fetched data (for debugging purposes)
-      print(data);
 
       // Update the state with the retrieved values
       setState(() {
