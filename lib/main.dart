@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           cursorColor: Colors.black,
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white, // AppBar background color.
+          backgroundColor: Colors.transparent, // AppBar background color.
           elevation: 0, // Removes shadow from the AppBar.
           iconTheme: IconThemeData(color: kColorScheme.onBackground),
           titleTextStyle: GoogleFonts.roboto(
