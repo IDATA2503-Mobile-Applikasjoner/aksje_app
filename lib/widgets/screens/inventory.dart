@@ -171,16 +171,20 @@ class _InventoryState extends State<Inventory> {
                 // Displays a horizontally scrollable list of stocks.
                 SizedBox(
                   height: 200,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: stocks.length,
-                    itemBuilder: (context, index) {
-                      return StockCard(
-                        stock: stocks[index],
-                        onTap: () => _goToStockDetailPage(stocks[index]),
-                      );
-                    },
-                  ),
+                  child: stocks.isNotEmpty
+                      ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: stocks.length,
+                          itemBuilder: (context, index) {
+                            return StockCard(
+                              stock: stocks[index],
+                              onTap: () => _goToStockDetailPage(stocks[index]),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text('No stocks owned'),
+                        ),
                 ),
               ],
             ),
