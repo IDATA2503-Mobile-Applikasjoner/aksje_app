@@ -144,6 +144,8 @@ Investmate/
 ├── pubspec.yaml
 └── README.md
 ```
+### Class Diagram Back-End
+![image](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/assets/99326286/f6b4ff68-607b-4a11-84b2-23a52d9db4c9)
 
 ## Conclusion
 
