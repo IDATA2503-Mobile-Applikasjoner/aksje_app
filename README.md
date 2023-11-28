@@ -151,11 +151,11 @@ Investmate/
 
 ## Conclusion
 
-StockApp brings the world of the Oslo Børs to your mobile device, giving you the power to buy and sell stocks with just a few taps. Designed with the user in mind, StockApp aims to provide a seamless and intuitive stock trading experience. We're eager to receive any feedback and are always looking to improve. Happy trading!
+Investmate represents the culmination of our learning and efforts in the IDATA2503 - Mobile Applications course at NTNU. This project, centered around a stock trading simulation app, has provided us with invaluable experience in mobile app development, from conceptualization to implementation. While Investmate serves as a simulated platform for stock trading, its primary purpose has been educational, allowing us as students to apply our skills in a practical setting. We appreciate the opportunity to develop this project and are thankful for the insights gained during the process.
 
 ---
 
-For any questions or feedback regarding StockApp, please reach out to the development team at NTNU.
+For any questions or feedback regarding Investmate, please reach out to the development team at NTNU.
 
 
   
