@@ -40,7 +40,7 @@ class _InventoryState extends State<Inventory> {
     super.didChangeDependencies();
     // Fetch stock data and portfolio history from the server.
     _fetchStockDataFromServer();
-    _setStockHistoriesWithDataFromServer();
+    _setPortfolioHistoriesWithDataFromServer();
     _setDevelopmentText();
 
     // Periodically updates data every 30 seconds.
@@ -48,7 +48,7 @@ class _InventoryState extends State<Inventory> {
       setState(() {
         _setDevelopmentText();
         _fetchStockDataFromServer();
-        _setStockHistoriesWithDataFromServer();
+        _setPortfolioHistoriesWithDataFromServer();
       });
     });
   }
@@ -63,85 +63,158 @@ class _InventoryState extends State<Inventory> {
     );
   }
 
-  /// Fetches stock data from the server and updates the stocks list.
+  /// Asynchronous method to fetch stock data from the server.
+  /// This method queries the server for stock data associated with the user's ID,
+  /// using the provided [UserProvider] instance.
+  ///
+  /// If the request is successful (HTTP status code 200), the response data is
+  /// decoded from JSON to a list of [Stock] instances, and the widget's state is
+  /// updated with the new stock data.
+  ///
+  /// Returns a [Future] with no specific return value. Throws an error if there
+  /// are issues during the process, such as unsuccessful server response or
+  /// encountered exceptions.
   Future<void> _fetchStockDataFromServer() async {
     try {
-      UserProvider userProvider =
-          Provider.of<UserProvider>(context, listen: false);
+      // Access the UserProvider instance using Provider to get the user's UID
+      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
       var uid = userProvider.user!.uid;
+
+      // Construct the base URL for the API endpoint
       var baseURL = Uri.parse("${globals.baseUrl}/api/portfolio/stocks/$uid");
+
+      // Make an HTTP GET request to the server
       var response = await http.get(baseURL);
 
+      // Check if the response status code is 200 (OK)
       if (response.statusCode == 200) {
+        // Decode the response body from JSON to a list
         List responseData = jsonDecode(response.body);
+
+        // Convert the list of data into a list of Stock instances
         setState(() {
           stocks = responseData.map((data) => Stock.fromJson(data)).toList();
         });
       } else {
+        // If the response status code is not 200, throw an error
         return Future.error("Didn't get stocks");
       }
     } catch (e) {
+      // If an exception occurs during the process, throw an error
       return Future.error(e);
     }
   }
 
-  /// Fetches portfolio history data from the server and updates the portfolioHistory list.
-  Future<List<PortfolioHistory>> _setStockHistoriesWithDataFromServer() async {
+  /// Asynchronous method to fetch portfolio histories from the server.
+  /// This method queries the server for portfolio histories associated with
+  /// the user's ID, using the provided [UserProvider] instance.
+  ///
+  /// Returns a [Future] that resolves to a list of [PortfolioHistory] instances
+  /// if the request is successful (HTTP status code 200). Otherwise, throws an error.
+  ///
+  /// The returned list represents the portfolio histories retrieved from the server,
+  /// and the widget's state is updated with the new values.
+  Future<List<PortfolioHistory>> _setPortfolioHistoriesWithDataFromServer() async {
     try {
-      UserProvider userProvider =
-          Provider.of<UserProvider>(context, listen: false);
+      // Access the UserProvider instance using Provider to get the user's UID
+      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
       var pid = userProvider.user!.uid;
-      print(pid);
-      var baseURL =
-          Uri.parse("${globals.baseUrl}/api/portfoliohistory/portfolios/$pid");
+
+      // Construct the base URL for the API endpoint
+      var baseURL = Uri.parse("${globals.baseUrl}/api/portfoliohistory/portfolios/$pid");
+
+      // Make an HTTP GET request to the server
       var response = await http.get(baseURL);
+
+      // Check if the response status code is 200 (OK)
       if (response.statusCode == 200) {
+        // Decode the response body from JSON to a list
         List responseData = jsonDecode(response.body);
+
+        // Convert the list of data into a list of PortfolioHistory instances
         List<PortfolioHistory> newPortfolioHistory = responseData
             .map((data) => PortfolioHistory.fromJson(data))
             .toList();
+
+        // Update the widget's state with the new portfolio histories
         setState(() {
           portfolioHistory = newPortfolioHistory;
         });
+
+        // Return the list of portfolio histories
         return newPortfolioHistory;
       }
+
+      // If the response status code is not 200, throw an error
       return Future.error("Didn't get data");
     } catch (e) {
+      // If an exception occurs during the process, throw an error
       return Future.error("Didn't get data");
     }
   }
 
-  Future<Map<String, dynamic>> _futureYourDevelopmentDataFromServer() async {
-    try {
-      UserProvider userProvider =
-          Provider.of<UserProvider>(context, listen: false);
-      var pid = userProvider.user!.uid;
-      var baseURL = Uri.parse(
-          "${globals.baseUrl}/api/portfoliohistory/portfolios/values/$pid");
-      var response = await http.get(baseURL);
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
-        return data;
-      }
-      return Future.error("Didn't find data");
-    } catch (e) {
-      return Future.error(e);
-    }
-  }
-
-    Future<void> _setDevelopmentText() async {
+    /// Asynchronous method to fetch development data from the server.
+    /// This method queries the server for portfolio history values associated
+    /// with the user's ID, using the provided [UserProvider] instance.
+    ///
+    /// Returns a [Future] that resolves to a map of development data if the
+    /// request is successful (HTTP status code 200). Otherwise, throws an error.
+    ///
+    /// The returned map typically contains keys like 'monetaryChange' and
+    /// 'percentageChange', representing the relevant development values.
+    Future<Map<String, dynamic>> _futureYourDevelopmentDataFromServer() async {
       try {
-        Map<String, dynamic> data = await _futureYourDevelopmentDataFromServer();
-        print(data);
-        setState(() {
-          monetaryChange = data['monetaryChange'];
-          percentageChange = data['percentageChange'];
-        });
+        // Obtain the user's ID from the UserProvider
+        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+        var pid = userProvider.user!.uid;
+
+        // Build the URL for the server request
+        var baseURL = Uri.parse("${globals.baseUrl}/api/portfoliohistory/portfolios/values/$pid");
+
+        // Send a GET request to the server
+        var response = await http.get(baseURL);
+
+        // Check if the response status code is 200 (OK)
+        if (response.statusCode == 200) {
+          // Decode the response body from JSON to a map
+          Map<String, dynamic> data = jsonDecode(response.body);
+          
+          // Return the fetched data
+          return data;
+        }
+
+        // If the response status code is not 200, throw an error
+        return Future.error("Didn't find data");
       } catch (e) {
-        // Handle errors if needed
+        // If an exception occurs during the process, throw an error
         return Future.error(e);
       }
     }
+
+  /// Asynchronous method to set development-related text data.
+  /// This method fetches development data from the server and updates the state
+  /// with the retrieved values.
+  ///
+  /// Throws an error if there are any issues during the process.
+  Future<void> _setDevelopmentText() async {
+    try {
+      // Fetch development data from the server
+      Map<String, dynamic> data = await _futureYourDevelopmentDataFromServer();
+
+      // Print the fetched data (for debugging purposes)
+      print(data);
+
+      // Update the state with the retrieved values
+      setState(() {
+        monetaryChange = data['monetaryChange'];
+        percentageChange = data['percentageChange'];
+      });
+    } catch (e) {
+      // Handle errors if needed
+      // Propagate the error by returning a Future with the error
+      return Future.error(e);
+    }
+  }
 
   /// Refreshes the page by fetching the latest stock data.
   Future<void> _onRefresh() async {
