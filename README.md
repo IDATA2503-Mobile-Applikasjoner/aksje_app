@@ -26,7 +26,6 @@ Welcome to StockApp, a Flutter project developed by students at NTNU for the cou
 
 ## Specifications
 
-NB: First iteration. This section needs updates in due time..
 
 ### General:
 
@@ -96,8 +95,65 @@ NB: First iteration. This section needs updates in due time..
 
 
 ## Folder Structure
-
-**[To be filled in the future]**
+```plaintext
+Investmate/
+│
+├── lib/
+│   ├── images/
+│   │   └── Investmate.png
+│   │   └── InvestmentBro.png
+│   │
+│   ├── models/
+│   │   └── portfolio_history.dart
+│   │   └── portfolio.dart
+│   │   └── stock_history.dart
+│   │   └── stock_list_model.dart
+│   │   └── stock_purchase.dart
+│   │   └── stock.dart
+│   │   └── user.dart
+│   │
+│   ├── providers/
+│   │   └── token_manager.dart
+│   │   └── user_provider.dart
+│   │
+│   ├── widgets/
+│   │   ├── components/
+│   │   │   └── flush_bar.dart
+│   │   │   └── login_button.dart
+│   │   │   └── navigation_bar.dart
+│   │   │   └── pop_up_menu_profile.dart
+│   │   │
+│   │   ├── screens/
+│   │   │   └── add_list.dart
+│   │   │   └── explore.dart
+│   │   │   └── inventory.dart
+│   │   │   └── log_in.dart
+│   │   │   └── main_page.dart
+│   │   │   └── my_lists.dart
+│   │   │   └── new_user.dart
+│   │   │   └── sign_up.dart
+│   │   │   └── splash.dart
+│   │   │   └── stock_detail.dart
+│   │   │   └── stock_watchlist_page.dart
+│   │   │
+│   │   ├── stock_components/
+│   │   │   └── portfolio_chart.dart
+│   │   │   └── stock_card.dart
+│   │   │   └── stock_chart.dart
+│   │   │   └── stock_item.dart
+│   │   │   └── stock_list.dart
+│   │   │
+│   │   └── stock_list_components/
+│   │       └── stock_list_item.dart
+│   │
+│   ├── globals.dart
+│   ├── main.dart
+│
+├── assets/ (if any)
+│
+├── pubspec.yaml
+└── README.md
+```
 
 ## Conclusion
 
