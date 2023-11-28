@@ -28,11 +28,10 @@ Welcome to Investmate, a Flutter project developed by students at NTNU for the c
 ![image](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/assets/99326286/ff51b21a-8838-476d-84f7-b4541cea23bd)
 
 ## User Guide
-* You can see the user gide at the wiki using this link
-* https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/User-Guide
+* To view the application's user guide visit: [User guide](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/User-Guide)
 
 ## Sprint reports
-To view our development process you can visit our wiki: [Sprint reports](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/Sprints)
+* To view our development process you can visit our wiki: [Sprint reports](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/Sprints)
 
 
 ## Specifications
