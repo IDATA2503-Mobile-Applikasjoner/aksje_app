@@ -146,6 +146,9 @@ Investmate/
 ### Class Diagram Back-End
 ![image](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/assets/99326286/f6b4ff68-607b-4a11-84b2-23a52d9db4c9)
 
+### Domain Diagram Database
+![image](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/assets/99326286/a7206c90-28c7-4c9e-94ba-3b7f8189e695)
+
 ## Conclusion
 
 StockApp brings the world of the Oslo Børs to your mobile device, giving you the power to buy and sell stocks with just a few taps. Designed with the user in mind, StockApp aims to provide a seamless and intuitive stock trading experience. We're eager to receive any feedback and are always looking to improve. Happy trading!
