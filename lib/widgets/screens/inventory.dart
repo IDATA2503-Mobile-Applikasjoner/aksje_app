@@ -24,6 +24,8 @@ class Inventory extends StatefulWidget {
 class _InventoryState extends State<Inventory> {
   // List of stocks in the user's inventory.
   List<Stock> stocks = [];
+  double ?monetaryChange;
+  double ?percentageChange;
 
   // Portfolio history data.
   late List<PortfolioHistory> portfolioHistory = [];
@@ -39,10 +41,12 @@ class _InventoryState extends State<Inventory> {
     // Fetch stock data and portfolio history from the server.
     _fetchStockDataFromServer();
     _setStockHistoriesWithDataFromServer();
+    _setDevelopmentText();
 
     // Periodically updates data every 30 seconds.
     Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
+        _setDevelopmentText();
         _fetchStockDataFromServer();
         _setStockHistoriesWithDataFromServer();
       });
@@ -115,8 +119,6 @@ class _InventoryState extends State<Inventory> {
       var baseURL = Uri.parse(
           "${globals.baseUrl}/api/portfoliohistory/portfolios/values/$pid");
       var response = await http.get(baseURL);
-      print(response.statusCode);
-      //print(pid);
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
         return data;
@@ -126,6 +128,20 @@ class _InventoryState extends State<Inventory> {
       return Future.error(e);
     }
   }
+
+    Future<void> _setDevelopmentText() async {
+      try {
+        Map<String, dynamic> data = await _futureYourDevelopmentDataFromServer();
+        print(data);
+        setState(() {
+          monetaryChange = data['monetaryChange'];
+          percentageChange = data['percentageChange'];
+        });
+      } catch (e) {
+        // Handle errors if needed
+        return Future.error(e);
+      }
+    }
 
   /// Refreshes the page by fetching the latest stock data.
   Future<void> _onRefresh() async {
@@ -160,21 +176,32 @@ class _InventoryState extends State<Inventory> {
                   ],
                   
                 ),
-                FutureBuilder<Map<String, dynamic>>(
-                  future: _futureYourDevelopmentDataFromServer(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // You can return a different widget or an empty container if you don't want anything displayed during loading.
-                      return Container();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      // Display your fetched data here.
-                      final monetaryChange = snapshot.data!['monetaryChange'];
-                      final percentageChange = snapshot.data!['percentageChange'];
-                      return Text('Monetary Change: $monetaryChange, Percentage Change: $percentageChange');
-                    }
-                  },
+                const SizedBox(height: 10),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${monetaryChange ?? 'N/A'} NOK"),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Text("${percentageChange ?? 'N/A'}%",
+                      style: TextStyle(
+                        color: percentageChange != null && percentageChange! >= 0
+                          ? Colors.green
+                          : Colors.red,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Icon(
+                      percentageChange != null && percentageChange! >= 0
+                          ? Icons.trending_up // Icon for positive change
+                          : Icons.trending_down, // Icon for negative change
+                      color: percentageChange != null && percentageChange! >= 0
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20.0),
                 // Displays a chart representing the portfolio history.
