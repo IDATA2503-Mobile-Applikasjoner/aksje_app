@@ -31,6 +31,7 @@ Welcome to Investmate, a Flutter project developed by students at NTNU for the c
 * To view the application's user guide visit: [User guide](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/User-Guide)
 
 ## Sprint reports
+* The development team worked with agile software development, working in sprints with meetings each week.
 * To view our development process you can visit our wiki: [Sprint reports](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/Sprints)
 
 
