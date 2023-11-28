@@ -152,6 +152,351 @@ Investmate/
 ### Class Diagram Back-End
 ![image](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/assets/99326286/f6b4ff68-607b-4a11-84b2-23a52d9db4c9)
 
+### Class Diagram Front-End
+```mermaid
+classDiagram
+class MyApp
+MyApp : +createState() State<MyApp>
+StatefulWidget <|-- MyApp
+
+class _MyAppState
+_MyAppState : -_pages$ List~Widget~
+_MyAppState : +build() Widget
+State <|-- _MyAppState
+
+class Portfolio
+Portfolio : +pid int
+Portfolio : +user User
+Portfolio o-- User
+Portfolio : +stockPurchases Set~StockPurchase~
+
+class PortfolioHistory
+PortfolioHistory : +phid int
+PortfolioHistory : +date DateTime
+PortfolioHistory : +price double
+
+class Stock
+Stock : +id int
+Stock : +symbol String
+Stock : +name String
+Stock : +currentPrice double
+Stock : +openingPrice double
+Stock : +percentChangeIntraday double
+Stock : +toJson() Map<String, dynamic>
+
+class StockHistory
+StockHistory : +date DateTime
+StockHistory : +open double
+StockHistory : +close double
+StockHistory : +high double
+StockHistory : +low double
+StockHistory : +volume int
+
+class StockListModel
+StockListModel : +lid int
+StockListModel : +name String
+StockListModel : +stocks List~Map~String, dynamic~~
+StockListModel : +valid bool
+
+class StockPurchase
+StockPurchase : +spid int
+StockPurchase : +date DateTime
+StockPurchase : +price double
+StockPurchase : +quantity int
+
+class User
+User : +email String
+User : +password String
+User : +uid int
+User : +toJson() Map<String, dynamic>
+
+class TokenManager
+TokenManager : +storage$ FlutterSecureStorage
+TokenManager o-- FlutterSecureStorage
+TokenManager : +storeToken()$ void
+TokenManager : +getToken()$ dynamic
+TokenManager : +removeToken()$ void
+
+class UserProvider
+UserProvider : -_user User?
+UserProvider o-- User
+UserProvider : +user User?
+UserProvider o-- User
+UserProvider : +setUser() void
+ChangeNotifier <|-- UserProvider
+
+class CustomNavigationBar
+CustomNavigationBar : +selectedIndex int
+CustomNavigationBar : +onItemTapped dynamic Functionint
+CustomNavigationBar o-- dynamic Functionint
+CustomNavigationBar : +build() Widget
+StatelessWidget <|-- CustomNavigationBar
+
+class AddListPage
+AddListPage : +createState() _AddListPageState
+StatefulWidget <|-- AddListPage
+
+class _AddListPageState
+_AddListPageState : +nameController TextEditingController
+_AddListPageState o-- TextEditingController
+_AddListPageState : -_addListToServer() dynamic
+_AddListPageState : -_createList() void
+_AddListPageState : -_checkIfNameIsValid() bool
+_AddListPageState : -_navMyListPage() void
+_AddListPageState : +build() Widget
+State <|-- _AddListPageState
+
+class ExplorePage
+ExplorePage : +createState() _ExplorePageState
+StatefulWidget <|-- ExplorePage
+
+class _ExplorePageState
+_ExplorePageState : +stocks List~Stock~
+_ExplorePageState : +filteredStocks List~Stock~
+_ExplorePageState : +isLoading bool
+_ExplorePageState : +initState() void
+_ExplorePageState : -_fetchStocksDataFromServer() dynamic
+_ExplorePageState : -_goToStockDetailPage() dynamic
+_ExplorePageState : -_navToStockDetailPage() void
+_ExplorePageState : -_filterStocks() void
+_ExplorePageState : -_sortStocksByHighestPrice() void
+_ExplorePageState : -_sortStocksByLowestPrice() void
+_ExplorePageState : -_sortStocksByBiggestEarner() void
+_ExplorePageState : -_sortStocksByBiggestLoser() void
+_ExplorePageState : -_showSortOptions() void
+_ExplorePageState : -_onRefresh() dynamic
+_ExplorePageState : +build() Widget
+State <|-- _ExplorePageState
+
+class Inventory
+Inventory : +createState() State<Inventory>
+StatefulWidget <|-- Inventory
+
+class _InventoryState
+_InventoryState : +stocks List~Stock~
+_InventoryState : +monetaryChange double?
+_InventoryState : +percentageChange double?
+_InventoryState : +portfolioHistory List~PortfolioHistory~
+_InventoryState : +initState() void
+_InventoryState : +didChangeDependencies() void
+_InventoryState : -_goToStockDetailPage() void
+_InventoryState : -_fetchStockDataFromServer() dynamic
+_InventoryState : -_setPortfolioHistoriesWithDataFromServer() dynamic
+_InventoryState : -_futureYourDevelopmentDataFromServer() dynamic
+_InventoryState : -_setDevelopmentText() dynamic
+_InventoryState : -_onRefresh() dynamic
+_InventoryState : +build() Widget
+State <|-- _InventoryState
+
+class LoginPage
+LoginPage : +createState() _LoginPageState
+StatefulWidget <|-- LoginPage
+
+class _LoginPageState
+_LoginPageState : +emailController TextEditingController
+_LoginPageState o-- TextEditingController
+_LoginPageState : +passwordController TextEditingController
+_LoginPageState o-- TextEditingController
+_LoginPageState : +storage FlutterSecureStorage
+_LoginPageState o-- FlutterSecureStorage
+_LoginPageState : +isLoggedIn bool
+_LoginPageState : +isLoading bool
+_LoginPageState : +login() dynamic
+_LoginPageState : +getLoginUser() dynamic
+_LoginPageState : +storeToken() void
+_LoginPageState : +getToken() dynamic
+_LoginPageState : +removeToken() void
+_LoginPageState : +navSignUpPage() void
+_LoginPageState : +build() Widget
+State <|-- _LoginPageState
+
+class MainPage
+MainPage : +selectedIndex int
+MainPage : +createState() State<MainPage>
+StatefulWidget <|-- MainPage
+
+class _MainPageState
+_MainPageState : -_pages$ List~Widget~
+_MainPageState : -_onItemTapped() void
+_MainPageState : +build() Widget
+State <|-- _MainPageState
+
+class MyListsPage
+MyListsPage : +createState() _MyListsPageState
+StatefulWidget <|-- MyListsPage
+
+class _MyListsPageState
+_MyListsPageState : +lists List~StockListModel~
+_MyListsPageState : +isLoading bool
+_MyListsPageState : +initState() void
+_MyListsPageState : +didChangeDependencies() void
+_MyListsPageState : -_fetchDataFromServer() dynamic
+_MyListsPageState : -_navToAddListPage() void
+_MyListsPageState : -_goTiListPageWithDataFromServer() dynamic
+_MyListsPageState : -_navToListPage() void
+_MyListsPageState : +build() Widget
+State <|-- _MyListsPageState
+
+class NewUserPage
+NewUserPage : +build() Widget
+StatelessWidget <|-- NewUserPage
+
+class OnboardingPagePresenter
+OnboardingPagePresenter : +pages List~NewUSerPageModel~
+OnboardingPagePresenter : +onSkip void Function?
+OnboardingPagePresenter o-- void Function
+OnboardingPagePresenter : +onFinish void Function?
+OnboardingPagePresenter o-- void Function
+OnboardingPagePresenter : +createState() State<OnboardingPagePresenter>
+StatefulWidget <|-- OnboardingPagePresenter
+
+class _OnboardingPageState
+_OnboardingPageState : -_currentPage int
+_OnboardingPageState : -_pageController PageController
+_OnboardingPageState o-- PageController
+_OnboardingPageState : -_navigateToLoginPage() void
+_OnboardingPageState : +build() Widget
+State <|-- _OnboardingPageState
+
+class NewUSerPageModel
+NewUSerPageModel : +title String
+NewUSerPageModel : +description String
+NewUSerPageModel : +imageUrl String
+NewUSerPageModel : +bgColor Color
+NewUSerPageModel o-- Color
+NewUSerPageModel : +textColor Color
+NewUSerPageModel o-- Color
+
+class SignUp
+SignUp : +createState() _SignUpState
+StatefulWidget <|-- SignUp
+
+class _SignUpState
+_SignUpState : +emailController TextEditingController
+_SignUpState o-- TextEditingController
+_SignUpState : +passwordController TextEditingController
+_SignUpState o-- TextEditingController
+_SignUpState : +confirmPasswordController TextEditingController
+_SignUpState o-- TextEditingController
+_SignUpState : +checkPassword() bool
+_SignUpState : +createUser() dynamic
+_SignUpState : +navToLoginSuccessScreen() void
+_SignUpState : +cancel() void
+_SignUpState : +build() Widget
+State <|-- _SignUpState
+
+class Splash
+Splash : +createState() _SplashState
+StatefulWidget <|-- Splash
+
+class _SplashState
+_SplashState : -_controller AnimationController
+_SplashState o-- AnimationController
+_SplashState : -_animation Animation~double~
+_SplashState o-- Animation~double~
+_SplashState : +initState() void
+_SplashState : +dispose() void
+_SplashState : +build() Widget
+State <|-- _SplashState
+SingleTickerProviderStateMixin <|-- _SplashState
+
+class StockDetailPage
+StockDetailPage : +stock Stock
+StockDetailPage o-- Stock
+StockDetailPage : +createState() _StockDetailPageState
+StatefulWidget <|-- StockDetailPage
+
+class _StockDetailPageState
+_StockDetailPageState : +stockLists List~StockListModel~
+_StockDetailPageState : +stock Stock
+_StockDetailPageState o-- Stock
+_StockDetailPageState : +timer Timer
+_StockDetailPageState o-- Timer
+_StockDetailPageState : +stockHistories List~StockHistory~
+_StockDetailPageState : +initState() void
+_StockDetailPageState : +dispose() void
+_StockDetailPageState : -_fetcListDataFromServer() dynamic
+_StockDetailPageState : -_showListOptions() void
+_StockDetailPageState : -_addStockToListInServer() dynamic
+_StockDetailPageState : -_addStockPrchaseToServer() dynamic
+_StockDetailPageState : -_buyStock() void
+_StockDetailPageState : -_getStockDataFromServer() dynamic
+_StockDetailPageState : -_getPrucheasStockStocksFromServer() dynamic
+_StockDetailPageState : -_checkIfUserOwnStock() dynamic
+_StockDetailPageState : -_getPrucheasStockFromServer() dynamic
+_StockDetailPageState : -_setStockHistoriesWithDataFromServer() dynamic
+_StockDetailPageState : -_removeStockPurchase() dynamic
+_StockDetailPageState : -_showAddToListDialog() void
+_StockDetailPageState : -_onRefresh() dynamic
+_StockDetailPageState : +build() Widget
+State <|-- _StockDetailPageState
+
+class StockWatchlistPage
+StockWatchlistPage : +stockList StockListModel
+StockWatchlistPage o-- StockListModel
+StockWatchlistPage : +createState() _StockWatchlistPageState
+StatefulWidget <|-- StockWatchlistPage
+
+class _StockWatchlistPageState
+_StockWatchlistPageState : +stocks List~Stock~
+_StockWatchlistPageState : +isLoading bool
+_StockWatchlistPageState : +newNameController TextEditingController
+_StockWatchlistPageState o-- TextEditingController
+_StockWatchlistPageState : +initState() void
+_StockWatchlistPageState : -_fetchStocksDataFromServer() dynamic
+_StockWatchlistPageState : -_setStocksData() void
+_StockWatchlistPageState : -_getStockDataFromnServer() dynamic
+_StockWatchlistPageState : -_removeStockFromList() dynamic
+_StockWatchlistPageState : -_updateListName() dynamic
+_StockWatchlistPageState : -_removeList() dynamic
+_StockWatchlistPageState : -_goToStockDetailPage() void
+_StockWatchlistPageState : -_navToStockDetailPage() void
+_StockWatchlistPageState : -_onRefresh() dynamic
+_StockWatchlistPageState : -_showNewNameOption() void
+_StockWatchlistPageState : -_navMyListPage() void
+_StockWatchlistPageState : +build() Widget
+State <|-- _StockWatchlistPageState
+
+class StockCard
+StockCard : +stock Stock
+StockCard o-- Stock
+StockCard : +onTap void Function
+StockCard o-- void Function
+StockCard : +build() Widget
+StatelessWidget <|-- StockCard
+
+class StockItem
+StockItem : +stock Stock
+StockItem o-- Stock
+StockItem : +build() Widget
+StatelessWidget <|-- StockItem
+
+class StockList
+StockList : +stocks List~Stock~
+StockList : +onStockTap dynamic FunctionStock
+StockList o-- dynamic FunctionStock
+StockList : +onRemoveStock dynamic FunctionStock?
+StockList o-- dynamic FunctionStock
+StockList : +isDeleteEnabled bool
+StockList : +build() Widget
+StatelessWidget <|-- StockList
+
+class StockListItem
+StockListItem : +stockList StockListModel
+StockListItem o-- StockListModel
+StockListItem : +onStockListTap dynamic FunctionStockListModel
+StockListItem o-- dynamic FunctionStockListModel
+StockListItem : +build() Widget
+StatelessWidget <|-- StockListItem
+
+class StockListModelList
+StockListModelList : +stockLists List~StockListModel~
+StockListModelList : +onStockListTap dynamic FunctionStockListModel
+StockListModelList o-- dynamic FunctionStockListModel
+StockListModelList : +build() Widget
+StatelessWidget <|-- StockListModelList
+```
+
 ### Domain Diagram Database
 ![image](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/assets/99326286/a7206c90-28c7-4c9e-94ba-3b7f8189e695)
 
