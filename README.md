@@ -69,7 +69,7 @@ Welcome to StockApp, a Flutter project developed by students at NTNU for the cou
 
 ### Performance & Scalability:
 
-- **Database:** Utilize efficient database systems (e.g., Firebase, SQL databases) for storing user data, transaction history, and other app-related data.
+- **Database:** Utilize efficient database systems (PostgreSQL databases) for storing user data, transaction history, and other app-related data.
 - **Scalability:** Design the backend infrastructure to handle a growing number of users and increased data traffic.
 
 ### Security:
