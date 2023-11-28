@@ -140,8 +140,6 @@ Investmate/
 │   ├── globals.dart
 │   ├── main.dart
 │
-├── assets/ (if any)
-│
 ├── pubspec.yaml
 └── README.md
 ```
