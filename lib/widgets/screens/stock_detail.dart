@@ -32,7 +32,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
   List<StockListModel> stockLists = [];
   late Stock stock = widget.stock;
   late Timer timer;
-  late List<StockHistory> stockHistries = [];
+  late List<StockHistory> stockHistories = [];
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
             await _setStockHistoriesWithDataFromServer();
         setState(() {
           stock = newStock;
-          stockHistries = newStockHistories;
+          stockHistories = newStockHistories;
         });
       }
     });
@@ -272,7 +272,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
         List<StockHistory> newStockHistories =
             responseData.map((data) => StockHistory.fromJson(data)).toList();
         setState(() {
-          stockHistries = newStockHistories;
+          stockHistories = newStockHistories;
         });
         return newStockHistories;
       }
@@ -453,8 +453,7 @@ class _StockDetailPageState extends State<StockDetailPage> {
                   const SizedBox(height: 10),
                   SizedBox(
                     height: 300,
-                    child: //const Text("halla"),
-                        buildStockChart(stockHistries),
+                    child: buildStockChart(stockHistories),
                   ),
                   const SizedBox(height: 60),
                   Row(
