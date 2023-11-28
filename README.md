@@ -1,8 +1,9 @@
-# NTNU Mobile Applications (IDATA2503) - StockApp
+# NTNU Mobile Applications (IDATA2503) - Investmate (StockApp)
 
 ## Introduction
 
-Welcome to StockApp, a Flutter project developed by students at NTNU for the course IDATA2503 - Mobile Applications. StockApp provides a user-friendly interface for buying and selling stocks specifically from the Oslo Børs (Oslo Stock Exchange). Experience the financial world right at your fingertips and make informed investment decisions with ease!
+Welcome to Investmate, a Flutter project developed by students at NTNU for the course IDATA2503 - Mobile Applications. StockApp provides a user-friendly interface for buying and selling simulated stocks, allowing you to experience the financial world right at your fingertips and make informed investment decisions with ease. Dive into the world of stock trading with StockApp!
+
 
 ## User Stories
 
