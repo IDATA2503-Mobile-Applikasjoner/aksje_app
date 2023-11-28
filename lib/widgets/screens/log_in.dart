@@ -84,13 +84,11 @@ class _LoginPageState extends State<LoginPage> {
 
         Provider.of<UserProvider>(context, listen: false).setUser(user);
         navMainPage(context);
-
-        print('User: ${user.toJson()}');
       } else {
-        print('Request failed with status: ${response.statusCode}.');
+        return Future.error("Faild log in");
       }
     } else {
-      print('Token not found');
+      return Future.error("Fail to get token");
     }
   }
 

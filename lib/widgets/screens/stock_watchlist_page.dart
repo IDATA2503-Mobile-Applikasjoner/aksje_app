@@ -191,51 +191,58 @@ class _StockWatchlistPageState extends State<StockWatchlistPage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Wrap(
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Change List Name",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: newNameController,
-                      decoration: const InputDecoration(
-                        labelText: "New Name",
-                        border: OutlineInputBorder(),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Change List Name",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: newNameController,
+                        decoration: const InputDecoration(
+                          labelText: "New Name",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Cancel"),
                     ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("Cancel"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            String name = newNameController.text;
-                            await _updateListName(name);
-                            Navigator.pop(context); // Close the modal on save
-                          },
-                          child: const Text("Save"),
-                        ),
-                      ],
+                    ElevatedButton(
+                      onPressed: () async {
+                        String name = newNameController.text;
+                        await _updateListName(name);
+                        Navigator.pop(context); // Close the modal on save
+                      },
+                      child: const Text("Save"),
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );

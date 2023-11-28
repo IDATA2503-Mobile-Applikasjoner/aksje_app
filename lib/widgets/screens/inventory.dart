@@ -158,6 +158,23 @@ class _InventoryState extends State<Inventory> {
                   children: [
                     Text('Your development today'),
                   ],
+                  
+                ),
+                FutureBuilder<Map<String, dynamic>>(
+                  future: _futureYourDevelopmentDataFromServer(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // You can return a different widget or an empty container if you don't want anything displayed during loading.
+                      return Container();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      // Display your fetched data here.
+                      final monetaryChange = snapshot.data!['monetaryChange'];
+                      final percentageChange = snapshot.data!['percentageChange'];
+                      return Text('Monetary Change: $monetaryChange, Percentage Change: $percentageChange');
+                    }
+                  },
                 ),
                 const SizedBox(height: 20.0),
                 // Displays a chart representing the portfolio history.
