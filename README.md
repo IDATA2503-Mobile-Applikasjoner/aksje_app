@@ -4,7 +4,6 @@
 
 Welcome to Investmate, a Flutter project developed by students at NTNU for the course IDATA2503 - Mobile Applications. Investmate provides a user-friendly interface for buying and selling simulated stocks, allowing you to experience the financial world right at your fingertips and make informed investment decisions with ease. Dive into the world of stock trading with Investmate!
 
-
 ## User Stories
 
 1. **View Stocks:** As a user, I want to view a list of simulated stocks so I can see my options.
@@ -31,6 +30,9 @@ Welcome to Investmate, a Flutter project developed by students at NTNU for the c
 ## User Guide
 * You can see the user gide at the wiki using this link
 * https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/User-Guide
+
+## Sprint reports
+To view our development process you can visit our wiki: [Sprint reports](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/Sprints)
 
 
 ## Specifications
