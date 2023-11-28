@@ -28,6 +28,10 @@ Welcome to Investmate, a Flutter project developed by students at NTNU for the c
 ### Use-case diagram
 ![image](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/assets/99326286/ff51b21a-8838-476d-84f7-b4541cea23bd)
 
+## User Guide
+* You can see the user gide at the wiki using this link
+* https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/User-Guide
+
 
 ## Specifications
 
