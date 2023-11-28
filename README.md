@@ -1,5 +1,5 @@
 # NTNU Mobile Applications (IDATA2503) - Investmate (StockApp)
-
+### Group 4
 ## Introduction
 
 Welcome to Investmate, a Flutter project developed by students at NTNU for the course IDATA2503 - Mobile Applications. Investmate provides a user-friendly interface for buying and selling simulated stocks, allowing you to experience the financial world right at your fingertips and make informed investment decisions with ease. Dive into the world of stock trading with Investmate!
@@ -155,7 +155,7 @@ Investmate represents the culmination of our learning and efforts in the IDATA25
 
 ---
 
-For any questions or feedback regarding Investmate, please reach out to the development team at NTNU.
+For more documentation regarding Investmate, please visit our wiki page [Investmate wiki](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki).
 
 
   
