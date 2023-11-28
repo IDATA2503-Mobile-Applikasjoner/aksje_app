@@ -182,7 +182,7 @@ class _InventoryState extends State<Inventory> {
                             );
                           },
                         )
-                      : Center(
+                      : const Center(
                           child: Text('No stocks owned'),
                         ),
                 ),
