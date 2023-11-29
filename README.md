@@ -34,6 +34,25 @@ Welcome to Investmate, a Flutter project developed by students at NTNU for the c
 * The development team worked with agile software development, working in sprints with meetings each week.
 * To view our development process you can visit our wiki: [Sprint reports](https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app/wiki/Sprints)
 
+## Running the Project
+
+To get started with this project, follow these steps:
+
+1. Clone the repository to your local machine:
+
+`git clone https://github.com/IDATA2503-Mobile-Applikasjoner/aksje_app.git`
+
+2. Open the project in your preferred Flutter development environment (e.g., Android Studio, VS Code).
+3. If you are running the backend locally change the url in the file `lib/globals.dart` to your local ip address and the selected port. If you are connected to the NTNU network you dont need to change the url. The backend code can be found here: https://github.com/rednas-source/stock-app-backend .
+
+4. Install the required dependencies by running:
+
+`flutter pub get`
+
+4. Run the app on an emulator or physical device:
+
+`flutter run`
+
 
 ## Specifications
 
